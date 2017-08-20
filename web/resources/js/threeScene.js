@@ -15,6 +15,7 @@ var mode = "";
 
 //Height Of The Control Panel
 var controlPanelHeight = 80;
+var headerHeight = 60;
 
 //Three.js Objects
 var raycaster = new THREE.Raycaster(); // create once
@@ -66,7 +67,6 @@ function setScene() {
     var degree = Math.PI / 180;
 
     camera.position.z = 800;
-
 
     // Load the background texture
     var texture = THREE.ImageUtils.loadTexture('resources/images/DowntownClean.jpg');
@@ -195,10 +195,11 @@ function onDocumentMouseDown(event) {
     event.preventDefault();
 
     //Map Starts Under Control Panel Height
-    //Set the correct coordinates to the vector according to window width and height and coordinatePanelHeight
+    //Set the correct coordinates to the vector according to window width, window height, 
+    //headerHeight and coordinatePanelHeight
     vector.set(
             (event.clientX / window.innerWidth) * 2 - 1,
-            -((event.clientY - controlPanelHeight) / window.innerHeight) * 2 + 1,
+            -((event.clientY - (controlPanelHeight + headerHeight)) / window.innerHeight) * 2 + 1,
             0.5);
 
     vector.unproject(camera);
