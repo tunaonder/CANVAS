@@ -3,7 +3,6 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-
 /* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode */
 
 //List Of ALL STATIC OBJECTS
@@ -15,7 +14,7 @@ var currentMoveSpot = null;
 //Object Id will be incremented for each added objects
 var objectId = 0;
 
-//////// STATIC OBJECTS STYLING FOR THREE.JS MESHES ////////
+// STATIC OBJECTS STYLING FOR THREE.JS MESHES
 
 //Radius of Spots
 var enterExitRadius = 8;
@@ -30,8 +29,6 @@ var enterPointColor = 0xFF6347;
 var moveSpotColor = 0xffff00;
 var forkColor = 0x0000ff;
 var mergeColor = 0x9932CC;
-
-//================================================
 
 //Standart Move Spot 
 function MoveSpot(geometry, material, id, x, y, nextId, prevId, type) {
@@ -134,14 +131,12 @@ function exitPointInsert() {
 
 }
 
-
 function trafficLightInsert(state){
     
     TrafficLight.prototype = new THREE.Mesh();
     var geometry = new THREE.CircleGeometry(trafficLightRadius, 32);
     var material;
-    
-    
+      
     if(state === 'Red'){
         material = new THREE.MeshBasicMaterial({color: trafficLightRed});
     }
@@ -149,7 +144,6 @@ function trafficLightInsert(state){
         material = new THREE.MeshBasicMaterial({color: trafficLightGreen});
         
     }
-    
     
     //Set The Id Of Next Object
     objectId++;
@@ -162,7 +156,6 @@ function trafficLightInsert(state){
     trafficLight.position.x = trafficLight.x;
     trafficLight.position.y = trafficLight.y;
 
-
     currentMoveSpot.nextMoveSpotId = trafficLight.objectId;
     trafficLight.prevMoveSpotId = currentMoveSpot.objectId;
 
@@ -173,19 +166,12 @@ function trafficLightInsert(state){
     moveSpotObjects.push(trafficLight);
 
     //Add to the Scene
-    scene.add(trafficLight);
-    
-    
-    
+    scene.add(trafficLight);  
 }
 
 function moveSpotInsert() {
-
-
     var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: moveSpotColor});
-
-
 
     MoveSpot.prototype = new THREE.Mesh();
 
@@ -193,16 +179,12 @@ function moveSpotInsert() {
     objectId++;
     var addedMoveSpot = new MoveSpot(geometry, material, 's' + objectId, vector.x, vector.y, 0, 0, "Standart");
 
-
     addedMoveSpot.position.x = addedMoveSpot.x;
     addedMoveSpot.position.y = addedMoveSpot.y;
-
 
     currentMoveSpot.nextMoveSpotId = addedMoveSpot.objectId;
     addedMoveSpot.prevMoveSpotId = currentMoveSpot.objectId;
     currentMoveSpot = addedMoveSpot;
-
-
 
     moveSpotObjects.push(addedMoveSpot);
 
@@ -211,7 +193,7 @@ function moveSpotInsert() {
     //This Function Is Called When an MoveSpot Is converted to a Fork or to a Merge
     //addedMoveSpot defines the CLICKED move Spot
     addedMoveSpot.callback = function () {
-        
+       
         //If Mode is FORK
         if (mode === 'forkButton') {
             var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
@@ -273,8 +255,7 @@ function moveSpotInsert() {
                     moveSpotObjects[i] = merge;
                 }
 
-            }
-            
+            }          
             //Remove The Area
             scene.remove(this);
             
@@ -283,18 +264,9 @@ function moveSpotInsert() {
             currentMoveSpot = null;
             
             alert('Move Spot is Converted to Merge');
-
-
-
         }
-
-
-
     };
-
-
 }
-
 
 /**
  * 
@@ -302,20 +274,16 @@ function moveSpotInsert() {
  */
 function moveSpotClicked() {
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-    mouse.y = -((event.clientY - controlPanelHeight) / renderer.domElement.clientHeight) * 2 + 1;
+    mouse.y = -((event.clientY - (controlPanelHeight + headerHeight)) / renderer.domElement.clientHeight) * 2 + 1;
 
 
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(moveSpotObjects);
 
     if (intersects.length > 0) {
-
         intersects[0].object.callback();
-
     }
-
 }
-
 
 //Removes The Last Added Move Spot
 function removeMoveSpot() {
@@ -340,11 +308,9 @@ function removeMoveSpot() {
  * @param {type} event
  * @returns {undefined}
  */
-function changeTrafficLightState(event){
-   
+function changeTrafficLightState(event){  
     var lightId = event.lightId;
-
-    
+  
     for (var i = 0; i < moveSpotObjects.length; i++) {
         
         //Find the Traffic Light from the array
@@ -361,10 +327,6 @@ function changeTrafficLightState(event){
             }
 
             break;
-
         }
-
-    }
-    
-    
+    }    
 }
