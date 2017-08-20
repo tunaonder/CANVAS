@@ -1,0 +1,53 @@
+/*
+Created by Sait Tuna Onder on 2017.02.03 
+Copyright © 2017 Sait Tuna Onder. All rights reserved.
+*/
+/* 
+    Created on : Feb 3, 2017, 12:47:09 PM
+    Author     : Onder
+*/
+
+html, body{
+
+    width: 100%;
+    margin: 0;
+    background-color: red;
+/*    Disable Page scrooling*/
+    overflow: hidden;
+}
+
+canvas {
+
+    /*  overflow: auto;
+      height: calc(100vh - 50px);
+      width: 100% !important;*/
+    width: 100%;
+    height: 500px;
+    background-color: pink;
+
+}
+
+/*Control Panel Styling*/
+#controlPanel{
+    height: 80px;
+    text-align: center;
+    background-color: gray;
+}
+
+#controlHeader{
+    display: block;
+
+    font-size: 20px; 
+
+
+}
+
+button{
+    width: 120px;
+    /*margin: 20px;*/
+    background-color: green;
+}
+
+.panelButton{
+    background-color: red;
+}
