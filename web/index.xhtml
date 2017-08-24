@@ -3,54 +3,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
-        <title>Blacksburg Traffic</title>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <ui:composition template="/templates/siteTemplate.xhtml">
+
+        <!-- Create the content for this page below -->
+        <ui:define name="editableContent">
 
 
-        <script src="resources/js/three.js"></script>
-        <script src="resources/js/jquery-3.1.0.min.js"></script>
+            <div id="pageContainer" style="height: 100%; width: 100;">
 
-        <script src="resources/js/threeScene.js"></script>
-        <script src="resources/js/moveSpot.js"></script>
-        <script src="resources/js/websocket.js"></script>
-        <script src="resources/js/events.js"></script>
-        <script src="resources/js/vehicle.js"></script>
-        <script src="resources/js/composedModels.js"></script>
-        <script src="resources/js/PriorityQueue.js"></script>
+                <div id="controlPanel" >
 
-
-        <link rel="stylesheet" href="resources/css/styles.css"/>
-    </h:head>
-    <h:body>
-        <div id="header">
-            <ui:insert id="header" >
-                <ui:include src="pageComponents/header.xhtml" />
-            </ui:insert>
-        </div>
-        
-        <div id="pageContainer" style="height: 100%; width: 100;">
-
-            <div id="controlPanel" >
-
-                <label id="controlHeader">Control Panel</label>
-                <button id="enterPointButton" class="panelButton" onClick="changeInsertMode(this.id);"> Add Enter Point</button>
-                <button id="moveSpotButton" class="panelButton" onClick="changeInsertMode(this.id);"> Add Move Spot</button>
-                <button id="exitPointButton" class="panelButton" onClick="changeInsertMode(this.id);"> Add Exit Point</button>
-                <button id="forkButton" class="panelButton" onClick="changeInsertMode(this.id);"> Convert to Fork</button>
-                <button id="mergeButton" class="panelButton" onClick="changeInsertMode(this.id);"> Convert to Merge</button>
-                <button id="greenLightButton" class="panelButton" onClick="changeInsertMode(this.id);"> Green Light</button>
-                <button id="redLightButton" class="panelButton" onClick="changeInsertMode(this.id);"> Red Light</button>
-                <button id="removeButton" class="panelButton" onClick="removeMoveSpot();"> Remove Last</button>
-                <button id="startStopButton" class="panelButton" onClick="startSimulation();"> Start Simulation</button>
-                <button id="testButton" class="panelButton" onClick="testSend();"> Test Simulation</button>
-                <br/>
-                <div class="mapView">
-                    <script> setScene();</script>
+                    <label id="controlHeader">Control Panel</label>
+                    <button id="enterPointButton" class="panelButton" onClick="changeInsertMode(this.id);"> Add Enter Point</button>
+                    <button id="moveSpotButton" class="panelButton" onClick="changeInsertMode(this.id);"> Add Move Spot</button>
+                    <button id="exitPointButton" class="panelButton" onClick="changeInsertMode(this.id);"> Add Exit Point</button>
+                    <button id="forkButton" class="panelButton" onClick="changeInsertMode(this.id);"> Convert to Fork</button>
+                    <button id="mergeButton" class="panelButton" onClick="changeInsertMode(this.id);"> Convert to Merge</button>
+                    <button id="greenLightButton" class="panelButton" onClick="changeInsertMode(this.id);"> Green Light</button>
+                    <button id="redLightButton" class="panelButton" onClick="changeInsertMode(this.id);"> Red Light</button>
+                    <button id="removeButton" class="panelButton" onClick="removeMoveSpot();"> Remove Last</button>
+                    <button id="startStopButton" class="panelButton" onClick="startSimulation();"> Start Simulation</button>
+                    <button id="testButton" class="panelButton" onClick="testSend();"> Test Simulation</button>
+                    <br/>
+                    <div class="mapView">
+                        <script> setScene();</script>
+                    </div>
                 </div>
             </div>
-        </div>
-    </h:body>
+        </ui:define>
+
+    </ui:composition>
+
 </html>
 

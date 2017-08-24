@@ -9,7 +9,6 @@ var camera;
 var scene;
 var renderer;
 
-
 //Control Panel Insert Mode(Changes According to Button Clicked)
 var mode = "";
 
@@ -58,11 +57,13 @@ function setScene() {
     //var backgroundWidth = 3737;
 //    var backgroundHeight = 2434;
 
-    var ratio = 2434 / 3737;
+   // var ratio = 2434 / 3737;
 
     var backgroundWidth = window.innerWidth;
-    var backgroundHeight = backgroundWidth * ratio;
-
+    var backgroundHeight = 800;
+    
+    backImage = new Image("resources/images/DowntownClean.jpg");
+    
     //Degree
     var degree = Math.PI / 180;
 
@@ -81,7 +82,6 @@ function setScene() {
 
     //Add the Map To The Scene
     scene.add(backgroundMesh);
-
 
     //Get The Bounds Of The Map
     var bbox = new THREE.Box3().setFromObject(backgroundMesh);
@@ -328,8 +328,3 @@ function calculateDistance(x1, y1, x2, y2) {
 
     return Math.sqrt(distance1 * distance1 + distance2 * distance2);
 }
-
-
-
-
-
