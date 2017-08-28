@@ -62,9 +62,16 @@ Copyright © 2017 Sait Tuna Onder. All rights reserved.
                             <!-- Execute the "validate" method in the "EmailValidator.java" class file to validate the email address entered. -->
                             <f:validator validatorId="emailValidator" />  
                         </p:inputText>
+                        
+                        <p:outputLabel value="#{bundle.CreateUserLabel_username}" for="username" />
+                        <p:inputText id="username" value="#{accountManager.username}" required="true" styleClass="accountInputTextField"
+                                     requiredMessage="#{bundle.CreateUserRequiredMessage_username}" label="Username">
+                            <!-- Execute the "validate" method in the "UsernameValidator.java" class file to validate the username entered. -->
+                            <f:validator validatorId="usernameValidator"/> 
+                        </p:inputText>
 
                         <h:outputLabel value="#{bundle.CreateUserLabel_password} *" for="password" />
-                        <p:password id="password" value="#{accountManager.password}" feedback="true" required="true" styleClass="accountInputTextField">
+                        <p:password id="password" value="#{accountManager.password}" required="true" styleClass="accountInputTextField">
                             <!-- Execute the "validate" method in the "PasswordValidator.java" class file to validate the password entered. -->
                             <f:validator validatorId="passwordValidator" /> 
                         </p:password>

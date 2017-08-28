@@ -30,6 +30,7 @@ public class AccountManager implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
+    private String username;
     
     private String statusMessage;
 
@@ -73,6 +74,14 @@ public class AccountManager implements Serializable {
         this.email = email;
     }
     
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     protected UserFacade getUserFacade() {
         return userFacade;
     }
@@ -84,9 +93,32 @@ public class AccountManager implements Serializable {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+
+    public User getSelected() {
+
+        if (selected == null) {
+            /*
+            user_id (database primary key) was put into the SessionMap
+            in the initializeSessionMap() method below or in LoginManager.
+             */
+            int userPrimaryKey = (int) FacesContext.getCurrentInstance().
+                    getExternalContext().getSessionMap().get("user_id");
+            /*
+            Given the primary key, obtain the object reference of the User
+            object and store it into the instance variable selected.
+             */
+            selected = getUserFacade().find(userPrimaryKey);
+        }
+        // Return the object reference of the selected User object
+        return selected;
+    }
+
+    public void setSelected(User selected) {
+        this.selected = selected;
+    }
     
     
-    
+   
      /*
     ================
     Instance Methods
@@ -94,7 +126,7 @@ public class AccountManager implements Serializable {
      */
     // Return True if a user is logged in; otherwise, return False
     public boolean isLoggedIn() {
-        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("email") != null;
+        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null;
     }
 
     /*
@@ -103,15 +135,15 @@ public class AccountManager implements Serializable {
      */
     public String createAccount() {
         
-        // First, check if the entered email is already being used
+        // First, check if the entered username is already being used
 
-        // Obtain the object reference of a User object with email
-        User aUser = getUserFacade().findByEmail(email);
+        // Obtain the object reference of a User object with username
+        User aUser = getUserFacade().findByUsername(username);
 
         if (aUser != null) {
-            // A user already exists with the email entered
-            email = "";
-            statusMessage = "Email already exists!";
+            // A user already exists with the username entered
+            username = "";
+            statusMessage = "Username already exists! Please select a different one!";
             return "";
         }
         
@@ -129,22 +161,19 @@ public class AccountManager implements Serializable {
                 newUser.setFirstName(firstName);
                 newUser.setLastName(lastName);
                 newUser.setEmail(email);
-                newUser.setPassword(password);
+                newUser.setUsername(username);
+                newUser.setPassword(password);               
                 
                 getUserFacade().create(newUser);
 
             } catch (EJBException e) {
-                email = "";
+                username = "";
                 statusMessage = "Something went wrong while creating user's account! See: " + e.getMessage();
                 return "";
             }
             // Initialize the session map for the newly created User object
             initializeSessionMap();
 
-            /*
-            The Profile page cannot be shown since the new User has not signed in yet.
-            Therefore, we show the Sign In page for the new User to sign in first.
-             */
             return "SignIn.xhtml?faces-redirect=true";
         }
         return "";
@@ -194,11 +223,11 @@ public class AccountManager implements Serializable {
             statusMessage = "Password and Confirm Password must match!";
         } else {
             // Obtain the logged-in User's username
-            String user_email = (String) FacesContext.getCurrentInstance().
-                    getExternalContext().getSessionMap().get("email");
+            String user_name = (String) FacesContext.getCurrentInstance().
+                    getExternalContext().getSessionMap().get("username");
 
             // Obtain the object reference of the signed-in User object
-            User user = getUserFacade().findByEmail(user_email);
+            User user = getUserFacade().findByUsername(user_name);
 
             if (entered_password.equals(user.getPassword())) {
                 // entered password = signed-in user's password
@@ -213,7 +242,7 @@ public class AccountManager implements Serializable {
     public void initializeSessionMap() {
 
         // Obtain the object reference of the User object
-        User user = getUserFacade().findByEmail(getEmail());
+        User user = getUserFacade().findByUsername(getUsername());
 
         // Put the User's object reference into session map variable user
         FacesContext.getCurrentInstance().getExternalContext().
@@ -323,6 +352,5 @@ public class AccountManager implements Serializable {
             statusMessage = "";
         }
     }
-    
-    
+
 }

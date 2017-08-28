@@ -38,14 +38,14 @@ public class UserFacade extends AbstractFacade<User> {
      * @param username is the username attribute (column) value of the user
      * @return object reference of the User entity whose username is username
      */
-    public User findByEmail(String email) {
-        if (em.createQuery("SELECT c FROM User c WHERE c.email = :email")
-                .setParameter("email", email)
+    public User findByUsername(String username) {
+        if (em.createQuery("SELECT c FROM User c WHERE c.username = :username")
+                .setParameter("username", username)
                 .getResultList().isEmpty()) {
             return null;
         } else {
-            return (User) (em.createQuery("SELECT c FROM User c WHERE c.email = :email")
-                    .setParameter("email", email)
+            return (User) (em.createQuery("SELECT c FROM User c WHERE c.username = :username")
+                    .setParameter("username", username)
                     .getSingleResult());
         }
     }
