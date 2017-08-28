@@ -42,11 +42,11 @@ var visualizationTime = 0;
 
 var simulationIsRunning = false;
 
-//Add Event Listener to the page
-document.addEventListener('mousedown', onDocumentMouseDown, false);
-
 //Set The When Application Displays the Map
 function setScene() {
+    
+    //Add Event Listener to the page
+    document.addEventListener('mousedown', onDocumentMouseDown, false);
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 30000);
@@ -150,8 +150,6 @@ function setScene() {
     };
 
     render();
-
-
 }
 
 /**
@@ -177,20 +175,13 @@ function processCurrentEvent(event) {
         changeTrafficLightState(event);
 
     }
-
-
-
-
-
 }
-
 
 /*
  * 
  * This method is called when user clicks to a location in the page
  */
 function onDocumentMouseDown(event) {
-
 
     event.preventDefault();
 

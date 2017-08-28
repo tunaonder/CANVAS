@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 Created by Sait Tuna Onder on 2017.08.25 
-Copyright © 2017 Sait Tun Onder. All rights reserved.
+Copyright © 2017 Sait Tuna Onder. All rights reserved.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -41,42 +41,37 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                     -->
                     <f:event listener="#{accountManager.validateInformation}" type="postValidate"/>
 
-                    <p:panelGrid columns="2" columnClasses="accountColumn1, accountColumn2">
+                    <p:panelGrid columns="2" columnClasses="columnRight, columnLeft">
 
-                        <!-- FIRST NAME -->
-                        <p:outputLabel value="First Name: " for="firstName" />
+                        <p:outputLabel value="#{bundle.CreateUserLabel_firstName}" for="firstName" />
                         <p:inputText id="firstName" value="#{accountManager.firstName}" required="true" styleClass="accountInputTextField"
                                      requiredMessage="#{bundle.CreateUserRequiredMessage_firstName}" label="First Name">
                             <f:validateLength minimum="2" />
                         </p:inputText>   
 
-                        <!-- LAST NAME -->
-                        <p:outputLabel value="Last Name:" for="lastName" />
+                        <p:outputLabel value="#{bundle.CreateUserLabel_lastName}" for="lastName" />
                         <p:inputText id="lastName" value="#{accountManager.lastName}" required="true" styleClass="accountInputTextField"
                                      requiredMessage="#{bundle.CreateUserRequiredMessage_lastName}" label="Last Name">
                             <f:validateLength minimum="2" />
                         </p:inputText>
 
-                        <!-- EMAIL ADDRESS -->
                         <p:outputLabel value="#{bundle.CreateUserLabel_email}" for="email" />
                         <p:inputText id="email" value="#{accountManager.email}" required="true" styleClass="accountInputTextField"
                                      requiredMessage="#{bundle.CreateUserRequiredMessage_email}" label="Email">
                             <f:validateLength minimum="2" />
-                             Execute the "validate" method in the "EmailValidator.java" class file to validate the email address entered. 
+                            <!-- Execute the "validate" method in the "EmailValidator.java" class file to validate the email address entered. -->
                             <f:validator validatorId="emailValidator" />  
                         </p:inputText>
 
-                        <!-- ACCOUNT PASSWORD -->
-<!--                        <h:outputLabel value="Password *" for="password" />
+                        <h:outputLabel value="#{bundle.CreateUserLabel_password} *" for="password" />
                         <p:password id="password" value="#{accountManager.password}" feedback="true" required="true" styleClass="accountInputTextField">
-                             Execute the "validate" method in the "PasswordValidator.java" class file to validate the password entered. 
+                            <!-- Execute the "validate" method in the "PasswordValidator.java" class file to validate the password entered. -->
                             <f:validator validatorId="passwordValidator" /> 
                         </p:password>
 
-                         CONFIRM PASSWORD 
                         <h:outputLabel value="Confirm Password: *" for="confirmPassword" />
                         <p:password id="confirmPassword" value="ToBeReadFromThisFieldByAccountManager" required="true" 
-                                    styleClass="accountInputTextField"/>-->
+                                    styleClass="accountInputTextField"/>
 
                     </p:panelGrid>
                     <br />

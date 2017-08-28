@@ -4,19 +4,10 @@
  */
 package vt.trafficsimulator.managers;
 
-import javax.enterprise.context.Dependent;
 import vt.trafficsimulator.entityclasses.User;
-import vt.trafficsimulator.entityclasses.MapImage;
 
 import vt.trafficsimulator.sessionbeans.UserFacade;
-import vt.trafficsimulator.sessionbeans.MapImageFacade;
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
@@ -283,6 +274,54 @@ public class AccountManager implements Serializable {
 
         // Redirect to show the index (Home) page
         return "index.xhtml?faces-redirect=true";
+    }
+    
+    // Validate if the entered password matches the entered confirm password
+    public void validateInformation(ComponentSystemEvent event) {
+
+        /*
+        FacesContext contains all of the per-request state information related to the processing of
+        a single JavaServer Faces request, and the rendering of the corresponding response.
+        It is passed to, and potentially modified by, each phase of the request processing lifecycle.
+         */
+        FacesContext fc = FacesContext.getCurrentInstance();
+
+        /*
+        UIComponent is the base class for all user interface components in JavaServer Faces. 
+        The set of UIComponent instances associated with a particular request and response are organized into
+        a component tree under a UIViewRoot that represents the entire content of the request or response.
+         */
+        // Obtain the UIComponent instances associated with the event
+        UIComponent components = event.getComponent();
+
+        /*
+        UIInput is a kind of UIComponent for the user to enter a value in.
+         */
+        // Obtain the object reference of the UIInput field with id="password" on the UI
+        UIInput uiInputPassword = (UIInput) components.findComponent("password");
+
+        // Obtain the password entered in the UIInput field with id="password" on the UI
+        String entered_password = uiInputPassword.getLocalValue()
+                == null ? "" : uiInputPassword.getLocalValue().toString();
+
+        // Obtain the object reference of the UIInput field with id="confirmPassword" on the UI
+        UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirmPassword");
+
+        // Obtain the confirm password entered in the UIInput field with id="confirmPassword" on the UI
+        String entered_confirm_password = uiInputConfirmPassword.getLocalValue()
+                == null ? "" : uiInputConfirmPassword.getLocalValue().toString();
+
+        if (entered_password.isEmpty() || entered_confirm_password.isEmpty()) {
+            // Do not take any action. 
+            // The required="true" in the XHTML file will catch this and produce an error message.
+            return;
+        }
+
+        if (!entered_password.equals(entered_confirm_password)) {
+            statusMessage = "Password and Confirm Password must match!";
+        } else {
+            statusMessage = "";
+        }
     }
     
     
