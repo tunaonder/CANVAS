@@ -1,5 +1,5 @@
 /*
- * Created by Sait Tuna Onder on 2017.08.25  * 
+ * Created by Sait Tuna Onder on 2017.08.29  * 
  * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
  */
 package vt.trafficsimulator.entityclasses;
@@ -71,7 +71,7 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
     @OneToMany(mappedBy = "userId")
-    private Collection<MapImage> mapImageCollection;
+    private Collection<UserFile> userFileCollection;
 
     public User() {
     }
@@ -138,12 +138,12 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<MapImage> getMapImageCollection() {
-        return mapImageCollection;
+    public Collection<UserFile> getUserFileCollection() {
+        return userFileCollection;
     }
 
-    public void setMapImageCollection(Collection<MapImage> mapImageCollection) {
-        this.mapImageCollection = mapImageCollection;
+    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
+        this.userFileCollection = userFileCollection;
     }
 
     @Override

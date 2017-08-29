@@ -1,5 +1,5 @@
 /*
- * Created by Sait Tuna Onder on 2017.08.25  * 
+ * Created by Sait Tuna Onder on 2017.08.29  * 
  * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
  */
 package vt.trafficsimulator.sessionbeans;
@@ -27,8 +27,8 @@ public class UserFacade extends AbstractFacade<User> {
     public UserFacade() {
         super(User.class);
     }
-
-    public User getUser(int id) {
+    
+        public User getUser(int id) {
 
         // The find method is inherited from the parent AbstractFacade class
         return em.find(User.class, id);
@@ -49,5 +49,6 @@ public class UserFacade extends AbstractFacade<User> {
                     .getSingleResult());
         }
     }
+    
     
 }

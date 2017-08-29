@@ -9,22 +9,24 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+
     <ui:composition template="templates/siteTemplate.xhtml">
+
+        <ui:define name="title">
+            <!-- Set the page title -->
+            <h:outputText value="#{accountManager.selected.firstName}'s Files"></h:outputText>
+        </ui:define>
 
         <!-- Create the content for this page below -->
         <ui:define name="editableContent">
-            <div align="center" style="width:70%">
-                <!--
-                You can place p:growl anywhere on your JSF page since the messages are displayed
-                as an overlay. The life attribute defines how long the message will be displayed 
-                in milliseconds after which it will fade away. 5000 milliseconds = 5 seconds
-                
-                All 'FacesMessage resultMsg' will be displayed here.
-                -->
+
+            <div align="center" style="width:95%">
+
                 <p:growl id="growl" life="5000" />
 
                 <h:form id="UserFileListForm">
+
+                    <p:panel header="#{accountManager.selected.firstName}&nbsp;#{accountManager.selected.lastName}'s Files" >
 
                         <p:dataTable id="datalist" value="#{userFileController.items}" var="item"
                                      selectionMode="single" selection="#{userFileController.selected}"
@@ -96,16 +98,6 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                                 <div align="center"><h:outputText value="#{item.userId}"/></div>
                             </p:column>
 
-                            <!-- USER PHOTO column -->
-                            <p:column style="width:100px;">
-                                <f:facet name="header">
-                                    <h:outputText value="User Photo"/>
-                                </f:facet>
-                                <div align="center">
-                                    <h:graphicImage class="previewProfilePhoto" value="#{accountManager.userPhoto()}" />
-                                </div>
-                            </p:column>
-
                             <!--
                             The "header" and "footer" facets are defined for the p:dataTable.
                             See their documentations in PrimeFaces User Guide.
@@ -167,9 +159,14 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                                                  ajax="false" icon="ui-icon-play" styleClass="commandButton" 
                                                  disabled="#{empty userFileController.selected}" />
                             </f:facet>
+
                         </p:dataTable>
+                    </p:panel>
+
                 </h:form>
             </div>
+
         </ui:define>
     </ui:composition>
+    <!-- Do not enter tags after the composition line since they are ignored by JSF -->
 </html>
