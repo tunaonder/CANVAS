@@ -35,11 +35,12 @@
                             Home
                         </h:link>&nbsp;&nbsp;
 
-                        <h:link outcome="Maps" styleClass="arialTen">
-                            <i class="fa fa-files-o">&nbsp;</i>Maps
-                        </h:link>&nbsp;&nbsp;
-
                         <c:if test="#{accountManager.isLoggedIn() == true}">
+                            
+                            <h:link outcome="Maps" styleClass="arialTen">
+                                <i class="fa fa-files-o">&nbsp;</i>Maps
+                            </h:link>&nbsp;&nbsp;
+
                             <h:commandLink action="#{accountManager.logout()}" styleClass="arialTen" >
                                 <i class="fa fa-sign-out">&nbsp;</i>Sign Out
                             </h:commandLink>&nbsp;&nbsp;

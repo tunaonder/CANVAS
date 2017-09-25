@@ -39,23 +39,9 @@ import vt.trafficsimulator.sessionbeans.UserFileFacade;
 
 public class UserFileController implements Serializable {
 
-    /*
-    ===============================
-    Instance Variables (Properties)
-    ===============================
-
-    The instance variable 'userFacade' is annotated with the @EJB annotation.
-    The @EJB annotation directs the EJB Container (of the GlassFish AS) to inject (store) the object reference
-    of the UserFacade object, after it is instantiated at runtime, into the instance variable 'userFacade'.
-     */
     @EJB
     private UserFacade userFacade;
 
-    /*
-    The instance variable 'userFileFacade' is annotated with the @EJB annotation.
-    The @EJB annotation directs the EJB Container (of the GlassFish AS) to inject (store) the object reference 
-    of the UserFileFacade object, after it is instantiated at runtime, into the instance variable 'userFileFacade'.
-     */
     @EJB
     private UserFileFacade userFileFacade;
 
@@ -65,11 +51,6 @@ public class UserFileController implements Serializable {
     // items = list of UserFile objects
     private List<UserFile> items = null;
 
-    /*
-    cleanedFileNameHashMap<KEY, VALUE>
-        KEY   = Integer fileId
-        VALUE = String cleanedFileNameForSelected
-     */
     HashMap<Integer, String> cleanedFileNameHashMap = null;
 
     // Message to show when file type cannot be processed
@@ -180,11 +161,6 @@ public class UserFileController implements Serializable {
         return getUserFileFacade().findAll();
     }
 
-    /*
-    ================
-    Instance Methods
-    ================
-     */
     public UserFile prepareCreate() {
         selected = new UserFile();
         initializeEmbeddableKey();
@@ -297,11 +273,6 @@ public class UserFileController implements Serializable {
 
     }
 
-    /*
-    =========================
-    Delete Selected User File
-    =========================
-     */
     public String deleteSelectedUserFile() {
 
         UserFile userFileToDelete = selected;
@@ -338,11 +309,6 @@ public class UserFileController implements Serializable {
         return "Maps?faces-redirect=true";
     }
 
-    /*
-    ========================
-    Refresh User's File List
-    ========================
-     */
     public void refreshFileList() {
         /*
         By setting the items to null, we force the getItems
@@ -482,16 +448,6 @@ public class UserFileController implements Serializable {
                 fileTypeMessage = "Unable to display the selected file!";
                 return false;
         }
-    }
-
-    /*
-    =================================================
-    Return True if Selected File is an MP4 Video File
-    =================================================
-     */
-    public boolean isMP4Video() {
-
-        return extensionOfSelectedFileInCaps().equals("MP4");
     }
 
     /*

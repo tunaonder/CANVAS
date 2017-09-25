@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created by Sait Tuna Onder on 2017.09.25 
+Copyright © 2017 Sait Tun Onder. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="templates/siteTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Display Map"></h:outputText>
+        </ui:define>
+
+        <ui:define name="editableContent">
+
+            <div align="center">
+                <h2>#{userFileController.cleanedFileNameForSelected()}</h2>
+
+                <c:choose>
+                    <c:when test = "${userFileController.isImage()}">
+                        <!-- Display the map image -->
+                        <h:graphicImage class="displayImage" value="#{userFileController.selectedFileRelativePath()}" style="width: 80%;"/>
+                        <br />
+                    </c:when>
+
+                    <c:otherwise>
+                        <c:if test = "${userFileController.isViewable()}">
+                            <!-- Display the viewable file -->
+                            <div>
+                                <iframe src="#{userFileController.selectedFileRelativePath()}" width="600" height="400" scrolling="yes"></iframe>
+                            </div>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+
+                <h:outputText styleClass="alertUser" value="#{userFileController.fileTypeMessage}"/>
+                <br />
+
+                <p:button outcome="Maps" value="Back" icon="ui-icon-arrowthick-1-w" styleClass="commandButton" />
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+</html>
