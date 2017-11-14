@@ -53,16 +53,15 @@ function setScene() {
 
     renderer = new THREE.WebGLRenderer();
 
-    //Background Image Real Size
-    //var backgroundWidth = 3737;
-//    var backgroundHeight = 2434;
+    var backImage = new Image();
+    // Default Image
+    backImage.src = 'resources/images/DowntownClean.jpg';
 
-   // var ratio = 2434 / 3737;
-
-    var backgroundWidth = window.innerWidth;
-    var backgroundHeight = 800;
+    // Get the size ratio of the default image
+    var ratio = backImage.height/backImage.width;
     
-    backImage = new Image("resources/images/DowntownClean.jpg");
+    var backgroundWidth = window.innerWidth;
+    var backgroundHeight = ratio * backgroundWidth;
     
     //Degree
     var degree = Math.PI / 180;

@@ -5,7 +5,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import vt.trafficsimulator.entityclasses.User;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-12T16:44:48")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-13T23:32:11")
 @StaticMetamodel(UserFile.class)
 public class UserFile_ { 
 

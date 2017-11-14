@@ -11,16 +11,13 @@ html, body{
     width: 100%;
     margin: 0;
 /*    Disable Page scrooling*/
-    overflow: hidden;
+/*    overflow: hidden;*/
 }
 
 canvas {
     /*  overflow: auto;
       height: calc(100vh - 50px);
       width: 100% !important;*/
-    width: 100%;
-    height: 500px;
-    background-color: pink;
 }
 
 /*Control Panel Styling*/
