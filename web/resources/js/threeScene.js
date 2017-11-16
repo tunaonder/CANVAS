@@ -30,7 +30,6 @@ var mapFinishY;
 //Array Of Current Vehicles 
 var vehicles = [];
 
-
 //Earliest Event
 var earliestEvent;
 
@@ -52,20 +51,18 @@ function setScene() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 30000);
 
     renderer = new THREE.WebGLRenderer();
-
-    var backImage = new Image();
-    // Default Image
-    backImage.src = 'resources/images/DowntownClean.jpg';
-
-    // Get the size ratio of the default image
-    var ratio = backImage.height/backImage.width;
     
+    // Temporary: Disable background Image Size Ratio Calculation
+//    var backImage = new Image();    
+//    // Default Image
+//    backImage.src = 'resources/images/DowntownClean.jpg';
+//    var ratio = backImage.height/backImage.width;   
+    // Get the size ratio of the default image
+    var ratio = 2434/3737;
+
     var backgroundWidth = window.innerWidth;
     var backgroundHeight = ratio * backgroundWidth;
-    
-    //Degree
-    var degree = Math.PI / 180;
-
+   
     camera.position.z = 800;
 
     // Load the background texture
@@ -95,7 +92,6 @@ function setScene() {
     //Set Background Color to the Scene
     renderer.setClearColor(0xafcedf);
     document.body.appendChild(renderer.domElement);
-
     
     //This Function is Called 60 times in A Second!
     //Three.js main visualization processes are happening in this method.
@@ -128,7 +124,6 @@ function setScene() {
                         earliestEventTime = eventQueue.getFirst().time;
 
                     }
-
                 }
             }
             
@@ -199,9 +194,6 @@ function onDocumentMouseDown(event) {
     var distance = -camera.position.z / dir.z;
 
     var pos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-
-
 
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
@@ -279,7 +271,6 @@ function changeInsertMode(id) {
 
     }
 }
-
 
 //Gets An Object And Camere, and returns 2d X and Y coordinates
 //function toScreenPosition(obj, camera)

@@ -3,7 +3,6 @@
  * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
  */
 
-
 /* global THREE, scene, vehicles */
 var degree = Math.PI / 180;
 
@@ -25,8 +24,6 @@ function Vehicle(geometry, material, vehicleId, speed, length, rotation, x, y, t
     this.targetX = targetX;
     this.targetY = targetY;
     this.carRotation = rotation;
-
-
 }
 
 function createNewVehicle(event) {
@@ -59,8 +56,6 @@ function createNewVehicle(event) {
         vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[11]);
     }
     
-    
-    
     //Create Mesh
     vehicleMaterial = new THREE.MeshBasicMaterial({map: vehicleTexture, transparent: true});
 
@@ -75,7 +70,6 @@ function createNewVehicle(event) {
     vehicle.position.y = vehicle.y;
     //Set vehicle rotation
     vehicle.rotation.z = vehicle.carRotation + degree * 90;
-
 
     //Add to the scene and vehicle array
     scene.add(vehicle);
@@ -110,13 +104,8 @@ function changeVehicleDirection(event) {
             vehicles[i].position.y = y;
 
             break;
-
-
         }
-
     }
-
-
 }
 
 /**
@@ -141,8 +130,6 @@ function changeVehicleSpeed(event) {
         }
 
     }
-
-
 }
 
 /**
@@ -166,11 +153,7 @@ function destroyVehicle(event){
             //i = i - 1;
             
             break;
-
-
         }
-
     }
-    
 }
 

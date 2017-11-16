@@ -6,7 +6,6 @@
 
 /* global moveSpotObjects, eventQueue */
 
-
 var socket = new WebSocket("ws://localhost:8080/build/actions");
 
 //Call onMessage method when socket gets a message from the server
@@ -19,10 +18,7 @@ socket.onmessage = onMessage;
  */
 function startSimulation() {
 
-
-    
     var staticObjects = [];
-
 
     for (var i = 0; i < moveSpotObjects.length; i++) {
 
@@ -90,10 +86,7 @@ function startSimulation() {
                 "prevId": object.prevMoveSpotId,
                 "state": object.state
             });
-
         }
-
-
     }
 
     //Start Rendering
@@ -103,8 +96,6 @@ function startSimulation() {
     document.getElementById('startStopButton').style.background = "green";
 
     socket.send(JSON.stringify(staticObjects));
-
-
 }
 
 function testSend(){

@@ -298,9 +298,6 @@ function removeMoveSpot() {
     moveSpotObjects.splice(-1,1);
     //Set the new Current Move Spot
     currentMoveSpot = moveSpotObjects[moveSpotObjects.length-1];
-
-
-
 }
 
 /**
