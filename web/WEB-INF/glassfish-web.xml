@@ -9,4 +9,5 @@
   </jsp-config>
   
    <property name="alternatedocroot_1" value="from=/TrafficSimulatorFileStorage/* dir=/Users/Onder" />
+<!--   <property name="alternatedocroot_1" value="from=/TrafficSimulatorFileStorage/* dir=/home/Onder" />-->
 </glassfish-web-app>
