@@ -6,7 +6,7 @@
         <property name="portNumber" value="3306"/>
         <property name="databaseName" value="TrafficSimulatorDB"/>
         <property name="User" value="root"/>
-        <property name="Password" value="CSD@mysql-1872"/>
+        <property name="Password" value="Tur-Kiye(1923)"/>
         <property name="URL" value="jdbc:mysql://localhost:3306/TrafficSimulatorDB?zeroDateTimeBehavior=convertToNull"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
