@@ -178,13 +178,18 @@ function processCurrentEvent(event) {
 function onDocumentMouseDown(event) {
 
     event.preventDefault();
+    
+    // Determine how much user has scrolled
+    // Source: https://stackoverflow.com/questions/11373741/detecting-by-how-much-user-has-scrolled
+    var scrollAmountY = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement 
+        || document.body.parentNode || document.body).scrollTop;
 
     //Map Starts Under Control Panel Height
     //Set the correct coordinates to the vector according to window width, window height, 
     //headerHeight and coordinatePanelHeight
     vector.set(
             (event.clientX / window.innerWidth) * 2 - 1,
-            -((event.clientY - (controlPanelHeight + headerHeight)) / window.innerHeight) * 2 + 1,
+            -(((event.clientY + scrollAmountY) - (controlPanelHeight + headerHeight)) / window.innerHeight) * 2 + 1,
             0.5);
 
     vector.unproject(camera);
@@ -271,28 +276,6 @@ function changeInsertMode(id) {
 
     }
 }
-
-//Gets An Object And Camere, and returns 2d X and Y coordinates
-//function toScreenPosition(obj, camera)
-//{
-//    var vector = new THREE.Vector3();
-//
-//    var widthHalf = 0.5 * renderer.context.canvas.width;
-//    var heightHalf = 0.5 * renderer.context.canvas.height;
-//
-//    obj.updateMatrixWorld();
-//    vector.setFromMatrixPosition(obj.matrixWorld);
-//    vector.project(camera);
-//
-//    vector.x = (vector.x * widthHalf) + widthHalf;
-//    vector.y = -(vector.y * heightHalf) + heightHalf;
-//
-//    return {
-//        x: vector.x,
-//        y: vector.y
-//    };
-//
-//}
 
 /**
  * 

@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode */
+/* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode, headerHeight */
 
 //List Of ALL STATIC OBJECTS
 var moveSpotObjects = [];
@@ -273,10 +273,15 @@ function moveSpotInsert() {
  * Finds the clicked move spot and calls its callback method
  */
 function moveSpotClicked() {
+    
+    // Determine how much user has scrolled
+    // Source: https://stackoverflow.com/questions/11373741/detecting-by-how-much-user-has-scrolled
+    var scrollAmountY = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement 
+        || document.body.parentNode || document.body).scrollTop;
+    
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-    mouse.y = -((event.clientY - (controlPanelHeight + headerHeight)) / renderer.domElement.clientHeight) * 2 + 1;
-
-
+    mouse.y = -(((event.clientY + scrollAmountY) - (controlPanelHeight + headerHeight)) / renderer.domElement.clientHeight) * 2 + 1;
+    
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(moveSpotObjects);
 
