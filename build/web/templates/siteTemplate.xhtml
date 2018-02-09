@@ -41,7 +41,7 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
         -->
         <h:outputStylesheet library="css" name="styles.css" />  
         <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        
+
         <!--
         The icons and the font-awesome.min.css styles provided by http://fontawesome.io/
         are linked for use by the entire site.
@@ -51,13 +51,13 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" />
-        
+
         <!-- 
         If you need to link an additional CSS file for a particular page, 
         you can redefine "css" in that page by using <ui:define name="css"> 
         -->
         <ui:insert name="css"/>
-        
+
         <!-- 
         A favicon (short for favorite icon), also known as a shortcut icon, website icon, tab icon, 
         URL icon or bookmark icon, is a file named favicon.ico [https://en.wikipedia.org/wiki/Favicon]
@@ -69,7 +69,7 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
         <link rel="shortcut icon" href="resources/images/favicon.ico" type="image/x-icon" />
 
         <script src="resources/js/three.js"></script>
-        
+
         <script src="resources/js/threeScene.js"></script>
         <script src="resources/js/moveSpot.js"></script>
         <script src="resources/js/websocket.js"></script>
@@ -81,48 +81,47 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
     </h:head>
 
     <h:body>  
-        <div id="page">  
-            <!-- 
-            The Site Template page layout design consists of three components:
-                1. Header Component (Typically is the same for the entire site)
-                2. Editable Content Component (each page creates its own content)
-                3. Footer Component (Typically is the same for the entire site)
 
-            =====================================
-            * Header Component of this Template *
-            =====================================
-            The header component is displayed on the top of each page created based on this siteTemplate.
-            Changes made in the header component will show up automatically with all pages created 
-            based on this siteTemplate for the entire site, achieving great maintainability.
-            -->
-            <div id="header">
-                <ui:insert name="header" >
-                    <ui:include src="headerTemplate.xhtml" />
-                </ui:insert>
-            </div>
+        <!-- 
+        The Site Template page layout design consists of three components:
+            1. Header Component (Typically is the same for the entire site)
+            2. Editable Content Component (each page creates its own content)
+            3. Footer Component (Typically is the same for the entire site)
 
-            <!--
-            The ui:insert tag is a templating tag that declares a named content element
-            to be defined by another Facelet. It can be used effectively with the
-            ui:define tag to pass values between Facelets. [jsftoolbox.com]
-            
-            The ui:include tag is a server-side include tag for Facelets. It simply includes
-            the document pointed to by the "src" attribute as part of the current JSF page.
-            The included document should use a component or composition tag to trim unnecessary
-            markup, or it may simply contain a fragment of XHTML or XML to be included. [jsftoolbox.com]
-
-            ===============================================
-            * Editable Content Component of this Template *
-            ===============================================
-            Any page created based on this template is expected to provide its own content
-            by using <ui:define name="editableContent">. If the page content is not defined,
-            contentTemplate's content will be used as default. 
-            -->
-            <div id="editableContent">
-                <ui:insert name="editableContent" >
-                    <ui:include src="contentTemplate.xhtml" />
-                </ui:insert>
-            </div>         
+        =====================================
+        * Header Component of this Template *
+        =====================================
+        The header component is displayed on the top of each page created based on this siteTemplate.
+        Changes made in the header component will show up automatically with all pages created 
+        based on this siteTemplate for the entire site, achieving great maintainability.
+        -->
+        <div id="header">
+            <ui:insert name="header" >
+                <ui:include src="headerTemplate.xhtml" />
+            </ui:insert>
         </div>
+
+        <!--
+        The ui:insert tag is a templating tag that declares a named content element
+        to be defined by another Facelet. It can be used effectively with the
+        ui:define tag to pass values between Facelets. [jsftoolbox.com]
+        
+        The ui:include tag is a server-side include tag for Facelets. It simply includes
+        the document pointed to by the "src" attribute as part of the current JSF page.
+        The included document should use a component or composition tag to trim unnecessary
+        markup, or it may simply contain a fragment of XHTML or XML to be included. [jsftoolbox.com]
+
+        ===============================================
+        * Editable Content Component of this Template *
+        ===============================================
+        Any page created based on this template is expected to provide its own content
+        by using <ui:define name="editableContent">. If the page content is not defined,
+        contentTemplate's content will be used as default. 
+        -->
+        <div id="editableContent">
+            <ui:insert name="editableContent" >
+                <ui:include src="contentTemplate.xhtml" />
+            </ui:insert>
+        </div> 
     </h:body>
 </html>

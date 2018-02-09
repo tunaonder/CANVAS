@@ -12,9 +12,11 @@ var renderer;
 //Control Panel Insert Mode(Changes According to Button Clicked)
 var mode = "";
 
-//Height Of The Control Panel
-var controlPanelHeight = 80;
+var controlPanelWidth = 300;
 var headerHeight = 60;
+
+var canvasWidth = window.innerWidth-controlPanelWidth;
+var canvasHeight = window.innerHeight - headerHeight;
 
 //Three.js Objects
 var raycaster = new THREE.Raycaster(); // create once
@@ -48,7 +50,7 @@ function setScene() {
     document.addEventListener('mousedown', onDocumentMouseDown, false);
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 30000);
+    camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 30000);
 
     renderer = new THREE.WebGLRenderer();
     
@@ -60,10 +62,10 @@ function setScene() {
     // Get the size ratio of the default image
     var ratio = 2434/3737;
 
-    var backgroundWidth = window.innerWidth;
+    var backgroundWidth = canvasWidth;
     var backgroundHeight = ratio * backgroundWidth;
    
-    camera.position.z = 800;
+    camera.position.z = 700;
 
     // Load the background texture
     var texture = THREE.ImageUtils.loadTexture('resources/images/DowntownClean.jpg');
@@ -88,7 +90,7 @@ function setScene() {
 
 
     //Renders the app in half resolution, but display in full size.
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(canvasWidth, canvasHeight);
     //Set Background Color to the Scene
     renderer.setClearColor(0xafcedf);
     document.body.appendChild(renderer.domElement);
@@ -129,8 +131,6 @@ function setScene() {
             
             //Move All Vehicles
             for (var i = 0; i < vehicles.length; i++) {
-
-
                 vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
                 vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
             }
@@ -184,12 +184,11 @@ function onDocumentMouseDown(event) {
     var scrollAmountY = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement 
         || document.body.parentNode || document.body).scrollTop;
 
-    //Map Starts Under Control Panel Height
     //Set the correct coordinates to the vector according to window width, window height, 
-    //headerHeight and coordinatePanelHeight
+    //headerHeight and coordinatePanelWidth
     vector.set(
-            (event.clientX / window.innerWidth) * 2 - 1,
-            -(((event.clientY + scrollAmountY) - (controlPanelHeight + headerHeight)) / window.innerHeight) * 2 + 1,
+            ((event.clientX-controlPanelWidth) / canvasWidth) * 2 - 1,
+            -(((event.clientY + scrollAmountY) - headerHeight) / canvasHeight) * 2 + 1,
             0.5);
 
     vector.unproject(camera);

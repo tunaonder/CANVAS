@@ -7,45 +7,89 @@ Copyright © 2017 Sait Tuna Onder. All rights reserved.
     Author     : Onder
 */
 
-html, body{
+html{
     width: 100%;
+    height: 100%;
     margin: 0;
 /*    Disable Page scrooling*/
 /*    overflow: hidden;*/
 }
 
-canvas {
-    /*  overflow: auto;
-      height: calc(100vh - 50px);
-      width: 100% !important;*/
-}
-
-/*Control Panel Styling*/
-#controlPanel{
-    height: 80px;
-    text-align: center;
-    background-color: gray;
-}
-
-#controlHeader{
-    display: block;
-    font-size: 20px; 
-}
-
-button{
-    width: 120px;
-    /*margin: 20px;*/
-    background-color: green;
-}
-
-.panelButton{
-    background-color: red;
+body{
+    margin: 0;
+    position: relative;
+    min-height: 100% !important;
 }
 
 #header {
     background-color: #F0FFFF;   /* Azure */
     width: 100%;
     height: 60px;
+    border-bottom: 2px solid #e95051;
+}
+
+canvas {
+    /*  overflow: auto;
+      height: calc(100vh - 50px);
+      width: 100% !important;*/
+    position: absolute;
+    left: 300px;
+    width: calc(100% - 300px) !important;
+}
+
+#editableContent {
+    /* Styles applied to the entire editableContent containing element of the site template */
+    position:absolute;
+    height: calc(100% - 60px) !important;
+}
+
+/*Control Panel Styling*/
+#controlPanel{
+
+ /* Styles applied to the entire sidebar containing element of the site template */
+/*    min-height: 100%;*/
+    display: inline-block;
+    float: left;
+    border-right: 2px solid #e95051;
+    width: 300px;
+/*    height: 100%;*/
+/*    overflow: scroll;*/
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.controlLabel{
+    display: block;
+    font-size: 20px; 
+}
+
+.panelButton{
+    width: 130px;
+    margin-right: 5px;
+    margin-top: 10px;
+    background-color: white;
+    border: 1px solid #e95051 !important;
+}
+
+.panelButton:hover {
+    /* Hover style for the aforementioned .btn-custom style class */
+    background-color: grey;
+    color: white;
+}
+
+#startSimDiv{
+    position: fixed;
+    bottom: 30px;   
+}
+
+#startSimDiv .panelButton{
+    background-color: #52D017;
+    border: none !important;
 }
 
 /* Style error messages text */
@@ -82,3 +126,4 @@ h1 {
     width: auto;
     height: 100px;
 }
+

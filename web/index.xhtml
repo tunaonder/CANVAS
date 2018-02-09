@@ -9,26 +9,28 @@
         <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
-            <div id="pageContainer" style="height: 100%; width: 100%;">
+            <div id="controlPanel" >
+                <label class="controlLabel">Add Spot</label>
+                <button id="enterPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Enter Point</button>
+                <button id="exitPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Exit Point</button>
+                <button id="moveSpotButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Add Move Spot</button>
+                <button id="redLightButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Red Light</button>
+                <button id="removeButton" class="btn panelButton" onClick="removeMoveSpot();"> Remove Last</button>
 
-                <div id="controlPanel" >
+                <label class="controlLabel">Convert Spot</label>
+                <button id="forkButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Convert to Fork</button>
+                <button id="mergeButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Convert to Merge</button>
+                <button id="" class="btn panelButton" onClick=""> Cancel Change</button>
 
-                    <label id="controlHeader">Control Panel</label>
-                    <button id="enterPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Enter Point</button>
-                    <button id="moveSpotButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Add Move Spot</button>
-                    <button id="exitPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Add Exit Point</button>
-                    <button id="forkButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Convert to Fork</button>
-                    <button id="mergeButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Convert to Merge</button>
-                    <button id="greenLightButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Green Light</button>
-                    <button id="redLightButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Red Light</button>
-                    <button id="removeButton" class="btn panelButton" onClick="removeMoveSpot();"> Remove Last</button>
+                <div id="startSimDiv">
+                    <label class="controlLabel">Run</label>
                     <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
                     <button id="testButton" class="btn panelButton" onClick="testSend();"> Test Simulation</button>
-                    <br/>
-                    <div class="mapView">
-                        <script> setScene();</script>
-                    </div>
                 </div>
+
+            </div>
+            <div>
+                <script> setScene();</script>
             </div>
         </ui:define>
 
