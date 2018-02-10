@@ -177,7 +177,7 @@ function processCurrentEvent(event) {
  */
 function onDocumentMouseDown(event) {
 
-    event.preventDefault();
+  //  event.preventDefault();
     
     // Determine how much user has scrolled
     // Source: https://stackoverflow.com/questions/11373741/detecting-by-how-much-user-has-scrolled

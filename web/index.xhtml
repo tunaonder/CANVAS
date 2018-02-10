@@ -11,7 +11,7 @@
         <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
-            <div id="controlPanel" >
+            <div id="controlPanel">
                 <label class="controlLabel">Add Spot</label>
                 <button id="enterPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Enter Point</button>
                 <button id="exitPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Exit Point</button>
@@ -34,7 +34,7 @@
                     <div id="trafficLightDiv">
                         <label class="controlLabel">Set Traffic Light</label>
                         <h:panelGrid columns="2" cellpadding="5" columnClasses="trafficLight-label, trafficLight-input">
-                            <p:outputLabel for="greenStartTime" value="Green Start Time: " />
+                            <h:outputLabel for="greenStartTime" value="Green Start Time: " />
                             <h:inputText id="greenStartTime" class="form-control">
                                 <f:validateLength minimum="2" maximum="32" />
                             </h:inputText>
@@ -49,12 +49,13 @@
                         </h:panelGrid>
                     </div>
                 </h:form>
-
             </div>
             <div>
                 <script> setScene();</script>
             </div>
+
         </ui:define>
+
 
     </ui:composition>
 
