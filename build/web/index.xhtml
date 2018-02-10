@@ -2,7 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition template="/templates/siteTemplate.xhtml">
 
@@ -14,7 +16,7 @@
                 <button id="enterPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Enter Point</button>
                 <button id="exitPointButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Exit Point</button>
                 <button id="moveSpotButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Add Move Spot</button>
-                <button id="redLightButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Red Light</button>
+                <button id="redLightButton" class="btn panelButton" onClick="changeInsertMode(this.id);"> Traffic Light</button>
                 <button id="removeButton" class="btn panelButton" onClick="removeMoveSpot();"> Remove Last</button>
 
                 <label class="controlLabel">Convert Spot</label>
@@ -27,6 +29,26 @@
                     <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
                     <button id="testButton" class="btn panelButton" onClick="testSend();"> Test Simulation</button>
                 </div>
+
+                <h:form id="trafficLightForm" rendered="true">
+                    <div id="trafficLightDiv">
+                        <label class="controlLabel">Set Traffic Light</label>
+                        <h:panelGrid columns="2" cellpadding="5" columnClasses="trafficLight-label, trafficLight-input">
+                            <p:outputLabel for="greenStartTime" value="Green Start Time: " />
+                            <h:inputText id="greenStartTime" class="form-control">
+                                <f:validateLength minimum="2" maximum="32" />
+                            </h:inputText>
+                            <p:outputLabel for="greenDuration" value="Green Duration: " />
+                            <h:inputText id="greenDuration" class="form-control" >
+                                <f:validateLength minimum="2" maximum="32" />
+                            </h:inputText>
+                            <p:outputLabel for="redDuration" value="Red Duration: " />
+                            <h:inputText id="redDuration" class="form-control"  >
+                                <f:validateLength minimum="2" maximum="32" />
+                            </h:inputText>
+                        </h:panelGrid>
+                    </div>
+                </h:form>
 
             </div>
             <div>

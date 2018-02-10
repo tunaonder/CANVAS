@@ -249,11 +249,10 @@ function onDocumentMouseDown(event) {
  */
 function changeInsertMode(id) {
 
-
     //If No Button Is Clicked Before Set The Mode
     if (mode === '') {
         mode = id;
-        document.getElementById(id).style.background = "green";
+        document.getElementById(id).style.background = "#99C68E";
 
     }
     //If There is already a clicked button
@@ -261,18 +260,17 @@ function changeInsertMode(id) {
         //If Same Button is Clicked
         if (mode === id) {
             //Clear The Mode
-            document.getElementById(id).style.background = "red";
+            document.getElementById(id).style.background = "white";
             mode = '';
         } else {
             //The Other Mode is cancelled
-            document.getElementById(mode).style.background = "red";
+            document.getElementById(mode).style.background = "white";
             //Set The New Mode
             mode = id;
             //Make it Visible
-            document.getElementById(mode).style.background = "green";
+            document.getElementById(mode).style.background = "#99C68E";
 
         }
-
     }
 }
 

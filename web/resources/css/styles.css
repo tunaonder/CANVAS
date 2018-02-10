@@ -92,6 +92,22 @@ canvas {
     border: none !important;
 }
 
+#trafficLightDiv{
+    margin-top: 30px;
+}
+
+.trafficLight-label {
+    /* Style class of the labels in the signup form */
+    padding-right: 10px;
+}
+
+.trafficLight-input input {
+    /* Style class for the inline profile edit inputs */
+    display: block;
+    width: 120px;
+    margin-top: 10px;
+}
+
 /* Style error messages text */
 .errorMessages {
     font-family: Arial, Helvetica, sans-serif;
