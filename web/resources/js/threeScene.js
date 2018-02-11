@@ -199,10 +199,10 @@ function onDocumentMouseDown(event) {
 
     var pos = camera.position.clone().add(dir.multiplyScalar(distance));
 
-    
+
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
-        
+
         //If the Mode is Convert To Fork or Convert to Merge
         if (mode === 'forkButton' || mode === 'mergeButton') {
             moveSpotClicked();
@@ -229,15 +229,34 @@ function onDocumentMouseDown(event) {
         } else if (mode === 'exitPointButton') {
             exitPointInsert();
         } else if (mode === 'trafficLightButton') {
-            var greenStartTime = document.getElementById("greenStartTime2").value;
-            alert(greenStartTime);
+            var greenStartTime = document.getElementById("trafficLightForm:greenStartTime").value;
+            var greenDuration = document.getElementById("trafficLightForm:greenDuration").value;
+            var redDuration = document.getElementById("trafficLightForm:redDuration").value;
+
+            if (greenStartTime === "" || greenDuration === "" || redDuration === "") {
+                alert("Please Fill Traffic Light Details");
+                return;
+            }
             
-            trafficLightInsert('Green');
+            var isNumber1 = greenStartTime.match(/^\d+$/);
+            var isNumber2 = greenDuration.match(/^\d+$/);
+            var isNumber3 = redDuration.match(/^\d+$/);
+            if (!isNumber1 || !isNumber2 || !isNumber3) {
+                alert("Traffic Light Details is not valid");
+                return;
+            }
+
+            if (greenStartTime < 0 || greenDuration < 0 || redDuration < 0) {
+                alert("Time cannot be smaller than 0");
+                return;
+            }
+
         }
     }
 }
 
 /**
+ * 
  * 
  * @param {type} x1
  * @param {type} y1
