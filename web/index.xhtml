@@ -24,12 +24,6 @@
                 <button id="mergeButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Merge</button>
                 <button id="" class="btn panelButton" onClick=""> Cancel Change</button>
 
-                <div id="startSimDiv">
-                    <label class="controlLabel">Run</label>
-                    <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
-                    <button id="testButton" class="btn panelButton" onClick="testSend();"> Test Simulation</button>
-                </div>
-                
                 <h:form id="trafficLightForm" style="display: none;">
                     <div id="trafficLightDiv">
                         <label class="controlLabel">Set Traffic Light</label>
@@ -43,6 +37,14 @@
                         </h:panelGrid>
                     </div>
                 </h:form>
+
+                <div id="startSimDiv">
+                    <label class="controlLabel">Run</label>
+                    <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
+                    <button id="testButton" class="btn panelButton" onClick="testSend();"> Test Simulation</button>
+                </div>
+
+
             </div>
             <div>
                 <script> setScene();</script>

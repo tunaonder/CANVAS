@@ -62,7 +62,8 @@ canvas {
 
 .controlLabel{
     display: block;
-    font-size: 20px; 
+    font-size: 20px;
+    margin-top: 10px;
 }
 
 .panelButton{
@@ -79,10 +80,10 @@ canvas {
     color: white;
 }
 
-#startSimDiv{
+/*#startSimDiv{
     position: fixed;
     bottom: 30px;   
-}
+}*/
 
 #startSimDiv .panelButton{
     background-color: #52D017;
@@ -90,7 +91,7 @@ canvas {
 }
 
 #trafficLightDiv{
-    margin-top: 30px; 
+    margin-top: 20px; 
 }
 
 .trafficLight-label {
