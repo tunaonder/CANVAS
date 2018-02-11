@@ -23,8 +23,6 @@ function Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, ta
     this.targetX = targetX;
     this.targetY = targetY;
     this.id = eventId;
-
-
 }
 
 //Change Direction Event
@@ -132,16 +130,8 @@ function processEvent(event) {
         var type = event.action;
         var time = event.time;
         var lightId = event.lightId;
-
         var newEvent = new Event5(type, time, lightId);
-
-
         eventQueue.push(newEvent, time);
-
-
-        
-
-
     }
 
 }
