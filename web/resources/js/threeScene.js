@@ -282,6 +282,9 @@ function buttonClicked(id) {
             document.getElementById("trafficLightForm").style.display = 'inline';
         } else {
             document.getElementById("trafficLightForm").style.display = 'none';
+            document.getElementById("trafficLightForm:greenStartTime").value = "";
+            document.getElementById("trafficLightForm:greenDuration").value = "";
+            document.getElementById("trafficLightForm:redDuration").value = "";
         }
     }
 }
