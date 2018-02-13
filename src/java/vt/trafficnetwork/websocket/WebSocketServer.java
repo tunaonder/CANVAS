@@ -30,8 +30,10 @@ public class WebSocketServer {
     @OnOpen
     public void open(Session session) {
         sessionHandler.addSession(session);
-        System.out.println(session);
         System.out.println("connect");
+        System.out.println(session);
+        
+        System.out.println("TES1");
 
     }
 
@@ -55,6 +57,7 @@ public class WebSocketServer {
             JsonArray jsonArray = reader.readArray();
 
             System.out.println(jsonArray);
+  
             //Create a New Simulation Instance for this session
             SimulationManager sim = SimulationManager.addSimulationInstance(session.getId());
 

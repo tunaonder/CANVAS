@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="TrafficSimulatorPU" transaction-type="JTA">
-    <jta-data-source>java:app/TrafficSimulatorDB</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-       <properties>
+    <persistence-unit name="TrafficSimulatorPU" transaction-type="JTA">
+        <jta-data-source>java:app/TrafficSimulatorDB</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
             <property name="javax.persistence.jdbc.user" value="root" />
             <property name="javax.persistence.jdbc.password" value="Tur-Kiye(1923)" />
+            <property name="eclipselink.logging.level" value="ALL" />
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true" />
+            <property name="eclipselink.logging.connection" value="true" />
+            <property name="eclipselink.logging.session" value="true" />
+            <property name="eclipselink.logging.thread" value="true" />
+            <property name="eclipselink.logging.timestamp" value="true" />
         </properties>
-  </persistence-unit>
+    </persistence-unit>
 </persistence>

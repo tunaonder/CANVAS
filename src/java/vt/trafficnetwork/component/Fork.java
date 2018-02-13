@@ -18,8 +18,7 @@ public class Fork extends MovementObject{
     private MovementObject nextAlternative;
 
     public Fork(String id, double x, double y) {
-        super(id, x, y);
-        
+        super(id, x, y);  
     }
 
     public MovementObject getPrev() {

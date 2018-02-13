@@ -42,22 +42,29 @@ function MoveSpot(geometry, material, id, x, y, nextId, prevId, type) {
 
 }
 
-//Fork extends Move Spot. Has an Alternative Next Spot
+// Fork extends Move Spot. Has an Alternative Next Spot
 function Fork(geometry, material, id, x, y, nextId, prevId, type) {
     MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
     this.nextMoveSpotAlternativeId = null;
 }
 
-//Merge extends Move Spot. Has an Alternative Previous Spot
+// Merge extends Move Spot. Has an Alternative Previous Spot
 function Merge(geometry, material, id, x, y, nextId, prevId, type) {
     MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
     this.prevMoveSpotAlternativeId = null;
 }
 
-//Traffic Light extends Move Spot. Has a State(Green or Red)
-function TrafficLight(geometry, material, id, x, y, nextId, prevId, type, state) {
+// Traffic Light extends Move Spot
+function TrafficLight(geometry, material, id, x, y, nextId, prevId, 
+                        type, greenStartTime, greenDuration, redDuration) {
     MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
-    this.state = state;
+    this.greenStartTime = greenStartTime;
+    this.greenDuration = greenDuration;
+    this.redDuration = redDuration;
+    this.state = 'Red';
+    if(greenStartTime === '0'){
+        this.state = 'Green';
+    }
 }
 
 /**
@@ -131,18 +138,17 @@ function exitPointInsert() {
 
 }
 
-function trafficLightInsert(state){
+function trafficLightInsert(greenStartTime, greenDuration, redDuration){
     
     TrafficLight.prototype = new THREE.Mesh();
     var geometry = new THREE.CircleGeometry(trafficLightRadius, 32);
     var material;
       
-    if(state === 'Red'){
-        material = new THREE.MeshBasicMaterial({color: trafficLightRed});
+    if(greenStartTime === '0'){
+        material = new THREE.MeshBasicMaterial({color: trafficLightGreen});
     }
     else{
-        material = new THREE.MeshBasicMaterial({color: trafficLightGreen});
-        
+        material = new THREE.MeshBasicMaterial({color: trafficLightRed});       
     }
     
     //Set The Id Of Next Object
@@ -150,9 +156,9 @@ function trafficLightInsert(state){
     
     //Create A New Fork Containing clicked MoveSpot Info
      TrafficLight.prototype = new MoveSpot();
-     var trafficLight = new TrafficLight(geometry, material, 's' + objectId, vector.x, vector.y, 0, 0, "TrafficLight", state);
+     var trafficLight = new TrafficLight(geometry, material, 's' + objectId, vector.x, 
+        vector.y, 0, 0, "TrafficLight", greenStartTime, greenDuration, redDuration);
     
-
     trafficLight.position.x = trafficLight.x;
     trafficLight.position.y = trafficLight.y;
 
@@ -161,7 +167,6 @@ function trafficLightInsert(state){
 
     //Make it null to add new enter point
     currentMoveSpot = trafficLight;
-
 
     moveSpotObjects.push(trafficLight);
 

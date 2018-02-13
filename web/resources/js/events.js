@@ -10,7 +10,7 @@
 //Event Id. Will be Incremented for each received message
 var eventId = 0;
 
-//Vehicle Create Event
+// Vehicle Create Event
 function Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, targetY, eventId) {
     this.type = type;
     this.time = time;
@@ -25,7 +25,7 @@ function Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, ta
     this.id = eventId;
 }
 
-//Change Direction Event
+// Change Direction Event
 function Event2(type, time, vehicleId, rotation, eventId, x, y, speed) {
     this.type = type;
     this.time = time;
@@ -38,7 +38,7 @@ function Event2(type, time, vehicleId, rotation, eventId, x, y, speed) {
 
 }
 
-//Change Speed Event
+// Change Speed Event
 function Event3(type, time, vehicleId, speed) {
     this.type = type;
     this.time = time;
@@ -47,7 +47,7 @@ function Event3(type, time, vehicleId, speed) {
 
 }
 
-//Destroy Vehicle Event
+// Destroy Vehicle Event
 function Event4(type, time, vehicleId) {
     this.type = type;
     this.time = time;
@@ -55,7 +55,7 @@ function Event4(type, time, vehicleId) {
 
 }
 
-//Change Traffic Light State Event
+// Change Traffic Light State Event
 function Event5(type, time, lightId) {
     this.type = type;
     this.time = time;
@@ -64,8 +64,8 @@ function Event5(type, time, lightId) {
 }
 
 
-//This Method is called by websocket.js when a new message is received
-//Events are created accordingly and added to Event Queue
+// This Method is called by websocket.js when a new message is received
+// Events are created accordingly and added to Event Queue
 function processEvent(event) {
 
     eventId++;
@@ -83,8 +83,6 @@ function processEvent(event) {
         var targetX = event.targetX;
         var targetY = event.targetY;
         var rotation = event.rotation;
-
-
 
         var newEvent = new Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, targetY, eventId);
 

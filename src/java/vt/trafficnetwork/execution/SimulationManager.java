@@ -49,7 +49,7 @@ public class SimulationManager {
         if (managers == null) {
             managers = new HashMap();
         }
-
+                
         SimulationManager manager = new SimulationManager(sessionIdentifier);
         //Add This Manager Instance To The Static Hash Map
         managers.put(sessionIdentifier, manager);
@@ -58,17 +58,13 @@ public class SimulationManager {
     }
 
     public void requestExecution(JsonArray modelData) {
-        executor = new SimulationExecutor(modelData);
 
         // start execution thread
+        executor = new SimulationExecutor(modelData);      
         Thread exec = new Thread(executor, sessionIdentifier);
-
-       
         //Set priority
         //exec.setPriority(Thread.currentThread().getPriority() - 1);
-
-        exec.start();
-
+        exec.start();   
     }
 
     private class SimulationExecutor implements Runnable {
@@ -80,14 +76,12 @@ public class SimulationManager {
         }
 
         @Override
-        public void run() {
-            
-            try {
-                
+        public void run() {            
+            try {               
                 runner.execute(model);
                
             } catch (Exception e) {
-                System.out.println("error");
+                System.out.println("Runner Exception: " + e.getMessage());
             }
         }
     };

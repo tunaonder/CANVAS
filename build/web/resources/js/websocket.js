@@ -85,7 +85,9 @@ function startSimulation() {
                 "y": object.y,
                 "nextId": object.nextMoveSpotId,
                 "prevId": object.prevMoveSpotId,
-                "state": object.state
+                "greenStartTime": object.greenStartTime,
+                "greenDuration": object.greenDuration,
+                "redDuration": object.redDuration
             });
         }
     }

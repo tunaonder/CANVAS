@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/index.xhtml</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/resources/js/threeScene.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/resources/css/styles.css</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/conf/persistence.xml</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/WEB-INF/glassfish-resources.xml</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/welcomePrimefaces.xhtml</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/builder/SimulationBuilder.java</file>
         </group>
     </open-files>
 </project-private>

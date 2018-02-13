@@ -250,6 +250,14 @@ function onDocumentMouseDown(event) {
                 alert("Time cannot be smaller than 0");
                 return;
             }
+            trafficLightInsert(greenStartTime, greenDuration, redDuration);
+            
+            document.getElementById("trafficLightForm:greenStartTime").value = "";
+            document.getElementById("trafficLightForm:greenDuration").value = "";
+            document.getElementById("trafficLightForm:redDuration").value = "";
+            document.getElementById("trafficLightForm").style.display = 'none';
+            document.getElementById("trafficLightButton").style.background = "white";
+            mode = '';
 
         }
     }

@@ -31,11 +31,12 @@ public class SimulationBuilder {
 
     public void buildModel(JsonArray modelData, Simulator sim) throws Exception {
 
-        System.out.println("==Simulation Model Build Start--");
+        System.out.println("==Simulation Model Build Start 222--");
         
+        System.out.println("TESTTTTT");
         //First Read Each Json Object and Create Static Objects According to JSON Object Type
         for (int i = 0; i < modelData.size(); i++) {
-
+            
             JsonObject spot = modelData.getJsonObject(i);
 
             //'s' represents static objects
@@ -46,7 +47,8 @@ public class SimulationBuilder {
 
             //Create Objects of Different Types and add to Hash Map
             MovementObject object;
-
+            
+            
             switch (spot.getString("type")) {
                 case "Standart":
 
@@ -81,8 +83,12 @@ public class SimulationBuilder {
                     break;
                     
                 case "TrafficLight":
+//                    int greenStartTime = spot.getJsonNumber("greenStartTime").intValue();
+//                    int greenDuration = spot.getJsonNumber("greenDuration").intValue();
+//                    int redDuration = spot.getJsonNumber("redDuration").intValue();
                     
-                    object = new TrafficLight(id, x, y);
+                     object = new TrafficLight(id, x, y);
+                //    object = new TrafficLight(id, x, y, greenStartTime, greenDuration, redDuration);
                     objects.put(object.getId(), object);
                 
                     break;
@@ -197,7 +203,7 @@ public class SimulationBuilder {
                     
                     prevId = spot.getString("prevId");
                     nextId = spot.getString("nextId");
-                    String stateInfo = spot.getString("state");
+//                    String stateInfo = spot.getString("state");
 
                     prev = (MovementObject) objects.get(prevId);
                     next = (MovementObject) objects.get(nextId);
@@ -205,23 +211,24 @@ public class SimulationBuilder {
                     TrafficLight light = (TrafficLight) objects.get(id);
                     
                     
-                    if(stateInfo.equals("Green")){
-                        light.setState(TrafficLight.STATE.GREEN);
-                        
-                    }else if(stateInfo.equals("Red")){
-                        light.setState(TrafficLight.STATE.RED);
-                       
-                    }
-                    else{
-                       
-                        throw new Exception("Traffic Light is Invalid");
-                        
-                    }
+//                    if(stateInfo.equals("Green")){
+//                        light.setState(TrafficLight.STATE.GREEN);
+//                        
+//                    }else if(stateInfo.equals("Red")){
+//                        light.setState(TrafficLight.STATE.RED);
+//                       
+//                    }
+//                    else{
+//                       
+//                        throw new Exception("Traffic Light is Invalid");
+//                        
+//                    }
                     light.setPrev(prev);
                     light.setNext(next);
 
                     sim.addObject(light);
                     
+                    break;
                 default:
 
                     break;

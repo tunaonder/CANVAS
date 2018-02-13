@@ -48,15 +48,19 @@ public class EventFactory {
     }
     
     public Event scheduleTrafficLightStateChange(TrafficLight light, int currentTime){
-        
-        //If Vehicle is in Red State: time duration is redStateTime.
-        //Otherwise the duration is greenStateTime
-        int time = light.getState() == TrafficLight.STATE.RED ? light.getRedStateTime() : light.getGreenStateTime();
-        
-        time += currentTime;
-        
-   
-        
+             
+        int time;
+        if(currentTime == 0 && light.getGreenStartTime() != 0){
+            time = light.getGreenStartTime();
+        }
+        else{
+            //If Vehicle is in Red State: time duration is redStateTime.
+            //Otherwise the duration is greenStateTime
+            time = currentTime + (light.getState() == TrafficLight.STATE.RED ? 
+                    light.getRedStateTime() : light.getGreenStateTime());
+          
+        }     
+              
         return new TrafficLightStateChangeEvent(time, light);
      
     }

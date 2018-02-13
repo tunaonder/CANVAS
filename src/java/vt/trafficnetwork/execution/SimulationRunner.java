@@ -34,7 +34,7 @@ public class SimulationRunner {
             simulationBuilder.buildModel(modelData, sim);
         
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println(e);
             System.err.println("Could not build a simulation from the supplied model");
             return;
         }

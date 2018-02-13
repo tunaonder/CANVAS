@@ -17,11 +17,22 @@ public class TrafficLight extends MovementObject {
     private STATE state;
     private int redStateTime;
     private int greenStateTime;
+    private int greenStartTime;
 
     public TrafficLight(String id, double x, double y) {
         super(id, x, y);
-        redStateTime = 600;
-        greenStateTime = 600;
+        this.state = STATE.RED;
+//        , int greenStartTime, 
+//            int greenDuration, int redDuration
+//        this.greenStartTime = greenStartTime;
+//        this.greenStateTime = greenDuration;
+//        this.redStateTime = redDuration;
+//        if(greenStartTime == 0){
+//            this.state = STATE.GREEN;
+//        }
+//        else{
+//            this.state = STATE.RED;
+//        }
 
     }
 
@@ -64,7 +75,14 @@ public class TrafficLight extends MovementObject {
     public void setGreenStateTime(int greenStateTime) {
         this.greenStateTime = greenStateTime;
     }
-    
+
+    public int getGreenStartTime() {
+        return greenStartTime;
+    }
+
+    public void setGreenStartTime(int greenStartTime) {
+        this.greenStartTime = greenStartTime;
+    }
     
     public void changeState(){
         
