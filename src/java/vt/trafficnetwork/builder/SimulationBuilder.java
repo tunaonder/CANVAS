@@ -31,9 +31,8 @@ public class SimulationBuilder {
 
     public void buildModel(JsonArray modelData, Simulator sim) throws Exception {
 
-        System.out.println("==Simulation Model Build Start 222--");
+        System.out.println("==Simulation Model Build Start==");
         
-        System.out.println("TESTTTTT");
         //First Read Each Json Object and Create Static Objects According to JSON Object Type
         for (int i = 0; i < modelData.size(); i++) {
             
@@ -83,12 +82,11 @@ public class SimulationBuilder {
                     break;
                     
                 case "TrafficLight":
-//                    int greenStartTime = spot.getJsonNumber("greenStartTime").intValue();
-//                    int greenDuration = spot.getJsonNumber("greenDuration").intValue();
-//                    int redDuration = spot.getJsonNumber("redDuration").intValue();
+                    int greenStartTime = Integer.parseInt(spot.getString("greenStartTime"));
+                    int greenDuration = Integer.parseInt(spot.getString("greenDuration"));
+                    int redDuration = Integer.parseInt(spot.getString("redDuration"));
                     
-                     object = new TrafficLight(id, x, y);
-                //    object = new TrafficLight(id, x, y, greenStartTime, greenDuration, redDuration);
+                    object = new TrafficLight(id, x, y, greenStartTime, greenDuration, redDuration);
                     objects.put(object.getId(), object);
                 
                     break;

@@ -32,9 +32,6 @@ public class WebSocketServer {
         sessionHandler.addSession(session);
         System.out.println("connect");
         System.out.println(session);
-        
-        System.out.println("TES1");
-
     }
 
     @OnClose

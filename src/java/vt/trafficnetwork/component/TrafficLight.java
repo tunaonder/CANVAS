@@ -19,20 +19,19 @@ public class TrafficLight extends MovementObject {
     private int greenStateTime;
     private int greenStartTime;
 
-    public TrafficLight(String id, double x, double y) {
+    public TrafficLight(String id, double x, double y, int greenStartTime,
+            int greenDuration, int redDuration) {
         super(id, x, y);
         this.state = STATE.RED;
-//        , int greenStartTime, 
-//            int greenDuration, int redDuration
-//        this.greenStartTime = greenStartTime;
-//        this.greenStateTime = greenDuration;
-//        this.redStateTime = redDuration;
-//        if(greenStartTime == 0){
-//            this.state = STATE.GREEN;
-//        }
-//        else{
-//            this.state = STATE.RED;
-//        }
+
+        this.greenStartTime = greenStartTime;
+        this.greenStateTime = greenDuration;
+        this.redStateTime = redDuration;
+        if (greenStartTime == 0) {
+            this.state = STATE.GREEN;
+        } else {
+            this.state = STATE.RED;
+        }
 
     }
 
@@ -83,16 +82,15 @@ public class TrafficLight extends MovementObject {
     public void setGreenStartTime(int greenStartTime) {
         this.greenStartTime = greenStartTime;
     }
-    
-    public void changeState(){
-        
-        if(this.state == STATE.GREEN){
+
+    public void changeState() {
+
+        if (this.state == STATE.GREEN) {
             this.state = STATE.RED;
-        }
-        else{
+        } else {
             this.state = STATE.GREEN;
         }
-        
+
     }
 
     public enum STATE {
