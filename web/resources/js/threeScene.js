@@ -177,7 +177,9 @@ function processCurrentEvent(event) {
  */
 function onDocumentMouseDown(event) {
 
-    //  event.preventDefault();
+
+    console.log('test');
+    //event.preventDefault();
 
     // Determine how much user has scrolled
     // Source: https://stackoverflow.com/questions/11373741/detecting-by-how-much-user-has-scrolled
@@ -202,7 +204,7 @@ function onDocumentMouseDown(event) {
 
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
-
+        console.log('clickedIn');
         //If the Mode is Convert To Fork or Convert to Merge
         if (mode === 'forkButton' || mode === 'mergeButton') {
             moveSpotClicked();
@@ -250,6 +252,7 @@ function onDocumentMouseDown(event) {
                 alert("Time cannot be smaller than 0");
                 return;
             }
+            
             trafficLightInsert(greenStartTime, greenDuration, redDuration);
             
             document.getElementById("trafficLightForm:greenStartTime").value = "";

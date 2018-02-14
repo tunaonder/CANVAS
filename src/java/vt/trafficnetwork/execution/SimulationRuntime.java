@@ -131,12 +131,16 @@ public class SimulationRuntime {
         } else if (earliestScheduledEvent instanceof TrafficLightStateChangeEvent) {
 
             TrafficLightStateChangeEvent event = (TrafficLightStateChangeEvent) earliestScheduledEvent;
-
+            
+            // State is already set in the beginning of the simulation
+            // No need to change the state
+            if(simulationTime != 0){
+                //Change the state of the light
+                event.getLight().changeState();
+            }       
+            
             //Schedule the next Event
-            scheduleTrafficLightStateChange(event);
-
-            //Change the state of the light
-            event.getLight().changeState();
+            scheduleTrafficLightStateChange(event);           
 
             messageManager.trafficLightStateChange(event.getLight().getId(), simulationTime);
 

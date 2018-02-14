@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode, headerHeight */
+/* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode, headerHeight, controlPanelWidth */
 
 //List Of ALL STATIC OBJECTS
 var moveSpotObjects = [];
@@ -58,9 +58,9 @@ function Merge(geometry, material, id, x, y, nextId, prevId, type) {
 function TrafficLight(geometry, material, id, x, y, nextId, prevId, 
                         type, greenStartTime, greenDuration, redDuration) {
     MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
-    this.greenStartTime = greenStartTime;
     this.greenDuration = greenDuration;
     this.redDuration = redDuration;
+    this.greenStartTime = greenStartTime;
     this.state = 'Red';
     if(greenStartTime === '0'){
         this.state = 'Green';
@@ -284,8 +284,8 @@ function moveSpotClicked() {
     var scrollAmountY = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement 
         || document.body.parentNode || document.body).scrollTop;
     
-    mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-    mouse.y = -(((event.clientY + scrollAmountY) - (controlPanelHeight + headerHeight)) / renderer.domElement.clientHeight) * 2 + 1;
+    mouse.x = ((event.clientX-controlPanelWidth) / renderer.domElement.clientWidth) * 2 - 1;
+    mouse.y = -(((event.clientY + scrollAmountY) - headerHeight) / renderer.domElement.clientHeight) * 2 + 1;
     
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(moveSpotObjects);
@@ -317,7 +317,7 @@ function removeMoveSpot() {
  */
 function changeTrafficLightState(event){  
     var lightId = event.lightId;
-  
+    
     for (var i = 0; i < moveSpotObjects.length; i++) {
         
         //Find the Traffic Light from the array

@@ -22,11 +22,10 @@ public class TrafficLight extends MovementObject {
     public TrafficLight(String id, double x, double y, int greenStartTime,
             int greenDuration, int redDuration) {
         super(id, x, y);
-        this.state = STATE.RED;
-
-        this.greenStartTime = greenStartTime;
-        this.greenStateTime = greenDuration;
-        this.redStateTime = redDuration;
+        // Multiply time values by 60 since the smallest time frame is 1/60 seconds
+        this.greenStartTime = greenStartTime * 60;
+        this.greenStateTime = greenDuration * 60;
+        this.redStateTime = redDuration * 60;        
         if (greenStartTime == 0) {
             this.state = STATE.GREEN;
         } else {
