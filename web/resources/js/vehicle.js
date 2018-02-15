@@ -6,7 +6,7 @@
 /* global THREE, scene, vehicles */
 var degree = Math.PI / 180;
 
-var vehicleWidth = 12.5;
+var vehicleWidth = 9;
 
 //Vehicle Images
 var vehicleTextures = ['resources/images/Hatchback_red.png', 'resources/images/Blue_Porshe.png', 'resources/images/Porsche_black.png', 'resources/images/Porsche_blue.png',
@@ -40,16 +40,16 @@ function createNewVehicle(event) {
     //Choose a Random Index According to the length of the new vehicle
     //If it is short, it is standart vehicle
     //According to random index, set the vehicle texture
-    if(length === 25){
+    if(length === 16){
         var index = Math.floor((Math.random() * 8));
         vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[index]);
     }
-    else if(length === 35){
+    else if(length === 26){
         var index = Math.floor((Math.random() * 2));
         vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[8+index]);
        
     }
-    else if(length === 39){
+    else if(length === 30){
         vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[10]);
     }
     else{

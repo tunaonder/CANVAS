@@ -65,7 +65,7 @@ function setScene() {
     var backgroundWidth = canvasWidth;
     var backgroundHeight = ratio * backgroundWidth;
 
-    camera.position.z = 700;
+    camera.position.z = 500;
 
     // Load the background texture
     var texture = THREE.ImageUtils.loadTexture('resources/images/DowntownClean.jpg');

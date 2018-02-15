@@ -11,14 +11,14 @@ package vt.trafficnetwork.execution;
 public final class Constants {
     
     
-    public static final double vehicleDistanceLimit = 25;
-    public static final double vehicleToSpotDistanceLimit = 25;
+    public static final double vehicleDistanceLimit = 20;
+    public static final double vehicleToSpotDistanceLimit = 20;
     
-    public static final int vehicleLength1 = 25;
-    public static final int vehicleLength2 = 35;
-    public static final int vehicleLength3 = 39;
-    public static final int vehicleLength4 = 54;
+    public static final int vehicleLength1 = 16;
+    public static final int vehicleLength2 = 26;
+    public static final int vehicleLength3 = 30;
+    public static final int vehicleLength4 = 40;
     
-    public static final double minSpeed = 1.0;
-    public static final double maxSpeed = 3.0;
+    public static final double minSpeed = 0.7;
+    public static final double maxSpeed = 2.0;
 }
