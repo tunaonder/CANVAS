@@ -47,57 +47,63 @@ var simulationIsRunning = false;
 function setScene() {
 
     var currentBackgroundMap = document.getElementById("hiddenMapInput").value;
+
+    var img = new Image();
     
-    //Add Event Listener to the page
-    document.addEventListener('mousedown', onDocumentMouseDown, false);
+    // Image has to be loaded to get the imageHeight/imageWidth ratio
+    img.onload = function () {
+        var ratio = img.height / img.width;
 
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 30000);
+        //Add Event Listener to the page
+        document.addEventListener('mousedown', onDocumentMouseDown, false);
 
-    renderer = new THREE.WebGLRenderer();
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 30000);
 
-    // Temporary: Disable background Image Size Ratio Calculation
-//    var backImage = new Image();    
-//    // Default Image
-//    backImage.src = 'resources/images/DowntownClean.jpg';
-//    var ratio = backImage.height/backImage.width;   
-    // Get the size ratio of the default image
-    var ratio = 2434 / 3737;
+        renderer = new THREE.WebGLRenderer();
 
-    var backgroundWidth = canvasWidth;
-    var backgroundHeight = ratio * backgroundWidth;
+        var backgroundWidth = canvasWidth;
+        var backgroundHeight = ratio * backgroundWidth;
+        
+        // Camera position has to be set according to size of the background image file
+        // While map gets bigger, camera zooms out
+        camera.position.z = backgroundWidth * 0.55;
 
-    camera.position.z = 500;
-
-    // Load the background texture
-    var texture = THREE.ImageUtils.loadTexture(currentBackgroundMap);
-    var backgroundMesh = new THREE.Mesh(
-            new THREE.PlaneBufferGeometry(backgroundWidth, backgroundHeight, 0),
-            new THREE.MeshBasicMaterial({
-                map: texture
-            }));
-
-    backgroundMesh.material.depthTest = false;
-    backgroundMesh.material.depthWrite = false;
-
-    //Add the Map To The Scene
-    scene.add(backgroundMesh);
-
-    //Get The Bounds Of The Map
-    var bbox = new THREE.Box3().setFromObject(backgroundMesh);
-    mapStartX = bbox.min.x;
-    mapStartY = bbox.min.y;
-    mapFinishX = bbox.max.x;
-    mapFinishY = bbox.max.y;
+        // Load the background texture
+        var texture = THREE.ImageUtils.loadTexture(currentBackgroundMap);
 
 
-    //Renders the app in half resolution, but display in full size.
-    renderer.setSize(canvasWidth, canvasHeight);
-    //Set Background Color to the Scene
-    renderer.setClearColor(0xafcedf);
-    document.body.appendChild(renderer.domElement);
+        var backgroundMesh = new THREE.Mesh(
+                new THREE.PlaneBufferGeometry(backgroundWidth, backgroundHeight, 0),
+                new THREE.MeshBasicMaterial({
+                    map: texture
+                }));
 
-    render();
+        backgroundMesh.material.depthTest = false;
+        backgroundMesh.material.depthWrite = false;
+
+        //Add the Map To The Scene
+        scene.add(backgroundMesh);
+
+        //Get The Bounds Of The Map
+        var bbox = new THREE.Box3().setFromObject(backgroundMesh);
+        mapStartX = bbox.min.x;
+        mapStartY = bbox.min.y;
+        mapFinishX = bbox.max.x;
+        mapFinishY = bbox.max.y;
+
+
+        //Renders the app in half resolution, but display in full size.
+        renderer.setSize(canvasWidth, canvasHeight);
+        //Set Background Color to the Scene
+        renderer.setClearColor(0xafcedf);
+        document.body.appendChild(renderer.domElement);
+
+        render();
+    };
+
+    img.src = currentBackgroundMap;
+
 }
 
 //This Function is Called 60 times in A Second!
