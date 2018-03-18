@@ -36,7 +36,6 @@ canvas {
 
 #editableContent {
     /* Styles applied to the entire editableContent containing element of the site template */
-    position:absolute;
     height: calc(100% - 60px) !important;
 }
 
@@ -44,17 +43,12 @@ canvas {
 #controlPanel{
 
  /* Styles applied to the entire sidebar containing element of the site template */
-/*    min-height: 100%;*/
     display: inline-block;
     float: left;
     border-right: 2px solid #e95051;
     width: 300px;
-/*    height: 100%;*/
-/*    overflow: scroll;*/
     position: absolute;
     left: 0;
-    top: 0;
-    bottom: 0;
     right: 0;
     padding-top: 10px;
     padding-left: 10px;
