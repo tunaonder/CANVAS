@@ -37,11 +37,11 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                                      rowsPerPageTemplate="5,10,20,30,40,50"
                                      styleClass="dataTable" >
 
-                            <p:ajax event="rowSelect"   update="uploadButton deleteButton displayButton">
+                            <p:ajax event="rowSelect"   update="uploadButton deleteButton displayButton setBackgroundButton">
                                 #{userFileController.setSelectedRowNumber(rowNumber)};
                             </p:ajax>
 
-                            <p:ajax event="rowUnselect" update="uploadButton deleteButton displayButton"/>
+                            <p:ajax event="rowUnselect" update="uploadButton deleteButton displayButton setBackgroundButton"/>
 
                             <!-- FILE ID column -->
                             <p:column sortBy="#{item.id}" style="width:60px;">
@@ -104,9 +104,9 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                                                  ajax="false" icon=" ui-icon-document" styleClass="commandButton" 
                                                  disabled="#{empty userFileController.selected}" />
                                 
-                                <p:commandButton value="Set Background" ajax="false"
+                                <p:commandButton id="setBackgroundButton" value="Set Background" ajax="false"
                                                  action="#{userFileController.changeBackgroundMap()}" 
-                                                 styleClass="commandButton"/>
+                                                 styleClass="commandButton" disabled="#{empty userFileController.selected}"/>
                             </f:facet>
 
                         </p:dataTable>
