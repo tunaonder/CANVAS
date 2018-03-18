@@ -23,6 +23,8 @@ public class Constants {
     Relative path is defined with respect to the Alternate Document Root starting with 'TrafficSimulatorFileStorage'.
      */
     public static final String FILES_RELATIVE_PATH = "TrafficSimulatorFileStorage/";
+    
+    public static final String DEFAULT_BACKGROUND_MAP = "DowntownClean.jpg";
 
     /* Temporary filename */
     public static final String TEMP_FILE = "tmp_file";

@@ -1,11 +1,10 @@
 /*
- * Created by Sait Tuna Onder on 2017.08.29  * 
- * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
+ * Created by Sait Tuna Onder on 2018.03.18  * 
+ * Copyright © 2018 Sait Tuna Onder. All rights reserved. * 
  */
 package vt.trafficsimulator.entityclasses;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,12 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
     , @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName")
     , @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName")
-    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")})
+    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
+    , @NamedQuery(name = "User.findByBackgroundMapName", query = "SELECT u FROM User u WHERE u.backgroundMapName = :backgroundMapName")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,8 +68,11 @@ public class User implements Serializable {
     @Size(min = 1, max = 128)
     @Column(name = "email")
     private String email;
-    @OneToMany(mappedBy = "userId")
-    private Collection<UserFile> userFileCollection;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 128)
+    @Column(name = "backgroundMapName")
+    private String backgroundMapName;
 
     public User() {
     }
@@ -80,13 +81,14 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String password, String firstName, String lastName, String email) {
+    public User(Integer id, String username, String password, String firstName, String lastName, String email, String backgroundMapName) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.backgroundMapName = backgroundMapName;
     }
 
     public Integer getId() {
@@ -137,13 +139,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    @XmlTransient
-    public Collection<UserFile> getUserFileCollection() {
-        return userFileCollection;
+    public String getBackgroundMapName() {
+        return backgroundMapName;
     }
 
-    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
-        this.userFileCollection = userFileCollection;
+    public void setBackgroundMapName(String backgroundMapName) {
+        this.backgroundMapName = backgroundMapName;
     }
 
     @Override

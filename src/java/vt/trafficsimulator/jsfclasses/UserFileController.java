@@ -58,6 +58,7 @@ public class UserFileController implements Serializable {
 
     // Selected row number in p:dataTable in UserFiles.xhtml
     private String selectedRowNumber = "0";
+    private String currentMap;
 
     /*
     ==================
@@ -65,6 +66,7 @@ public class UserFileController implements Serializable {
     ==================
      */
     public UserFileController() {
+        currentMap = Constants.FILES_RELATIVE_PATH + Constants.DEFAULT_BACKGROUND_MAP;
     }
 
     /*
@@ -102,6 +104,14 @@ public class UserFileController implements Serializable {
 
     public void setFileTypeMessage(String fileTypeMessage) {
         this.fileTypeMessage = fileTypeMessage;
+    }
+
+    public String getCurrentMap() {
+        return currentMap;
+    }
+
+    public void setCurrentMap(String currentMap) {
+        this.currentMap = currentMap;
     }
 
     public List<UserFile> getItems() {
@@ -467,6 +477,12 @@ public class UserFileController implements Serializable {
         String fileExtensionInCaps = fileExtension.toUpperCase();
 
         return fileExtensionInCaps;
+    }
+    
+    public String changeBackgroundMap(){
+        
+        currentMap = Constants.FILES_RELATIVE_PATH + selected.getFilename();
+        return "index.xhtml?faces-redirect=true";
     }
 
 }

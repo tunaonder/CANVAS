@@ -103,6 +103,10 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                                 <p:commandButton id="displayButton" value="Display File" action="DisplayFile" 
                                                  ajax="false" icon=" ui-icon-document" styleClass="commandButton" 
                                                  disabled="#{empty userFileController.selected}" />
+                                
+                                <p:commandButton value="Set Background" ajax="false"
+                                                 action="#{userFileController.changeBackgroundMap()}" 
+                                                 styleClass="commandButton"/>
                             </f:facet>
 
                         </p:dataTable>

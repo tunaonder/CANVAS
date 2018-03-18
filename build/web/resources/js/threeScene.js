@@ -46,6 +46,8 @@ var simulationIsRunning = false;
 //Set The When Application Displays the Map
 function setScene() {
 
+    var currentBackgroundMap = document.getElementById("hiddenMapInput").value;
+    
     //Add Event Listener to the page
     document.addEventListener('mousedown', onDocumentMouseDown, false);
 
@@ -68,7 +70,7 @@ function setScene() {
     camera.position.z = 500;
 
     // Load the background texture
-    var texture = THREE.ImageUtils.loadTexture('resources/images/DowntownClean.jpg');
+    var texture = THREE.ImageUtils.loadTexture(currentBackgroundMap);
     var backgroundMesh = new THREE.Mesh(
             new THREE.PlaneBufferGeometry(backgroundWidth, backgroundHeight, 0),
             new THREE.MeshBasicMaterial({
@@ -95,55 +97,55 @@ function setScene() {
     renderer.setClearColor(0xafcedf);
     document.body.appendChild(renderer.domElement);
 
-    //This Function is Called 60 times in A Second!
-    //Three.js main visualization processes are happening in this method.
-    var render = function () {
-        //pauses when the user navigates to another browser tab
-        requestAnimationFrame(render);
+    render();
+}
 
-        if (simulationIsRunning) {
+//This Function is Called 60 times in A Second!
+//Three.js main visualization processes are happening in this method.
+function render() {
+    //pauses when the user navigates to another browser tab
+    requestAnimationFrame(render);
 
-
-            //Render Until All events are processed
-            if (eventQueue.size() !== 0) {
-
-                //Get The Earliest Event
-                earliestEventTime = eventQueue.getFirst().time;
-
-                //If there are multiple events at the same time, process all of them before incrementing
-                //visualizer time
-                while (earliestEventTime < visualizationTime + 1) {
-
-                    if (eventQueue.size() !== 0) {
-
-                        //Pop The First Event
-                        var event = eventQueue.pop();
-                        //Process it
-                        processCurrentEvent(event);
+    if (simulationIsRunning) {
 
 
-                        //Set the new earliest event time
-                        earliestEventTime = eventQueue.getFirst().time;
+        //Render Until All events are processed
+        if (eventQueue.size() !== 0) {
 
-                    }
+            //Get The Earliest Event
+            earliestEventTime = eventQueue.getFirst().time;
+
+            //If there are multiple events at the same time, process all of them before incrementing
+            //visualizer time
+            while (earliestEventTime < visualizationTime + 1) {
+
+                if (eventQueue.size() !== 0) {
+
+                    //Pop The First Event
+                    var event = eventQueue.pop();
+                    //Process it
+                    processCurrentEvent(event);
+
+
+                    //Set the new earliest event time
+                    earliestEventTime = eventQueue.getFirst().time;
+
                 }
             }
-
-            //Move All Vehicles
-            for (var i = 0; i < vehicles.length; i++) {
-                vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
-                vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
-            }
-            //increment Visualization Time
-            visualizationTime++;
-
         }
-        renderer.render(scene, camera);
+
+        //Move All Vehicles
+        for (var i = 0; i < vehicles.length; i++) {
+            vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
+            vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
+        }
+        //increment Visualization Time
+        visualizationTime++;
+
+    }
+    renderer.render(scene, camera);
 
 
-    };
-
-    render();
 }
 
 /**
@@ -239,7 +241,7 @@ function onDocumentMouseDown(event) {
                 alert("Please Fill Traffic Light Details");
                 return;
             }
-            
+
             var isNumber1 = greenStartTime.match(/^\d+$/);
             var isNumber2 = greenDuration.match(/^\d+$/);
             var isNumber3 = redDuration.match(/^\d+$/);
@@ -252,9 +254,9 @@ function onDocumentMouseDown(event) {
                 alert("Time cannot be smaller than 0");
                 return;
             }
-            
+
             trafficLightInsert(greenStartTime, greenDuration, redDuration);
-            
+
             document.getElementById("trafficLightForm:greenStartTime").value = "";
             document.getElementById("trafficLightForm:greenDuration").value = "";
             document.getElementById("trafficLightForm:redDuration").value = "";
