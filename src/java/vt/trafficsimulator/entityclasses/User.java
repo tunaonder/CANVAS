@@ -1,6 +1,6 @@
 /*
  * Created by Sait Tuna Onder on 2018.03.18  * 
- * Copyright © 2018 Sait Tuna Onder. All rights reserved. * 
+ * Copyright © 2018 Sait Tun Onder. All rights reserved. * 
  */
 package vt.trafficsimulator.entityclasses;
 
@@ -32,8 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
     , @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName")
     , @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName")
-    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
-    , @NamedQuery(name = "User.findByBackgroundMapName", query = "SELECT u FROM User u WHERE u.backgroundMapName = :backgroundMapName")})
+    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,11 +67,6 @@ public class User implements Serializable {
     @Size(min = 1, max = 128)
     @Column(name = "email")
     private String email;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 128)
-    @Column(name = "backgroundMapName")
-    private String backgroundMapName;
 
     public User() {
     }
@@ -81,14 +75,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String password, String firstName, String lastName, String email, String backgroundMapName) {
+    public User(Integer id, String username, String password, String firstName, String lastName, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.backgroundMapName = backgroundMapName;
     }
 
     public Integer getId() {
@@ -137,14 +130,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getBackgroundMapName() {
-        return backgroundMapName;
-    }
-
-    public void setBackgroundMapName(String backgroundMapName) {
-        this.backgroundMapName = backgroundMapName;
     }
 
     @Override

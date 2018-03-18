@@ -45,7 +45,6 @@ public class UserFileController implements Serializable {
     @EJB
     private UserFileFacade userFileFacade;
 
-    // selected = Selected UserFile object
     private UserFile selected;
 
     // items = list of UserFile objects

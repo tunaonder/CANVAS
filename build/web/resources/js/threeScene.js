@@ -67,6 +67,7 @@ function setScene() {
         
         // Camera position has to be set according to size of the background image file
         // While map gets bigger, camera zooms out
+        // 0.55 is selected after tests. Number could be bigger to zoom out
         camera.position.z = backgroundWidth * 0.55;
 
         // Load the background texture

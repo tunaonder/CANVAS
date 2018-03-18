@@ -163,7 +163,6 @@ public class AccountManager implements Serializable {
                 newUser.setEmail(email);
                 newUser.setUsername(username);
                 newUser.setPassword(password);
-                newUser.setBackgroundMapName(Constants.DEFAULT_BACKGROUND_MAP);
                 
                 getUserFacade().create(newUser);
 
