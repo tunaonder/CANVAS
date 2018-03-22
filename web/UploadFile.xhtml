@@ -30,25 +30,47 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
 
                 <div align="center">
 
-                    <h2>Upload One or More Files</h2>
+                    <h2>Project Name</h2>
 
-                    <div class="arialTen">
-                        Click Choose to select one or more files or drag one or more files and drop on the white area.
-                    </div>
                     <br/>
 
-                    <p:fileUpload fileUploadListener="#{fileUploadManager.handleFileUpload}" multiple="true" 
-                                  mode="advanced" sizeLimit="10000000" fileLimit="5"
-                                  dragDropSupport="true" update="messages" />
-                    <br/>
-                    <!-- Allow maximum 10MB file size and no more than 5 files to upload at the same time -->
+                    <h:form>
+                        <p:panelGrid columns="2" columnClasses="signInColumn1, signInColumn2">
 
-                    <p:commandButton value="Go Back" icon="ui-icon-arrowthick-1-w" ajax="false"
-                                     styleClass="commandButton" action="Maps" /> 
-                    <br/><br/>
+                            <h:outputLabel value="ProjectName:" for="projectName" />
+                            <p:inputText id="projectInput" value="#{fileUploadManager.projectName}" required="true" styleClass="signInInputTextField"
+                                         requiredMessage="blabla" label="Username" >
+                            </p:inputText>
+                        </p:panelGrid>
+                        <br/>
+                        <br/>
 
-                    <p:growl id="messages" showDetail="true" />
-                    <br/>
+                        <h3>Upload One or More Files</h3>
+
+                        <div class="arialTen">
+                            Click Choose to select one or more files or drag one or more files and drop on the white area.
+                        </div>
+                        <br/>
+
+                        <p:fileUpload fileUploadListener="#{fileUploadManager.handleFileUpload}" multiple="true" 
+                                      mode="advanced" sizeLimit="10000000" fileLimit="5"
+                                      dragDropSupport="true" update="messages" style="width: 50%;" />
+                        <br/>
+                        <!-- Allow maximum 10MB file size and no more than 5 files to upload at the same time -->
+
+                       
+
+                        <p:growl id="messages" showDetail="true" />
+                        <br/>
+                        <p:commandButton id="commandd" value="Create Project" action="#{fileUploadManager.createProject()}" 
+                                         styleClass="commandButton" ajax="false" icon="ui-icon-arrowthick-1-e" />
+                         <p:commandButton value="Go Back" icon="ui-icon-arrowthick-1-w" ajax="false"
+                                         styleClass="commandButton" action="Projects" /> 
+                        <br/><br/>
+                    </h:form>
+
+
+
                 </div>
             </h:form>
 

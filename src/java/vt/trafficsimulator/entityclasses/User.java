@@ -1,10 +1,11 @@
 /*
- * Created by Sait Tuna Onder on 2018.03.18  * 
- * Copyright © 2018 Sait Tun Onder. All rights reserved. * 
+ * Created by Sait Tuna Onder on 2018.03.21  * 
+ * Copyright © 2018 Sait Tuna Onder. All rights reserved. * 
  */
 package vt.trafficsimulator.entityclasses;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -67,6 +70,8 @@ public class User implements Serializable {
     @Size(min = 1, max = 128)
     @Column(name = "email")
     private String email;
+    @OneToMany(mappedBy = "userId")
+    private Collection<Project> projectCollection;
 
     public User() {
     }
@@ -130,6 +135,15 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @XmlTransient
+    public Collection<Project> getProjectCollection() {
+        return projectCollection;
+    }
+
+    public void setProjectCollection(Collection<Project> projectCollection) {
+        this.projectCollection = projectCollection;
     }
 
     @Override

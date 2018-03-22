@@ -20,9 +20,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import vt.trafficsimulator.entityclasses.Project;
 import vt.trafficsimulator.entityclasses.User;
 import vt.trafficsimulator.entityclasses.UserFile;
 import vt.trafficsimulator.jsfclasses.UserFileController;
+import vt.trafficsimulator.sessionbeans.ProjectFacade;
 import vt.trafficsimulator.sessionbeans.UserFacade;
 import vt.trafficsimulator.sessionbeans.UserFileFacade;
 
@@ -32,10 +34,6 @@ import vt.trafficsimulator.sessionbeans.UserFileFacade;
  */
 @Named(value = "fileUploadManager")
 @SessionScoped
-/**
- *
- * @author Balci
- */
 public class FileUploadManager implements Serializable {
 
     /*
@@ -61,6 +59,9 @@ public class FileUploadManager implements Serializable {
     @EJB
     private UserFileFacade userFileFacade;
 
+    @EJB
+    private ProjectFacade projectFacade;
+
     /*
     The instance variable 'userFileController' is annotated with the @Inject annotation.
     The @Inject annotation directs the JavaServer Faces (JSF) CDI Container to inject (store) the object reference 
@@ -74,6 +75,9 @@ public class FileUploadManager implements Serializable {
 
     // Resulting FacesMessage produced
     FacesMessage resultMsg;
+
+    private String projectName;
+    private String uploadedFileName;
 
     /*
     =========================
@@ -98,8 +102,39 @@ public class FileUploadManager implements Serializable {
         return userFileFacade;
     }
 
+    public ProjectFacade getProjectFacade() {
+        return projectFacade;
+    }
+
     public UserFileController getUserFileController() {
         return userFileController;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public void createProject() {
+
+        String user_name = (String) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap().get("username");
+
+        User user = getUserFacade().findByUsername(user_name);
+
+        List<Project> projectsFound = getProjectFacade().findByProjectName(projectName);
+        if (!projectsFound.isEmpty()) {
+            resultMsg = new FacesMessage("Project Name already exists! Please Select another name!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return;
+        }
+
+        Project newProject = new Project(projectName, uploadedFileName, user);
+        getProjectFacade().create(newProject);
+
     }
 
     /*
@@ -120,6 +155,8 @@ public class FileUploadManager implements Serializable {
             Since each file has its own primary key (unique id), the user can upload
             multiple files with the same name.
              */
+            
+            // TODO MAKE IT UNIQUE!!
             String userId_filename = user.getId() + "_" + event.getFile().getFileName();
 
             /*
@@ -135,47 +172,42 @@ public class FileUploadManager implements Serializable {
                 inputStream.close();
             }
 
+            uploadedFileName = userId_filename;
+
             /*
             Create a new UserFile object with attibutes: (See UserFile table definition inputStream DB)
                 <> id = auto generated as the unique Primary key for the user file object
                 <> filename = userId_filename
                 <> user_id = user
              */
-            UserFile newUserFile = new UserFile(userId_filename, user);
-
+            //UserFile newUserFile = new UserFile(userId_filename, user);
             /*
             ==============================================================
             If the userId_filename was used before, delete the earlier file.
             ==============================================================
              */
-            List<UserFile> filesFound = getUserFileFacade().findByFilename(userId_filename);
-
-            /*
-            If the userId_filename already exists in the database, 
-            the filesFound List will not be empty.
-             */
-            if (!filesFound.isEmpty()) {
-
-                // Remove the file with the same name from the database
-                getUserFileFacade().remove(filesFound.get(0));
-            }
-
+//            List<Project> projectsFound = getProjectFacade().findByProjectName(projectName);
+//            if(!projectsFound.isEmpty()){
+//                 resultMsg = new FacesMessage("Project Name already exists! Please Select another name!");
+//                 FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+//                 return;
+//            }
+//           
+//            
+//            Project newProject = new Project(projectName, userId_filename, user);
+//            getProjectFacade().create(newProject);
             //---------------------------------------------------------------
             //
             // Create the new UserFile entity (row) in the CloudDriveDB
-            getUserFileFacade().create(newUserFile);
-
+            // getUserFileFacade().create(newUserFile);
             // This sets the necessary flag to ensure the messages are preserved.
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-
-            getUserFileController().refreshFileList();
-
-            resultMsg = new FacesMessage("File(s) Uploaded Successfully!");
-            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
-
-            // After successful upload, show the Maps.xhtml facelets page
-            FacesContext.getCurrentInstance().getExternalContext().redirect("Maps.xhtml");
-
+            // FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            //    getUserFileController().refreshFileList();
+//            resultMsg = new FacesMessage("Project is created Successfully!");
+//            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+//
+//            // After successful upload, show the Projects.xhtml facelets page
+//            FacesContext.getCurrentInstance().getExternalContext().redirect("Projects.xhtml");
         } catch (IOException e) {
             resultMsg = new FacesMessage("Something went wrong during file upload! See: " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, resultMsg);
