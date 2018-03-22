@@ -13,9 +13,9 @@
                 <tr>
                     <td align="left" valign="middle">
 
-                        <h:graphicImage value="resources/images/logo.png"
-                                        style="width:100%; height:500px; max-height:200px; max-width:230px;"
-                                        alt="Traffic Simulator Logo"/>
+                        <a href="index.xhtml"> <h:graphicImage value="resources/images/CanvasLogo.png"
+                                                               style="margin-left: 20px; margin-top: -5px; max-height:50px; max-width:150px;"
+                                                               alt="Traffic Simulator Logo"/></a>
 
                     </td>
                     <td align="center" valign="middle">
@@ -36,11 +36,11 @@
                         </h:link>&nbsp;&nbsp;
 
                         <c:if test="#{accountManager.isLoggedIn() == true}">
-                            
+
                             <h:link outcome="Maps" styleClass="arialTen">
                                 <i class="fa fa-files-o">&nbsp;</i>Maps
                             </h:link>&nbsp;&nbsp;
-                            
+
                             <h:link outcome="Projects" styleClass="arialTen">
                                 <i class="fa fa-files-o">&nbsp;</i>My Projects
                             </h:link>&nbsp;&nbsp;
