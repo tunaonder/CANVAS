@@ -134,6 +134,10 @@ public class FileUploadManager implements Serializable {
 
         Project newProject = new Project(projectName, uploadedFileName, user);
         getProjectFacade().create(newProject);
+        
+        // Clear Data
+        uploadedFileName = "";
+        projectName = "";
 
     }
 
@@ -150,14 +154,18 @@ public class FileUploadManager implements Serializable {
 
             User user = getUserFacade().findByUsername(user_name);
 
+            
+            
+             List<Project> projectsFound = getProjectFacade().findProjectsByUserID(user.getId());
+             int projectCount = projectsFound.size();
             /*
-            To associate the file to the user, record "userId_filename" in the database.
+            To associate the file to the user, record "filename" in the database.
             Since each file has its own primary key (unique id), the user can upload
             multiple files with the same name.
              */
             
-            // TODO MAKE IT UNIQUE!!
-            String userId_filename = user.getId() + "_" + event.getFile().getFileName();
+            String filename = user.getId() + "_" + projectCount + 
+                    "_" + event.getFile().getFileName();
 
             /*
             "The try-with-resources statement is a try statement that declares one or more resources. 
@@ -168,11 +176,11 @@ public class FileUploadManager implements Serializable {
             try (InputStream inputStream = event.getFile().getInputstream();) {
 
                 // The method inputStreamToFile given below writes the uploaded file into the CloudStorage/FileStorage directory.
-                inputStreamToFile(inputStream, userId_filename);
+                inputStreamToFile(inputStream, filename);
                 inputStream.close();
             }
 
-            uploadedFileName = userId_filename;
+            uploadedFileName = filename;
 
             /*
             Create a new UserFile object with attibutes: (See UserFile table definition inputStream DB)
