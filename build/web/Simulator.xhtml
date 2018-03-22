@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition template="/templates/siteTemplate.xhtml">
+
+        <!-- Create the content for this page below -->
+        <ui:define name="editableContent">
+
+            <div id="controlPanel">
+                <label class="controlLabel">Add Spot</label>
+                <button id="enterPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Enter Point</button>
+                <button id="exitPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Exit Point</button>
+                <button id="moveSpotButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Add Move Spot</button>
+                <button id="trafficLightButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Traffic Light</button>
+                <button id="removeButton" class="btn panelButton" onClick="removeMoveSpot();"> Remove Last</button>
+
+                <label class="controlLabel">Convert Spot</label>
+                <button id="forkButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Fork</button>
+                <button id="mergeButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Merge</button>
+                <button id="" class="btn panelButton" onClick=""> Cancel Change</button>
+
+                <h:form id="trafficLightForm" style="display: none;">
+
+                    <label class="controlLabel">Set Traffic Light</label>
+                    <h:panelGrid columns="2" cellpadding="5" columnClasses="trafficLight-label, trafficLight-input">
+                        <h:outputLabel for="greenStartTime" value="Green Start Time: " />
+                        <h:inputText a:placeholder="0 seconds" id="greenStartTime" class="form-control"/>
+                        <p:outputLabel for="greenDuration" value="Green Duration: " />
+                        <h:inputText a:placeholder="15 seconds" id="greenDuration" class="form-control" />
+                        <p:outputLabel for="redDuration" value="Red Duration: " />
+                        <h:inputText a:placeholder="45 seconds" id="redDuration" class="form-control"  />
+                    </h:panelGrid>
+                </h:form>
+
+                <div id="startSimDiv">
+                    <label class="controlLabel">Run</label>
+                    <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
+                    <button id="testButton" class="btn panelButton" onClick="testSend();"> Test Simulation</button>
+                </div>
+
+
+            </div>
+            <div>
+                <h:inputHidden id="hiddenMapInput" value="#{userFileController.currentMap}"/>
+                <script> setScene();</script>
+            </div>
+
+        </ui:define>
+    </ui:composition>
+
+</html>
+
