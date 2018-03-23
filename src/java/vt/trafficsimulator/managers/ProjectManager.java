@@ -211,7 +211,6 @@ public class ProjectManager implements Serializable {
 
     }
 
-
     /*
     ================
     Instance Methods
@@ -249,40 +248,6 @@ public class ProjectManager implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, resultMsg);
             uploadedFileName = filename;
 
-            /*
-            Create a new UserFile object with attibutes: (See UserFile table definition inputStream DB)
-                <> id = auto generated as the unique Primary key for the user file object
-                <> filename = userId_filename
-                <> user_id = user
-             */
-            //UserFile newUserFile = new UserFile(userId_filename, user);
-            /*
-            ==============================================================
-            If the userId_filename was used before, delete the earlier file.
-            ==============================================================
-             */
-//            List<Project> projectsFound = getProjectFacade().findByProjectName(projectName);
-//            if(!projectsFound.isEmpty()){
-//                 resultMsg = new FacesMessage("Project Name already exists! Please Select another name!");
-//                 FacesContext.getCurrentInstance().addMessage(null, resultMsg);
-//                 return;
-//            }
-//           
-//            
-//            Project newProject = new Project(projectName, userId_filename, user);
-//            getProjectFacade().create(newProject);
-            //---------------------------------------------------------------
-            //
-            // Create the new UserFile entity (row) in the CloudDriveDB
-            // getUserFileFacade().create(newUserFile);
-            // This sets the necessary flag to ensure the messages are preserved.
-            // FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            //    getUserFileController().refreshFileList();
-//            resultMsg = new FacesMessage("Project is created Successfully!");
-//            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
-//
-//            // After successful upload, show the Projects.xhtml facelets page
-//            FacesContext.getCurrentInstance().getExternalContext().redirect("Projects.xhtml");
         } catch (IOException e) {
             resultMsg = new FacesMessage("Something went wrong during file upload! See: " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, resultMsg);
