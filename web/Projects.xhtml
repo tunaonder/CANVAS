@@ -21,8 +21,14 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
             <div align="center" >
 
                 My Projects
-               
+
                 <br/>
+
+                <div>
+                    <p:orderList id="projectList" value="#{fileUploadManager.userProjects}" var="project" controlsLocation="none"
+                                 itemLabel="#{project.projectname}" itemValue="#{project.projectname}" />
+
+                </div>
                 <p:button id="createProjectButton" value=" Create Project" 
                           class="btn btn-default" outcome="UploadFile"/>
             </div>

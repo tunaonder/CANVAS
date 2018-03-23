@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -78,6 +79,18 @@ public class FileUploadManager implements Serializable {
 
     private String projectName;
     private String uploadedFileName;
+    
+    private User user;
+    List<Project> userProjects;
+
+    @PostConstruct
+    public void init() {
+        String user_name = (String) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap().get("username");
+
+        user = getUserFacade().findByUsername(user_name);
+        userProjects = getProjectFacade().findProjectsByUserID(user.getId());
+    }
 
     /*
     =========================
@@ -118,6 +131,16 @@ public class FileUploadManager implements Serializable {
         this.projectName = projectName;
     }
 
+    public List<Project> getUserProjects() {
+        return userProjects;
+    }
+
+    public void setUserProjects(List<Project> userProjects) {
+        this.userProjects = userProjects;
+    }
+    
+    
+
     public void createProject() {
 
         String user_name = (String) FacesContext.getCurrentInstance()
@@ -134,12 +157,13 @@ public class FileUploadManager implements Serializable {
 
         Project newProject = new Project(projectName, uploadedFileName, user);
         getProjectFacade().create(newProject);
-        
+
         // Clear Data
         uploadedFileName = "";
         projectName = "";
 
     }
+
 
     /*
     ================
@@ -154,18 +178,16 @@ public class FileUploadManager implements Serializable {
 
             User user = getUserFacade().findByUsername(user_name);
 
-            
-            
-             List<Project> projectsFound = getProjectFacade().findProjectsByUserID(user.getId());
-             int projectCount = projectsFound.size();
+            List<Project> projectsFound = getProjectFacade().findProjectsByUserID(user.getId());
+            int projectCount = projectsFound.size();
             /*
             To associate the file to the user, record "filename" in the database.
             Since each file has its own primary key (unique id), the user can upload
             multiple files with the same name.
              */
-            
-            String filename = user.getId() + "_" + projectCount + 
-                    "_" + event.getFile().getFileName();
+
+            String filename = user.getId() + "_" + projectCount
+                    + "_" + event.getFile().getFileName();
 
             /*
             "The try-with-resources statement is a try statement that declares one or more resources. 
