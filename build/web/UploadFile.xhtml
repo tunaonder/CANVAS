@@ -39,13 +39,13 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
 
                             <h:outputLabel value="ProjectName:" for="projectName" />
                             <p:inputText id="projectInput" value="#{projectManager.newProjectName}" required="true" styleClass="signInInputTextField"
-                                         requiredMessage="blabla" label="Username" >
+                                         requiredMessage="Please Enter Project Name!" >
                             </p:inputText>
                         </p:panelGrid>
                         <br/>
                         <br/>
 
-                        <h3>Upload One or More Files</h3>
+                        <h3>Please Upload Project Background Map</h3>
 
                         <div class="arialTen">
                             Click Choose to select one or more files or drag one or more files and drop on the white area.
@@ -64,8 +64,7 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                         <br/>
                         <p:commandButton id="commandd" value="Create Project" action="#{projectManager.createProject()}" 
                                          styleClass="commandButton" ajax="false" icon="ui-icon-arrowthick-1-e" />
-                         <p:commandButton value="Go Back" icon="ui-icon-arrowthick-1-w" ajax="false"
-                                         styleClass="commandButton" action="Projects" /> 
+
                         <br/><br/>
                     </h:form>
 

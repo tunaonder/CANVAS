@@ -80,7 +80,7 @@ public class ProjectManager implements Serializable {
     FacesMessage resultMsg;
 
     private String newProjectName;
-    private String uploadedFileName;
+    private String uploadedFileName = "";
     
     private User user;
     private List<Project> userProjects;
@@ -97,7 +97,7 @@ public class ProjectManager implements Serializable {
         userProjectNames = new ArrayList<>();
         for(int i=0; i<userProjects.size(); i++){
             userProjectNames.add(userProjects.get(i).getProjectname());          
-        }       
+        }         
     }
 
     /*
@@ -177,23 +177,37 @@ public class ProjectManager implements Serializable {
     }
     
 
-    public void createProject() {
+    public String createProject() {
 
+        if(uploadedFileName.equals("")){
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Upload Background Map for the New Project!", ""));
+            return "";
+            
+        }
+        
         List<Project> projectsFound = getProjectFacade().findByProjectName(newProjectName);
         if (!projectsFound.isEmpty()) {
-            resultMsg = new FacesMessage("Project Name already exists! Please Select another name!");
-            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
-            return;
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Name already exists! Please Select another name!", ""));
+            return "";
         }
 
         Project newProject = new Project(newProjectName, uploadedFileName, user);
         getProjectFacade().create(newProject);
 
+        selectedProjectName = newProjectName;
         // Clear Data
         uploadedFileName = "";
         newProjectName = "";
         
         userProjects = getProjectFacade().findProjectsByUserID(user.getId());
+        userProjectNames = new ArrayList<>();
+        for(int i=0; i<userProjects.size(); i++){
+            userProjectNames.add(userProjects.get(i).getProjectname());          
+        }
+        
+        return "Simulator?faces-redirect=true";
 
     }
 
@@ -231,6 +245,8 @@ public class ProjectManager implements Serializable {
                 inputStream.close();
             }
 
+            resultMsg = new FacesMessage("Model Background is Successfully Uploaded!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
             uploadedFileName = filename;
 
             /*

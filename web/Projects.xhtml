@@ -21,21 +21,21 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
             <div align="center" >
                 <h:form>
                     <p:growl id="msgs" showDetail="true" />           
-                    My Projects
 
                     <br/>
-
+                    <br/>
+                    <br/>
                     <div>
-
-
                         <p:orderList id="projectList" value="#{projectManager.userProjectNames}" var="project" controlsLocation="none"
                                      itemLabel="#{project}" itemValue="#{project}">
+                            <f:facet name="caption">My Projects</f:facet>
                             <p:ajax event="select" listener="#{projectManager.onSelect}" update="msgs"/>
 
                         </p:orderList>
 
 
                     </div>
+                    <br/>
                     <p:commandButton id="selectProjectButton" value="Select Project" 
                                      class="btn btn-default" action="#{projectManager.selectProject()}"/>
                     <p:button id="createProjectButton" value=" Create Project" 
