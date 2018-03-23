@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -78,14 +79,14 @@ public class ProjectManager implements Serializable {
     // Resulting FacesMessage produced
     FacesMessage resultMsg;
 
-    private String projectName;
+    private String newProjectName;
     private String uploadedFileName;
     
     private User user;
     private List<Project> userProjects;
+    private List<String> userProjectNames;
     private String selectedProjectName;
     
-
     @PostConstruct
     public void init() {
         String user_name = (String) FacesContext.getCurrentInstance()
@@ -93,6 +94,10 @@ public class ProjectManager implements Serializable {
 
         user = getUserFacade().findByUsername(user_name);
         userProjects = getProjectFacade().findProjectsByUserID(user.getId());
+        userProjectNames = new ArrayList<>();
+        for(int i=0; i<userProjects.size(); i++){
+            userProjectNames.add(userProjects.get(i).getProjectname());          
+        }       
     }
 
     /*
@@ -126,12 +131,12 @@ public class ProjectManager implements Serializable {
         return userFileController;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getNewProjectName() {
+        return newProjectName;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setNewProjectName(String projectName) {
+        this.newProjectName = projectName;
     }
 
     public List<Project> getUserProjects() {
@@ -154,6 +159,16 @@ public class ProjectManager implements Serializable {
                
         return "Simulator.xhtml?faces-redirect=true";
     }
+
+    public List<String> getUserProjectNames() {
+        return userProjectNames;
+    }
+
+    public void setUserProjectNames(List<String> userProjectNames) {
+        this.userProjectNames = userProjectNames;
+    }
+    
+    
     
     public void onSelect(SelectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -164,19 +179,19 @@ public class ProjectManager implements Serializable {
 
     public void createProject() {
 
-        List<Project> projectsFound = getProjectFacade().findByProjectName(projectName);
+        List<Project> projectsFound = getProjectFacade().findByProjectName(newProjectName);
         if (!projectsFound.isEmpty()) {
             resultMsg = new FacesMessage("Project Name already exists! Please Select another name!");
             FacesContext.getCurrentInstance().addMessage(null, resultMsg);
             return;
         }
 
-        Project newProject = new Project(projectName, uploadedFileName, user);
+        Project newProject = new Project(newProjectName, uploadedFileName, user);
         getProjectFacade().create(newProject);
 
         // Clear Data
         uploadedFileName = "";
-        projectName = "";
+        newProjectName = "";
         
         userProjects = getProjectFacade().findProjectsByUserID(user.getId());
 

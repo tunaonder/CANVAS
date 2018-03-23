@@ -28,9 +28,10 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                     <div>
 
 
-                        <p:orderList id="projectList" value="#{projectManager.userProjects}" var="project" controlsLocation="none"
-                                     itemLabel="#{project.projectname}" itemValue="#{project.projectname}">
+                        <p:orderList id="projectList" value="#{projectManager.userProjectNames}" var="project" controlsLocation="none"
+                                     itemLabel="#{project}" itemValue="#{project}">
                             <p:ajax event="select" listener="#{projectManager.onSelect}" update="msgs"/>
+
                         </p:orderList>
 
 
