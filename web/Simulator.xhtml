@@ -12,6 +12,7 @@
         <ui:define name="editableContent">
 
             <div id="controlPanel">
+                <h:outputText value="#{projectManager.selectedProjectName}" style="color: blue;"/>
                 <label class="controlLabel">Add Spot</label>
                 <button id="enterPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Enter Point</button>
                 <button id="exitPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Exit Point</button>
@@ -23,7 +24,9 @@
                 <button id="forkButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Fork</button>
                 <button id="mergeButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Merge</button>
                 <button id="" class="btn panelButton" onClick=""> Cancel Change</button>
-
+                
+                
+                
                 <h:form id="trafficLightForm" style="display: none;">
 
                     <label class="controlLabel">Set Traffic Light</label>

@@ -19,18 +19,27 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
         <ui:define name="editableContent">
 
             <div align="center" >
+                <h:form>
+                    <p:growl id="msgs" showDetail="true" />           
+                    My Projects
 
-                My Projects
+                    <br/>
 
-                <br/>
+                    <div>
 
-                <div>
-                    <p:orderList id="projectList" value="#{fileUploadManager.userProjects}" var="project" controlsLocation="none"
-                                 itemLabel="#{project.projectname}" itemValue="#{project.projectname}" />
 
-                </div>
-                <p:button id="createProjectButton" value=" Create Project" 
-                          class="btn btn-default" outcome="UploadFile"/>
+                        <p:orderList id="projectList" value="#{projectManager.userProjects}" var="project" controlsLocation="none"
+                                     itemLabel="#{project.projectname}" itemValue="#{project.projectname}">
+                            <p:ajax event="select" listener="#{projectManager.onSelect}" update="msgs"/>
+                        </p:orderList>
+
+
+                    </div>
+                    <p:commandButton id="selectProjectButton" value="Select Project" 
+                                     class="btn btn-default" action="#{projectManager.selectProject()}"/>
+                    <p:button id="createProjectButton" value=" Create Project" 
+                              class="btn btn-default" outcome="UploadFile"/>
+                </h:form>
             </div>
 
         </ui:define>
