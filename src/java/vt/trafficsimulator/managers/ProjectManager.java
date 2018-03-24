@@ -156,7 +156,12 @@ public class ProjectManager implements Serializable {
     }
     
     public String selectProject(){
-               
+        if (selectedProjectName.equals("")){
+            resultMsg = new FacesMessage("Please select a project!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return "";         
+        }       
+        
         return "Simulator.xhtml?faces-redirect=true";
     }
 

@@ -37,7 +37,7 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                     </div>
                     <br/>
                     <p:commandButton id="selectProjectButton" value="Select Project" 
-                                     class="btn btn-default" action="#{projectManager.selectProject()}"/>
+                                     class="btn btn-default" update="msgs" action="#{projectManager.selectProject()}"/>
                     <p:button id="createProjectButton" value=" Create Project" 
                               class="btn btn-default" outcome="UploadFile"/>
                 </h:form>
