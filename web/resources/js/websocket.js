@@ -101,13 +101,6 @@ function startSimulation() {
     socket.send(JSON.stringify(staticObjects));
 }
 
-function testSend(){
-   
-    var testCase = getModel7();
-    simulationIsRunning = true;
-    socket.send(testCase);
-}
-
 //This method is called automatically when client receives a message from server
 function onMessage(message) {
 

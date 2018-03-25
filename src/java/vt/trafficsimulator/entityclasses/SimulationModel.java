@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "SimulationModel.findAll", query = "SELECT s FROM SimulationModel s")
     , @NamedQuery(name = "SimulationModel.findById", query = "SELECT s FROM SimulationModel s WHERE s.id = :id")
     , @NamedQuery(name = "SimulationModel.findByModeldata", query = "SELECT s FROM SimulationModel s WHERE s.modeldata = :modeldata")
+    , @NamedQuery(name = "SimulationModel.findSimulationModelByProjectId", query = "SELECT s FROM SimulationModel s WHERE s.projectId.id = :projectId")
     , @NamedQuery(name = "SimulationModel.findByLastaddedelementid", query = "SELECT s FROM SimulationModel s WHERE s.lastaddedelementid = :lastaddedelementid")})
 public class SimulationModel implements Serializable {
 
@@ -62,6 +63,12 @@ public class SimulationModel implements Serializable {
     public SimulationModel(Integer id, String modeldata) {
         this.id = id;
         this.modeldata = modeldata;
+    }
+    
+    public SimulationModel(String modeldata, String lastaddedelementid, Project projectId){
+        this.modeldata = modeldata;
+        this.lastaddedelementid = lastaddedelementid;
+        this.projectId = projectId;       
     }
 
     public Integer getId() {

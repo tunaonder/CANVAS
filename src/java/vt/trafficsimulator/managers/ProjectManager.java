@@ -24,12 +24,14 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.UploadedFile;
 import vt.trafficsimulator.entityclasses.Project;
+import vt.trafficsimulator.entityclasses.SimulationModel;
 import vt.trafficsimulator.entityclasses.User;
 import vt.trafficsimulator.entityclasses.UserFile;
 import vt.trafficsimulator.jsfclasses.UserFileController;
 import vt.trafficsimulator.sessionbeans.ProjectFacade;
 import vt.trafficsimulator.sessionbeans.UserFacade;
 import vt.trafficsimulator.sessionbeans.UserFileFacade;
+import vt.trafficsimulator.sessionbeans.SimulationModelFacade;
 
 /**
  *
@@ -64,6 +66,9 @@ public class ProjectManager implements Serializable {
 
     @EJB
     private ProjectFacade projectFacade;
+    
+    @EJB
+    private SimulationModelFacade simulationModelFacade;
 
     /*
     The instance variable 'userFileController' is annotated with the @Inject annotation.
@@ -87,6 +92,8 @@ public class ProjectManager implements Serializable {
     private List<String> userProjectNames;
     private String selectedProjectName;
     private String selectedProjectMap;
+    private String simulationModelData = "";
+    private String lastAddedSpotId = "";
     
     @PostConstruct
     public void init() {
@@ -163,6 +170,14 @@ public class ProjectManager implements Serializable {
     public void setSelectedProjectMap(String selectedProjectMap) {
         this.selectedProjectMap = selectedProjectMap;
     }
+
+    public String getSimulationModelData() {
+        return simulationModelData;
+    }
+
+    public void setSimulationModelData(String simulationModel) {
+        this.simulationModelData = simulationModel;
+    } 
     
     public String selectProject(){
         if (selectedProjectName.equals("")){
@@ -173,7 +188,13 @@ public class ProjectManager implements Serializable {
         
         Project project = projectFacade.findByProjectName(selectedProjectName).get(0);
         selectedProjectMap = Constants.FILES_RELATIVE_PATH + project.getMapname();
-              
+        
+        SimulationModel model = simulationModelFacade.findSimulationModelByProjectId(project.getId());
+        if(model != null){
+            simulationModelData = model.getModeldata();
+            lastAddedSpotId = model.getLastaddedelementid();
+        }
+               
         return "Simulator.xhtml?faces-redirect=true";
     }
 
@@ -184,8 +205,14 @@ public class ProjectManager implements Serializable {
     public void setUserProjectNames(List<String> userProjectNames) {
         this.userProjectNames = userProjectNames;
     }
-    
-    
+
+    public String getLastAddedSpotId() {
+        return lastAddedSpotId;
+    }
+
+    public void setLastAddedSpotId(String lastAddedSpotId) {
+        this.lastAddedSpotId = lastAddedSpotId;
+    }
     
     public void onSelect(SelectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -228,6 +255,14 @@ public class ProjectManager implements Serializable {
   
         return "Simulator?faces-redirect=true";
 
+    }
+    
+    public void saveProjectModel(){
+        
+        Project currentProject = projectFacade.findByProjectName(selectedProjectName).get(0);
+        
+        SimulationModel model = new SimulationModel(simulationModelData, lastAddedSpotId, currentProject);
+        simulationModelFacade.create(model);
     }
 
     /*

@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global THREE, queue, eventQueue, currentMoveSpot */
+/* global THREE, queue, eventQueue, currentMoveSpot, moveSpotObjects */
 
 var camera;
 var scene;
@@ -43,8 +43,12 @@ var visualizationTime = 0;
 
 var simulationIsRunning = false;
 
+var tempArray = [];
+
 //Set The When Application Displays the Map
 function setScene() {
+
+    alert( document.getElementById("simModelForm:hiddenSimulationModel").value);
 
     var currentBackgroundMap = document.getElementById("hiddenMapInput").value;
 
@@ -209,14 +213,10 @@ function onDocumentMouseDown(event) {
     var distance = -camera.position.z / dir.z;
 
     var pos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-    
-   // alert(canvasWidth/mapStartX + ',' + canvasHeight/mapStartY);
     
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
-        //alert(vector.x + ',' + vector.y);
-        alert((vector.y-mapStartY)/(mapFinishY-mapFinishX));
+
         //If the Mode is Convert To Fork or Convert to Merge
         if (mode === 'forkButton' || mode === 'mergeButton') {
             moveSpotClicked();
@@ -343,4 +343,89 @@ function changeInsertMode(id) {
             document.getElementById(mode).style.background = "#99C68E";
         }
     }
+}
+
+function saveModel(){
+    
+    var staticObjects = [];
+    for (var i = 0; i < moveSpotObjects.length; i++) {
+         
+        var object = moveSpotObjects[i];
+        var xRelativeLocation = (object.x-mapStartX)/(mapFinishX-mapStartX);
+        var yRelativeLocation = (object.y-mapStartY)/(mapFinishY-mapStartY);
+
+        if (object.type === "Standart") {
+            staticObjects.push({
+                "type": object.type,
+                "objectId": object.objectId,
+                "x": xRelativeLocation,
+                "y": yRelativeLocation,
+                "nextId": object.nextMoveSpotId,
+                "prevId": object.prevMoveSpotId
+            });
+        }
+        else if (object.type === "Fork") {
+            staticObjects.push({
+                "type": object.type,
+                "objectId": object.objectId,
+                "x": xRelativeLocation,
+                "y": yRelativeLocation,
+                "nextId": object.nextMoveSpotId,
+                "prevId": object.prevMoveSpotId,
+                "alternativeNextId": object.nextMoveSpotAlternativeId
+            });
+        }
+        else if (object.type === "Merge") {
+            staticObjects.push({
+                "type": object.type,
+                "objectId": object.objectId,
+                "x": xRelativeLocation,
+                "y": yRelativeLocation,
+                "nextId": object.nextMoveSpotId,
+                "prevId": object.prevMoveSpotId,
+                "alternativePrevId": object.prevMoveSpotAlternativeId
+            });
+        }
+        else if (object.type === "EnterPoint") {
+            staticObjects.push({
+                "type": object.type,
+                "objectId": object.objectId,
+                "x": xRelativeLocation,
+                "y": yRelativeLocation,
+                "nextId": object.nextMoveSpotId
+            });
+
+        } else if (object.type === "ExitPoint") {
+            staticObjects.push({
+                "type": object.type,
+                "objectId": object.objectId,
+                "x": xRelativeLocation,
+                "y": yRelativeLocation,
+                "prevId": object.prevMoveSpotId
+            });
+
+        }
+        else if (object.type === "TrafficLight") {
+            staticObjects.push({
+                "type": object.type,
+                "objectId": object.objectId,
+                "x": xRelativeLocation,
+                "y": yRelativeLocation,
+                "nextId": object.nextMoveSpotId,
+                "prevId": object.prevMoveSpotId,
+                "greenStartTime": object.greenStartTime,
+                "greenDuration": object.greenDuration,
+                "redDuration": object.redDuration
+            });
+        }
+    }
+    
+    document.getElementById("simModelForm:hiddenLastAdded").value = staticObjects[staticObjects.length-1].objectId;
+    document.getElementById("simModelForm:hiddenSimulationModel").value = JSON.stringify(staticObjects);
+    alert(document.getElementById("simModelForm:hiddenSimulationModel").value);
+}
+
+function retrieveModel(){
+    
+    console.log(tempArray);
 }

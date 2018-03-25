@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:composition template="/templates/siteTemplate.xhtml">
 
@@ -24,9 +24,9 @@
                 <button id="forkButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Fork</button>
                 <button id="mergeButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Merge</button>
                 <button id="" class="btn panelButton" onClick=""> Cancel Change</button>
-                
-                
-                
+
+
+
                 <h:form id="trafficLightForm" style="display: none;">
 
                     <label class="controlLabel">Set Traffic Light</label>
@@ -43,13 +43,19 @@
                 <div id="startSimDiv">
                     <label class="controlLabel">Run</label>
                     <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
-                    <button id="testButton" class="btn panelButton" onClick="testSend();"> Test Simulation</button>
+                    <h:form id="simModelForm">
+                        <p:commandButton id="saveButton" class="btn panelButton" onclick="saveModel();"
+                                         action="#{projectManager.saveProjectModel}" value="Save Model"/>      
+                        <h:inputHidden id="hiddenSimulationModel" value="#{projectManager.simulationModelData}"/>
+                        <h:inputHidden id="hiddenLastAdded" value="#{projectManager.lastAddedSpotId}"/>
+                    </h:form>
+                    <button id="retrieveButton" class="btn panelButton" onClick="retrieveModel();"> Retrieve Model</button>
                 </div>
 
 
             </div>
             <div>
-                <h:inputHidden id="hiddenMapInput" value="#{projectManager.selectedProjectMap}"/>
+                <h:inputHidden id="hiddenMapInput" value="#{projectManager.selectedProjectMap}"/>                
                 <script> setScene();</script>
             </div>
 

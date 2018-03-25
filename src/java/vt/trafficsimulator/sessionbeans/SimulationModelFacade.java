@@ -4,6 +4,7 @@
  */
 package vt.trafficsimulator.sessionbeans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,5 +28,17 @@ public class SimulationModelFacade extends AbstractFacade<SimulationModel> {
     public SimulationModelFacade() {
         super(SimulationModel.class);
     }
-    
+
+    public SimulationModel findSimulationModelByProjectId(Integer projectID) {
+
+        List<SimulationModel> models = em.createNamedQuery("SimulationModel.findSimulationModelByProjectId")
+                .setParameter("projectId", projectID)
+                .getResultList();
+
+        if(models.isEmpty()){
+            return null;
+        }
+        return models.get(0);
+    }
+
 }
