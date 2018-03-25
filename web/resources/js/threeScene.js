@@ -43,12 +43,11 @@ var visualizationTime = 0;
 
 var simulationIsRunning = false;
 
-var tempArray = [];
+//Object Id will be incremented for each added objects
+var objectId = 0;
 
 //Set The When Application Displays the Map
 function setScene() {
-
-    alert( document.getElementById("simModelForm:hiddenSimulationModel").value);
 
     var currentBackgroundMap = document.getElementById("hiddenMapInput").value;
 
@@ -99,6 +98,7 @@ function setScene() {
         mapFinishX = bbox.max.x;
         mapFinishY = bbox.max.y;
 
+        retrieveModel();
 
         //Renders the app in half resolution, but display in full size.
         renderer.setSize(canvasWidth, canvasHeight);
@@ -232,16 +232,17 @@ function onDocumentMouseDown(event) {
                 return;
             }
         }
-
+       
         if (mode === 'enterPointButton') {
-
-            enterPointInsert();
+            objectId++;
+            enterPointInsert(vector.x, vector.y, 's'+objectId);
         } else if (mode === 'moveSpotButton') {
-
-            moveSpotInsert();
+            objectId++;
+            moveSpotInsert(vector.x, vector.y, 's'+objectId);
 
         } else if (mode === 'exitPointButton') {
-            exitPointInsert();
+            objectId++;
+            exitPointInsert(vector.x, vector.y, 's'+objectId);
         } else if (mode === 'trafficLightButton') {
             var greenStartTime = document.getElementById("trafficLightForm:greenStartTime").value;
             var greenDuration = document.getElementById("trafficLightForm:greenDuration").value;
@@ -265,7 +266,8 @@ function onDocumentMouseDown(event) {
                 return;
             }
 
-            trafficLightInsert(greenStartTime, greenDuration, redDuration);
+            objectId++;
+            trafficLightInsert(vector.x, vector.y, 's'+objectId, greenStartTime, greenDuration, redDuration);
 
             document.getElementById("trafficLightForm:greenStartTime").value = "";
             document.getElementById("trafficLightForm:greenDuration").value = "";
@@ -422,10 +424,44 @@ function saveModel(){
     
     document.getElementById("simModelForm:hiddenLastAdded").value = staticObjects[staticObjects.length-1].objectId;
     document.getElementById("simModelForm:hiddenSimulationModel").value = JSON.stringify(staticObjects);
-    alert(document.getElementById("simModelForm:hiddenSimulationModel").value);
 }
 
 function retrieveModel(){
     
-    console.log(tempArray);
+    var modelData = document.getElementById("simModelForm:hiddenSimulationModel").value;
+    
+    if(modelData === '') return;
+    var jsonArr = $.parseJSON(modelData);
+
+    for(var i=0; i<jsonArr.length; i++){
+       
+        var spot = jsonArr[i];
+        var xRatio = spot.x;
+        var yRatio = spot.y;
+        var xCoord = xRatio * (mapFinishX-mapStartX) + mapStartX;
+        var yCoord = yRatio * (mapFinishY-mapStartY) + mapStartY;
+        if(spot.type === 'EnterPoint'){
+            
+            enterPointInsert(xCoord, yCoord, spot.objectId);
+   
+        }
+        else if(spot.type === 'ExitPoint'){
+            
+            exitPointInsert(xCoord, yCoord, spot.objectId);
+        }
+        else if(spot.type === 'Standart'){
+            
+            moveSpotInsert(xCoord, yCoord, spot.objectId);
+            
+        }
+        
+         else if(spot.type === 'TrafficLight'){
+            
+            trafficLightInsert(xCoord, yCoord, spot.objectId, 
+                spot.greenStartTime, spot.greenDuration, spot.redDuration);
+            
+        }
+        
+    }
+    
 }

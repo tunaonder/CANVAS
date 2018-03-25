@@ -194,6 +194,10 @@ public class ProjectManager implements Serializable {
             simulationModelData = model.getModeldata();
             lastAddedSpotId = model.getLastaddedelementid();
         }
+        else{
+            simulationModelData = "";
+            lastAddedSpotId = "";
+        }
                
         return "Simulator.xhtml?faces-redirect=true";
     }

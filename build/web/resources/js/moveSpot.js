@@ -11,9 +11,6 @@ var moveSpotObjects = [];
 //The Last Added Spot
 var currentMoveSpot = null;
 
-//Object Id will be incremented for each added objects
-var objectId = 0;
-
 // STATIC OBJECTS STYLING FOR THREE.JS MESHES
 
 //Radius of Spots
@@ -74,8 +71,10 @@ function TrafficLight(geometry, material, id, x, y, nextId, prevId,
  */
 
 //This Methold is called to add an enter Point
-function enterPointInsert() {
-    //
+// xCoord: 
+// yCoord: 
+function enterPointInsert(xCoord, yCoord, objectId) {
+    
     //Create Enter Point   
     //Set MoveSpot as a child of Mesh
     MoveSpot.prototype = new THREE.Mesh();
@@ -85,8 +84,7 @@ function enterPointInsert() {
     var material = new THREE.MeshBasicMaterial({color: enterPointColor});
 
     //Set The Id Of Next Object
-    objectId++;
-    var startPoint = new MoveSpot(geometry, material, 's' + objectId, vector.x, vector.y, 0, 0, "EnterPoint");
+    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, 0, "EnterPoint");
 
     //position.x and position.y defines the coordinates of the MESH. It is related to Three.js
     //x and y holds the coordinate info
@@ -105,7 +103,7 @@ function enterPointInsert() {
 }
 
 //This Method inserts Exit Point
-function exitPointInsert() {
+function exitPointInsert(xCoord, yCoord, objectId) {
     //Create Exit Point
     //Set MoveSpot as a child of Mesh
     MoveSpot.prototype = new THREE.Mesh();
@@ -115,8 +113,7 @@ function exitPointInsert() {
     var material = new THREE.MeshBasicMaterial({color: exitPointColor});
 
     //Set The Id Of Next Object
-    objectId++;
-    var exitPoint = new MoveSpot(geometry, material, 's' + objectId, vector.x, vector.y, 0, 0, "ExitPoint");
+    var exitPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, 0, "ExitPoint");
 
     //position.x and position.y defines the coordinates of the MESH. It is related to Three.js
     //x and y holds the coordinate info
@@ -138,7 +135,7 @@ function exitPointInsert() {
 
 }
 
-function trafficLightInsert(greenStartTime, greenDuration, redDuration){
+function trafficLightInsert(xCoord, yCoord, objectId, greenStartTime, greenDuration, redDuration){
     
     TrafficLight.prototype = new THREE.Mesh();
     var geometry = new THREE.CircleGeometry(trafficLightRadius, 32);
@@ -151,13 +148,10 @@ function trafficLightInsert(greenStartTime, greenDuration, redDuration){
         material = new THREE.MeshBasicMaterial({color: trafficLightRed});       
     }
     
-    //Set The Id Of Next Object
-    objectId++;
-    
     //Create A New Fork Containing clicked MoveSpot Info
      TrafficLight.prototype = new MoveSpot();
-     var trafficLight = new TrafficLight(geometry, material, 's' + objectId, vector.x, 
-        vector.y, 0, 0, "TrafficLight", greenStartTime, greenDuration, redDuration);
+     var trafficLight = new TrafficLight(geometry, material, objectId, xCoord, 
+        yCoord, 0, 0, "TrafficLight", greenStartTime, greenDuration, redDuration);
     
     trafficLight.position.x = trafficLight.x;
     trafficLight.position.y = trafficLight.y;
@@ -165,7 +159,6 @@ function trafficLightInsert(greenStartTime, greenDuration, redDuration){
     currentMoveSpot.nextMoveSpotId = trafficLight.objectId;
     trafficLight.prevMoveSpotId = currentMoveSpot.objectId;
 
-    //Make it null to add new enter point
     currentMoveSpot = trafficLight;
 
     moveSpotObjects.push(trafficLight);
@@ -174,15 +167,14 @@ function trafficLightInsert(greenStartTime, greenDuration, redDuration){
     scene.add(trafficLight);  
 }
 
-function moveSpotInsert() {
+function moveSpotInsert(xCoord, yCoord, objectId) {
     var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: moveSpotColor});
 
     MoveSpot.prototype = new THREE.Mesh();
 
     //Set the id of the next object
-    objectId++;
-    var addedMoveSpot = new MoveSpot(geometry, material, 's' + objectId, vector.x, vector.y, 0, 0, "Standart");
+    var addedMoveSpot = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, 0, "Standart");
 
     addedMoveSpot.position.x = addedMoveSpot.x;
     addedMoveSpot.position.y = addedMoveSpot.y;
