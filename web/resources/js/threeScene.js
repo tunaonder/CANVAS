@@ -69,6 +69,8 @@ function setScene() {
         // While map gets bigger, camera zooms out
         // 0.55 is selected after tests. Number could be bigger to zoom out
         camera.position.z = backgroundWidth * 0.55;
+    
+        //camera.position.z = backgroundWidth * 0.7;
 
         // Load the background texture
         var texture = THREE.ImageUtils.loadTexture(currentBackgroundMap);
@@ -186,8 +188,6 @@ function processCurrentEvent(event) {
  */
 function onDocumentMouseDown(event) {
 
-
-    console.log('test');
     //event.preventDefault();
 
     // Determine how much user has scrolled
@@ -210,10 +210,13 @@ function onDocumentMouseDown(event) {
 
     var pos = camera.position.clone().add(dir.multiplyScalar(distance));
 
-
+    
+   // alert(canvasWidth/mapStartX + ',' + canvasHeight/mapStartY);
+    
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
-        console.log('clickedIn');
+        //alert(vector.x + ',' + vector.y);
+        alert((vector.y-mapStartY)/(mapFinishY-mapFinishX));
         //If the Mode is Convert To Fork or Convert to Merge
         if (mode === 'forkButton' || mode === 'mergeButton') {
             moveSpotClicked();

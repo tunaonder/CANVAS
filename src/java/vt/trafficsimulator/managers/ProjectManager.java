@@ -86,6 +86,7 @@ public class ProjectManager implements Serializable {
     private List<Project> userProjects;
     private List<String> userProjectNames;
     private String selectedProjectName;
+    private String selectedProjectMap;
     
     @PostConstruct
     public void init() {
@@ -154,6 +155,14 @@ public class ProjectManager implements Serializable {
     public void setSelectedProjectName(String selectedProjectName) {
         this.selectedProjectName = selectedProjectName;
     }
+
+    public String getSelectedProjectMap() {
+        return selectedProjectMap;
+    }
+
+    public void setSelectedProjectMap(String selectedProjectMap) {
+        this.selectedProjectMap = selectedProjectMap;
+    }
     
     public String selectProject(){
         if (selectedProjectName.equals("")){
@@ -162,6 +171,9 @@ public class ProjectManager implements Serializable {
             return "";         
         }       
         
+        Project project = projectFacade.findByProjectName(selectedProjectName).get(0);
+        selectedProjectMap = Constants.FILES_RELATIVE_PATH + project.getMapname();
+              
         return "Simulator.xhtml?faces-redirect=true";
     }
 
@@ -202,6 +214,8 @@ public class ProjectManager implements Serializable {
         getProjectFacade().create(newProject);
 
         selectedProjectName = newProjectName;
+        selectedProjectMap = Constants.FILES_RELATIVE_PATH + uploadedFileName;
+       
         // Clear Data
         uploadedFileName = "";
         newProjectName = "";
@@ -211,7 +225,7 @@ public class ProjectManager implements Serializable {
         for(int i=0; i<userProjects.size(); i++){
             userProjectNames.add(userProjects.get(i).getProjectname());          
         }
-        
+  
         return "Simulator?faces-redirect=true";
 
     }

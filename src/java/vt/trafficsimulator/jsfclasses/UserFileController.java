@@ -478,10 +478,10 @@ public class UserFileController implements Serializable {
         return fileExtensionInCaps;
     }
     
-    public String changeBackgroundMap(){
-        
-        currentMap = Constants.FILES_RELATIVE_PATH + selected.getFilename();
-        return "index.xhtml?faces-redirect=true";
-    }
+//    public String changeBackgroundMap(){
+//        
+//        currentMap = Constants.FILES_RELATIVE_PATH + selected.getFilename();
+//        return "index.xhtml?faces-redirect=true";
+//    }
 
 }
