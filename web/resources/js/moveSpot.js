@@ -182,80 +182,82 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
 
     //This Function Is Called When an MoveSpot Is converted to a Fork or to a Merge
     //addedMoveSpot defines the CLICKED move Spot
-    addedMoveSpot.callback = function () {
+    addedMoveSpot.callback = moveSpotCallback;
+}
 
-        //If Mode is FORK
-        if (mode === 'forkButton') {
-            var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
-            var material = new THREE.MeshBasicMaterial({color: forkColor});
+function moveSpotCallback() {
 
-            //Create A New Fork Containing clicked MoveSpot Info
-            Fork.prototype = new MoveSpot();
+    //If Mode is FORK
+    if (mode === 'forkButton') {
+        var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
+        var material = new THREE.MeshBasicMaterial({color: forkColor});
 
-            //Set the Next Object Id - 1, because alternativeId will be the Next Object of this object
-            var fork = new Fork(geometry, material, this.objectId, this.x, this.y, -1, this.prevMoveSpotId, "Fork");
-            //Set the Alternative Next Move Spot Id
-            fork.nextMoveSpotAlternativeId = this.nextMoveSpotId;
+        //Create A New Fork Containing clicked MoveSpot Info
+        Fork.prototype = new MoveSpot();
 
-            //Last Clicked MoveSpot Is The Fork
-            currentMoveSpot = fork;
+        //Set the Next Object Id - 1, because alternativeId will be the Next Object of this object
+        var fork = new Fork(geometry, material, this.objectId, this.x, this.y, -1, this.prevMoveSpotId, "Fork");
+        //Set the Alternative Next Move Spot Id
+        fork.nextMoveSpotAlternativeId = this.nextMoveSpotId;
 
-            //Add Fork To The Scene
-            fork.position.x = fork.x;
-            fork.position.y = fork.y;
+        //Last Clicked MoveSpot Is The Fork
+        currentMoveSpot = fork;
 
-            //Update The Move Spot Array
-            //Delete The Current Move Spot and Add The Created FORK
-            for (var i = 0; i < moveSpotObjects.length; i++) {
+        //Add Fork To The Scene
+        fork.position.x = fork.x;
+        fork.position.y = fork.y;
 
-                if (this.objectId === moveSpotObjects[i].objectId) {
-                    moveSpotObjects[i] = fork;
-                }
+        //Update The Move Spot Array
+        //Delete The Current Move Spot and Add The Created FORK
+        for (var i = 0; i < moveSpotObjects.length; i++) {
 
+            if (this.objectId === moveSpotObjects[i].objectId) {
+                moveSpotObjects[i] = fork;
             }
 
-            scene.add(fork);
-            //Remove The MoveSpot
-            scene.remove(this);
-
-
-            alert('MoveSpot is Converted To Fork');
-
-
-        } else if (mode === 'mergeButton') {
-            var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
-            var material = new THREE.MeshBasicMaterial({color: mergeColor});
-
-            Merge.prototype = new MoveSpot();
-            var merge = new Merge(geometry, material, this.objectId, this.x, this.y, this.nextMoveSpotId, this.prevMoveSpotId, "Merge");
-
-
-            merge.prevMoveSpotAlternativeId = currentMoveSpot.objectId;
-            currentMoveSpot.nextMoveSpotId = merge.objectId;
-
-
-            //Updaet the scene position
-            merge.position.x = merge.x;
-            merge.position.y = merge.y;
-
-            //Update The Move Spot Array
-            for (var i = 0; i < moveSpotObjects.length; i++) {
-
-                if (this.objectId === moveSpotObjects[i].objectId) {
-                    moveSpotObjects[i] = merge;
-                }
-
-            }
-            //Remove The Area
-            scene.remove(this);
-
-            scene.add(merge);
-
-            currentMoveSpot = null;
-
-            alert('Move Spot is Converted to Merge');
         }
-    };
+
+        scene.add(fork);
+        //Remove The MoveSpot
+        scene.remove(this);
+
+
+        alert('MoveSpot is Converted To Fork');
+
+
+    } else if (mode === 'mergeButton') {
+        var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
+        var material = new THREE.MeshBasicMaterial({color: mergeColor});
+
+        Merge.prototype = new MoveSpot();
+        var merge = new Merge(geometry, material, this.objectId, this.x, this.y, this.nextMoveSpotId, this.prevMoveSpotId, "Merge");
+
+
+        merge.prevMoveSpotAlternativeId = currentMoveSpot.objectId;
+        currentMoveSpot.nextMoveSpotId = merge.objectId;
+
+
+        //Updaet the scene position
+        merge.position.x = merge.x;
+        merge.position.y = merge.y;
+
+        //Update The Move Spot Array
+        for (var i = 0; i < moveSpotObjects.length; i++) {
+
+            if (this.objectId === moveSpotObjects[i].objectId) {
+                moveSpotObjects[i] = merge;
+            }
+
+        }
+        //Remove The Area
+        scene.remove(this);
+
+        scene.add(merge);
+
+        currentMoveSpot = null;
+
+        alert('Move Spot is Converted to Merge');
+    }
 }
 
 /**
@@ -325,7 +327,7 @@ function changeTrafficLightState(event) {
 // RETRIEVE MODEL FUNCTIONS
 
 function enterPointFromSavedModel(xCoord, yCoord, objectId, nextId) {
-    
+
     MoveSpot.prototype = new THREE.Mesh();
 
     //Create The Geometry and the material for the Mesh
@@ -346,7 +348,7 @@ function enterPointFromSavedModel(xCoord, yCoord, objectId, nextId) {
 }
 
 function exitPointFromSavedModel(xCoord, yCoord, objectId, prevId) {
-    
+
     MoveSpot.prototype = new THREE.Mesh();
 
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
@@ -358,12 +360,12 @@ function exitPointFromSavedModel(xCoord, yCoord, objectId, prevId) {
     exitPoint.position.y = exitPoint.y;
 
     moveSpotObjects.push(exitPoint);
-    
+
     scene.add(exitPoint);
 }
 
 function moveSpotFromSavedModel(xCoord, yCoord, objectId, nextId, prevId) {
-    
+
     var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: moveSpotColor});
 
@@ -377,11 +379,13 @@ function moveSpotFromSavedModel(xCoord, yCoord, objectId, nextId, prevId) {
     moveSpotObjects.push(addedMoveSpot);
 
     scene.add(addedMoveSpot);
-
+    
+    // Move Spot Can be converted into Fork or Merge
+    addedMoveSpot.callback = moveSpotCallback;
 }
 
-function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId, 
-            greenStartTime, greenDuration, redDuration) {
+function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId,
+        greenStartTime, greenDuration, redDuration) {
 
     TrafficLight.prototype = new THREE.Mesh();
     var geometry = new THREE.CircleGeometry(trafficLightRadius, 32);
@@ -435,7 +439,7 @@ function mergeFromSavedModel(objectId, xCoord, yCoord, prevId, nextId, alternati
     Merge.prototype = new MoveSpot();
     var merge = new Merge(geometry, material, objectId, xCoord, yCoord, nextId, prevId, "Merge");
     merge.prevMoveSpotAlternativeId = alternativePrevId;
-    
+
     //Updaet the scene position
     merge.position.x = merge.x;
     merge.position.y = merge.y;
