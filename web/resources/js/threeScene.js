@@ -425,9 +425,14 @@ function retrieveModel() {
 
     var modelData = document.getElementById("simModelForm:hiddenSimulationModel").value;
 
-    if (modelData === '')
+    if (modelData === ''){
         return;
+    }        
     var jsonArr = $.parseJSON(modelData);
+    if (jsonArr.length === 0){
+        return;
+    }
+    
 
     for (var i = 0; i < jsonArr.length; i++) {
 
@@ -453,6 +458,7 @@ function retrieveModel() {
         }
     }
     
+    // Find the Last Added Object Id
     var lastSpot = jsonArr[jsonArr.length-1];
     var lastObjectId = lastSpot.objectId;
        
@@ -464,6 +470,6 @@ function retrieveModel() {
         }
     }
     
-    // Numeric Object Id To Set New Spot Ids
+    // Numeric Object Id To Set New Spot Ids (All Static Object Ids start with 's')
     objectId = lastObjectId.substring(1);
 }
