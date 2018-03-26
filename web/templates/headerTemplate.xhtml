@@ -4,7 +4,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition>
@@ -14,7 +13,7 @@
                     <td align="left" valign="middle">
 
                         <a href="index.xhtml"> <h:graphicImage value="resources/images/CanvasLogo.png"
-                                                               style="margin-left: 20px; margin-top: -5px; max-height:50px; max-width:150px;"
+                                                               style="margin-left: 20px; margin-top: 2px; max-height:52px; max-width:150px;"
                                                                alt="Traffic Simulator Logo"/></a>
 
                     </td>
@@ -22,10 +21,10 @@
 
                         <!-- Welcome the user if signed in -->
                         <c:if test="#{accountManager.isLoggedIn() == true}">
-                            <h1>Hello, #{accountManager.selected.firstName}</h1>
+                            <h3>Hello, #{accountManager.selected.firstName}</h3>
                         </c:if>
                         <c:if test="#{accountManager.isLoggedIn() == false}">
-                            <h1>Hello, Guest</h1>
+                            <h3>Hello, Guest</h3>
                         </c:if>
 
                     </td>
