@@ -66,7 +66,7 @@ public class ProjectManager implements Serializable {
 
     @EJB
     private ProjectFacade projectFacade;
-    
+
     @EJB
     private SimulationModelFacade simulationModelFacade;
 
@@ -86,15 +86,14 @@ public class ProjectManager implements Serializable {
 
     private String newProjectName;
     private String uploadedFileName = "";
-    
+
     private User user;
     private List<Project> userProjects;
     private List<String> userProjectNames;
     private String selectedProjectName;
     private String selectedProjectMap;
     private String simulationModelData = "";
-    private String lastAddedSpotId = "";
-    
+
     @PostConstruct
     public void init() {
         String user_name = (String) FacesContext.getCurrentInstance()
@@ -103,9 +102,9 @@ public class ProjectManager implements Serializable {
         user = getUserFacade().findByUsername(user_name);
         userProjects = getProjectFacade().findProjectsByUserID(user.getId());
         userProjectNames = new ArrayList<>();
-        for(int i=0; i<userProjects.size(); i++){
-            userProjectNames.add(userProjects.get(i).getProjectname());          
-        }         
+        for (int i = 0; i < userProjects.size(); i++) {
+            userProjectNames.add(userProjects.get(i).getProjectname());
+        }
     }
 
     /*
@@ -177,29 +176,6 @@ public class ProjectManager implements Serializable {
 
     public void setSimulationModelData(String simulationModel) {
         this.simulationModelData = simulationModel;
-    } 
-    
-    public String selectProject(){
-        if (selectedProjectName.equals("")){
-            resultMsg = new FacesMessage("Please select a project!");
-            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
-            return "";         
-        }       
-        
-        Project project = projectFacade.findByProjectName(selectedProjectName).get(0);
-        selectedProjectMap = Constants.FILES_RELATIVE_PATH + project.getMapname();
-        
-        SimulationModel model = simulationModelFacade.findSimulationModelByProjectId(project.getId());
-        if(model != null){
-            simulationModelData = model.getModeldata();
-            lastAddedSpotId = model.getLastaddedelementid();
-        }
-        else{
-            simulationModelData = "";
-            lastAddedSpotId = "";
-        }
-               
-        return "Simulator.xhtml?faces-redirect=true";
     }
 
     public List<String> getUserProjectNames() {
@@ -210,30 +186,41 @@ public class ProjectManager implements Serializable {
         this.userProjectNames = userProjectNames;
     }
 
-    public String getLastAddedSpotId() {
-        return lastAddedSpotId;
-    }
-
-    public void setLastAddedSpotId(String lastAddedSpotId) {
-        this.lastAddedSpotId = lastAddedSpotId;
-    }
-    
     public void onSelect(SelectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Selected!", event.getObject().toString()));
         selectedProjectName = event.getObject().toString();
     }
-    
+
+    public String selectProject() {
+        if (selectedProjectName.equals("")) {
+            resultMsg = new FacesMessage("Please select a project!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return "";
+        }
+
+        Project project = projectFacade.findByProjectName(selectedProjectName).get(0);
+        selectedProjectMap = Constants.FILES_RELATIVE_PATH + project.getMapname();
+
+        SimulationModel model = simulationModelFacade.findSimulationModelByProjectId(project.getId());
+        if (model != null) {
+            simulationModelData = model.getModeldata();
+        } else {
+            simulationModelData = "";
+        }
+
+        return "Simulator.xhtml?faces-redirect=true";
+    }
 
     public String createProject() {
 
-        if(uploadedFileName.equals("")){
+        if (uploadedFileName.equals("")) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Upload Background Map for the New Project!", ""));
             return "";
-            
+
         }
-        
+
         List<Project> projectsFound = getProjectFacade().findByProjectName(newProjectName);
         if (!projectsFound.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -246,26 +233,36 @@ public class ProjectManager implements Serializable {
 
         selectedProjectName = newProjectName;
         selectedProjectMap = Constants.FILES_RELATIVE_PATH + uploadedFileName;
-       
+
         // Clear Data
         uploadedFileName = "";
         newProjectName = "";
-        
+
+        // Update Current Projects Dynamically
         userProjects = getProjectFacade().findProjectsByUserID(user.getId());
         userProjectNames = new ArrayList<>();
-        for(int i=0; i<userProjects.size(); i++){
-            userProjectNames.add(userProjects.get(i).getProjectname());          
+        for (int i = 0; i < userProjects.size(); i++) {
+            userProjectNames.add(userProjects.get(i).getProjectname());
         }
-  
+        
+        // No Data For New Project
+        simulationModelData = "";
+        
         return "Simulator?faces-redirect=true";
 
     }
-    
-    public void saveProjectModel(){
-        
+
+    public void saveProjectModel() {
+
         Project currentProject = projectFacade.findByProjectName(selectedProjectName).get(0);
+
+        // If Project has an existing model, delete it
+        SimulationModel model = simulationModelFacade.findSimulationModelByProjectId(currentProject.getId());
+        if(model!=null){
+            simulationModelFacade.remove(model);
+        }
         
-        SimulationModel model = new SimulationModel(simulationModelData, lastAddedSpotId, currentProject);
+        model = new SimulationModel(simulationModelData, currentProject);
         simulationModelFacade.create(model);
     }
 

@@ -52,33 +52,27 @@ function Merge(geometry, material, id, x, y, nextId, prevId, type) {
 }
 
 // Traffic Light extends Move Spot
-function TrafficLight(geometry, material, id, x, y, nextId, prevId, 
-                        type, greenStartTime, greenDuration, redDuration) {
+function TrafficLight(geometry, material, id, x, y, nextId, prevId,
+        type, greenStartTime, greenDuration, redDuration) {
     MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
     this.greenDuration = greenDuration;
     this.redDuration = redDuration;
     this.greenStartTime = greenStartTime;
     this.state = 'Red';
-    if(greenStartTime === '0'){
+    if (greenStartTime === '0') {
         this.state = 'Green';
     }
 }
-
-/**
- *  IMPORTANT NOTE: On the Client Side Enter and Exit Points are exactly same with MoveSpots
- *  The difference is their type as an argument. Therefore, when we insert Enter and Exit Point
- *  We create a move SPOT object
- */
 
 //This Methold is called to add an enter Point
 // xCoord: 
 // yCoord: 
 function enterPointInsert(xCoord, yCoord, objectId) {
-    
+
     //Create Enter Point   
     //Set MoveSpot as a child of Mesh
     MoveSpot.prototype = new THREE.Mesh();
-    
+
     //Create The Geometry and the material for the Mesh
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: enterPointColor});
@@ -93,7 +87,7 @@ function enterPointInsert(xCoord, yCoord, objectId) {
 
     //Set the Current Spot
     currentMoveSpot = startPoint;
-    
+
     //Push it To the Queue
     moveSpotObjects.push(startPoint);
 
@@ -107,7 +101,7 @@ function exitPointInsert(xCoord, yCoord, objectId) {
     //Create Exit Point
     //Set MoveSpot as a child of Mesh
     MoveSpot.prototype = new THREE.Mesh();
-    
+
     //Create The Geometry and the material for the Mesh
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: exitPointColor});
@@ -135,24 +129,23 @@ function exitPointInsert(xCoord, yCoord, objectId) {
 
 }
 
-function trafficLightInsert(xCoord, yCoord, objectId, greenStartTime, greenDuration, redDuration){
-    
+function trafficLightInsert(xCoord, yCoord, objectId, greenStartTime, greenDuration, redDuration) {
+
     TrafficLight.prototype = new THREE.Mesh();
     var geometry = new THREE.CircleGeometry(trafficLightRadius, 32);
     var material;
-      
-    if(greenStartTime === '0'){
+
+    if (greenStartTime === '0') {
         material = new THREE.MeshBasicMaterial({color: trafficLightGreen});
+    } else {
+        material = new THREE.MeshBasicMaterial({color: trafficLightRed});
     }
-    else{
-        material = new THREE.MeshBasicMaterial({color: trafficLightRed});       
-    }
-    
+
     //Create A New Fork Containing clicked MoveSpot Info
-     TrafficLight.prototype = new MoveSpot();
-     var trafficLight = new TrafficLight(geometry, material, objectId, xCoord, 
-        yCoord, 0, 0, "TrafficLight", greenStartTime, greenDuration, redDuration);
-    
+    TrafficLight.prototype = new MoveSpot();
+    var trafficLight = new TrafficLight(geometry, material, objectId, xCoord,
+            yCoord, 0, 0, "TrafficLight", greenStartTime, greenDuration, redDuration);
+
     trafficLight.position.x = trafficLight.x;
     trafficLight.position.y = trafficLight.y;
 
@@ -164,7 +157,7 @@ function trafficLightInsert(xCoord, yCoord, objectId, greenStartTime, greenDurat
     moveSpotObjects.push(trafficLight);
 
     //Add to the Scene
-    scene.add(trafficLight);  
+    scene.add(trafficLight);
 }
 
 function moveSpotInsert(xCoord, yCoord, objectId) {
@@ -190,7 +183,7 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
     //This Function Is Called When an MoveSpot Is converted to a Fork or to a Merge
     //addedMoveSpot defines the CLICKED move Spot
     addedMoveSpot.callback = function () {
-       
+
         //If Mode is FORK
         if (mode === 'forkButton') {
             var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
@@ -198,7 +191,7 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
 
             //Create A New Fork Containing clicked MoveSpot Info
             Fork.prototype = new MoveSpot();
-            
+
             //Set the Next Object Id - 1, because alternativeId will be the Next Object of this object
             var fork = new Fork(geometry, material, this.objectId, this.x, this.y, -1, this.prevMoveSpotId, "Fork");
             //Set the Alternative Next Move Spot Id
@@ -235,16 +228,16 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
 
             Merge.prototype = new MoveSpot();
             var merge = new Merge(geometry, material, this.objectId, this.x, this.y, this.nextMoveSpotId, this.prevMoveSpotId, "Merge");
-            
-            
+
+
             merge.prevMoveSpotAlternativeId = currentMoveSpot.objectId;
             currentMoveSpot.nextMoveSpotId = merge.objectId;
-            
+
 
             //Updaet the scene position
             merge.position.x = merge.x;
             merge.position.y = merge.y;
-            
+
             //Update The Move Spot Array
             for (var i = 0; i < moveSpotObjects.length; i++) {
 
@@ -252,14 +245,14 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
                     moveSpotObjects[i] = merge;
                 }
 
-            }          
+            }
             //Remove The Area
             scene.remove(this);
-            
+
             scene.add(merge);
 
             currentMoveSpot = null;
-            
+
             alert('Move Spot is Converted to Merge');
         }
     };
@@ -270,15 +263,15 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
  * Finds the clicked move spot and calls its callback method
  */
 function moveSpotClicked() {
-    
+
     // Determine how much user has scrolled
     // Source: https://stackoverflow.com/questions/11373741/detecting-by-how-much-user-has-scrolled
-    var scrollAmountY = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement 
-        || document.body.parentNode || document.body).scrollTop;
-    
-    mouse.x = ((event.clientX-controlPanelWidth) / renderer.domElement.clientWidth) * 2 - 1;
+    var scrollAmountY = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement
+            || document.body.parentNode || document.body).scrollTop;
+
+    mouse.x = ((event.clientX - controlPanelWidth) / renderer.domElement.clientWidth) * 2 - 1;
     mouse.y = -(((event.clientY + scrollAmountY) - headerHeight) / renderer.domElement.clientHeight) * 2 + 1;
-    
+
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(moveSpotObjects);
 
@@ -293,13 +286,13 @@ function removeMoveSpot() {
         alert('There is no MoveSpot to Remove');
         return;
     }
-    
+
     //Remove From The Scene
     scene.remove(currentMoveSpot);
     //Remove From the Array
-    moveSpotObjects.splice(-1,1);
+    moveSpotObjects.splice(-1, 1);
     //Set the new Current Move Spot
-    currentMoveSpot = moveSpotObjects[moveSpotObjects.length-1];
+    currentMoveSpot = moveSpotObjects[moveSpotObjects.length - 1];
 }
 
 /**
@@ -307,25 +300,148 @@ function removeMoveSpot() {
  * @param {type} event
  * @returns {undefined}
  */
-function changeTrafficLightState(event){  
+function changeTrafficLightState(event) {
     var lightId = event.lightId;
-    
+
     for (var i = 0; i < moveSpotObjects.length; i++) {
-        
+
         //Find the Traffic Light from the array
         if (lightId === moveSpotObjects[i].objectId) {
-            
+
             //If it is green change the state and make it Red
-            if(moveSpotObjects[i].state === 'Green'){
+            if (moveSpotObjects[i].state === 'Green') {
                 moveSpotObjects[i].state = 'Red';
                 moveSpotObjects[i].material.color.setHex(trafficLightRed);
-            }
-            else{
+            } else {
                 moveSpotObjects[i].state = 'Green';
                 moveSpotObjects[i].material.color.setHex(trafficLightGreen);
             }
 
             break;
         }
-    }    
+    }
+}
+
+// RETRIEVE MODEL FUNCTIONS
+
+function enterPointFromSavedModel(xCoord, yCoord, objectId, nextId) {
+    
+    MoveSpot.prototype = new THREE.Mesh();
+
+    //Create The Geometry and the material for the Mesh
+    var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
+    var material = new THREE.MeshBasicMaterial({color: enterPointColor});
+
+    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, nextId, 0, "EnterPoint");
+
+    startPoint.position.x = startPoint.x;
+    startPoint.position.y = startPoint.y;
+
+    //Push it To the Queue
+    moveSpotObjects.push(startPoint);
+
+    //Add to the Three.js Scene
+    scene.add(startPoint);
+
+}
+
+function exitPointFromSavedModel(xCoord, yCoord, objectId, prevId) {
+    
+    MoveSpot.prototype = new THREE.Mesh();
+
+    var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
+    var material = new THREE.MeshBasicMaterial({color: exitPointColor});
+
+    var exitPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, prevId, "ExitPoint");
+
+    exitPoint.position.x = exitPoint.x;
+    exitPoint.position.y = exitPoint.y;
+
+    moveSpotObjects.push(exitPoint);
+    
+    scene.add(exitPoint);
+}
+
+function moveSpotFromSavedModel(xCoord, yCoord, objectId, nextId, prevId) {
+    
+    var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
+    var material = new THREE.MeshBasicMaterial({color: moveSpotColor});
+
+    MoveSpot.prototype = new THREE.Mesh();
+
+    var addedMoveSpot = new MoveSpot(geometry, material, objectId, xCoord, yCoord, nextId, prevId, "Standart");
+
+    addedMoveSpot.position.x = addedMoveSpot.x;
+    addedMoveSpot.position.y = addedMoveSpot.y;
+
+    moveSpotObjects.push(addedMoveSpot);
+
+    scene.add(addedMoveSpot);
+
+}
+
+function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId, 
+            greenStartTime, greenDuration, redDuration) {
+
+    TrafficLight.prototype = new THREE.Mesh();
+    var geometry = new THREE.CircleGeometry(trafficLightRadius, 32);
+    var material;
+
+    if (greenStartTime === '0') {
+        material = new THREE.MeshBasicMaterial({color: trafficLightGreen});
+    } else {
+        material = new THREE.MeshBasicMaterial({color: trafficLightRed});
+    }
+
+    TrafficLight.prototype = new MoveSpot();
+    var trafficLight = new TrafficLight(geometry, material, objectId, xCoord,
+            yCoord, nextId, prevId, "TrafficLight", greenStartTime, greenDuration, redDuration);
+
+    trafficLight.position.x = trafficLight.x;
+    trafficLight.position.y = trafficLight.y;
+
+    moveSpotObjects.push(trafficLight);
+    //Add to the Scene
+    scene.add(trafficLight);
+}
+
+function forkFromSavedModel(objectId, xCoord, yCoord, prevMoveSpotId,
+        nextMoveSpotId, nextAlternativeMoveSpotId) {
+
+    var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
+    var material = new THREE.MeshBasicMaterial({color: forkColor});
+
+    Fork.prototype = new MoveSpot();
+
+    var fork = new Fork(geometry, material, objectId, xCoord, yCoord, nextMoveSpotId, prevMoveSpotId, "Fork");
+
+    fork.nextMoveSpotAlternativeId = nextAlternativeMoveSpotId;
+
+    //Add Fork To The Scene
+    fork.position.x = fork.x;
+    fork.position.y = fork.y;
+
+    moveSpotObjects.push(fork);
+
+    scene.add(fork);
+
+}
+
+function mergeFromSavedModel(objectId, xCoord, yCoord, prevId, nextId, alternativePrevId) {
+
+    var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
+    var material = new THREE.MeshBasicMaterial({color: mergeColor});
+
+    Merge.prototype = new MoveSpot();
+    var merge = new Merge(geometry, material, objectId, xCoord, yCoord, nextId, prevId, "Merge");
+    merge.prevMoveSpotAlternativeId = alternativePrevId;
+    
+    //Updaet the scene position
+    merge.position.x = merge.x;
+    merge.position.y = merge.y;
+
+    moveSpotObjects.push(merge);
+
+    scene.add(merge);
+
 }

@@ -108,7 +108,7 @@ canvas {
 }
 
 /* Style PrimeFaces Command Button --> p:commandButton  */
-.commandButton, .ui-confirmdialog-yes, .ui-confirmdialog-no, .ui-fileupload-choose, .ui-fileupload-upload, .ui-fileupload-cancel {
+/*.commandButton, .ui-confirmdialog-yes, .ui-confirmdialog-no, .ui-fileupload-choose, .ui-fileupload-upload, .ui-fileupload-cancel {
     border-radius: 2em !important;
     font-family: Arial, Helvetica, sans-serif !important;
     font-size: 10pt !important;
@@ -116,7 +116,7 @@ canvas {
     font-weight: normal !important;
     text-decoration: none;
     color: black;
-}
+}*/
 
 h1 {
     font-family: Arial, Helvetica, sans-serif;

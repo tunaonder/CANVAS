@@ -52,7 +52,7 @@ function setScene() {
     var currentBackgroundMap = document.getElementById("hiddenMapInput").value;
 
     var img = new Image();
-    
+
     // Image has to be loaded to get the imageHeight/imageWidth ratio
     img.onload = function () {
         var ratio = img.height / img.width;
@@ -67,12 +67,12 @@ function setScene() {
 
         var backgroundWidth = canvasWidth;
         var backgroundHeight = ratio * backgroundWidth;
-        
+
         // Camera position has to be set according to size of the background image file
         // While map gets bigger, camera zooms out
         // 0.55 is selected after tests. Number could be bigger to zoom out
         camera.position.z = backgroundWidth * 0.55;
-    
+
         //camera.position.z = backgroundWidth * 0.7;
 
         // Load the background texture
@@ -213,7 +213,7 @@ function onDocumentMouseDown(event) {
     var distance = -camera.position.z / dir.z;
 
     var pos = camera.position.clone().add(dir.multiplyScalar(distance));
-    
+
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
 
@@ -232,17 +232,17 @@ function onDocumentMouseDown(event) {
                 return;
             }
         }
-       
+
         if (mode === 'enterPointButton') {
             objectId++;
-            enterPointInsert(vector.x, vector.y, 's'+objectId);
+            enterPointInsert(vector.x, vector.y, 's' + objectId);
         } else if (mode === 'moveSpotButton') {
             objectId++;
-            moveSpotInsert(vector.x, vector.y, 's'+objectId);
+            moveSpotInsert(vector.x, vector.y, 's' + objectId);
 
         } else if (mode === 'exitPointButton') {
             objectId++;
-            exitPointInsert(vector.x, vector.y, 's'+objectId);
+            exitPointInsert(vector.x, vector.y, 's' + objectId);
         } else if (mode === 'trafficLightButton') {
             var greenStartTime = document.getElementById("trafficLightForm:greenStartTime").value;
             var greenDuration = document.getElementById("trafficLightForm:greenDuration").value;
@@ -267,7 +267,7 @@ function onDocumentMouseDown(event) {
             }
 
             objectId++;
-            trafficLightInsert(vector.x, vector.y, 's'+objectId, greenStartTime, greenDuration, redDuration);
+            trafficLightInsert(vector.x, vector.y, 's' + objectId, greenStartTime, greenDuration, redDuration);
 
             document.getElementById("trafficLightForm:greenStartTime").value = "";
             document.getElementById("trafficLightForm:greenDuration").value = "";
@@ -347,14 +347,14 @@ function changeInsertMode(id) {
     }
 }
 
-function saveModel(){
-    
+function saveModel() {
+
     var staticObjects = [];
     for (var i = 0; i < moveSpotObjects.length; i++) {
-         
+
         var object = moveSpotObjects[i];
-        var xRelativeLocation = (object.x-mapStartX)/(mapFinishX-mapStartX);
-        var yRelativeLocation = (object.y-mapStartY)/(mapFinishY-mapStartY);
+        var xRelativeLocation = (object.x - mapStartX) / (mapFinishX - mapStartX);
+        var yRelativeLocation = (object.y - mapStartY) / (mapFinishY - mapStartY);
 
         if (object.type === "Standart") {
             staticObjects.push({
@@ -365,8 +365,7 @@ function saveModel(){
                 "nextId": object.nextMoveSpotId,
                 "prevId": object.prevMoveSpotId
             });
-        }
-        else if (object.type === "Fork") {
+        } else if (object.type === "Fork") {
             staticObjects.push({
                 "type": object.type,
                 "objectId": object.objectId,
@@ -376,8 +375,7 @@ function saveModel(){
                 "prevId": object.prevMoveSpotId,
                 "alternativeNextId": object.nextMoveSpotAlternativeId
             });
-        }
-        else if (object.type === "Merge") {
+        } else if (object.type === "Merge") {
             staticObjects.push({
                 "type": object.type,
                 "objectId": object.objectId,
@@ -387,8 +385,7 @@ function saveModel(){
                 "prevId": object.prevMoveSpotId,
                 "alternativePrevId": object.prevMoveSpotAlternativeId
             });
-        }
-        else if (object.type === "EnterPoint") {
+        } else if (object.type === "EnterPoint") {
             staticObjects.push({
                 "type": object.type,
                 "objectId": object.objectId,
@@ -406,8 +403,7 @@ function saveModel(){
                 "prevId": object.prevMoveSpotId
             });
 
-        }
-        else if (object.type === "TrafficLight") {
+        } else if (object.type === "TrafficLight") {
             staticObjects.push({
                 "type": object.type,
                 "objectId": object.objectId,
@@ -421,47 +417,53 @@ function saveModel(){
             });
         }
     }
-    
-    document.getElementById("simModelForm:hiddenLastAdded").value = staticObjects[staticObjects.length-1].objectId;
+
     document.getElementById("simModelForm:hiddenSimulationModel").value = JSON.stringify(staticObjects);
 }
 
-function retrieveModel(){
-    
+function retrieveModel() {
+
     var modelData = document.getElementById("simModelForm:hiddenSimulationModel").value;
-    
-    if(modelData === '') return;
+
+    if (modelData === '')
+        return;
     var jsonArr = $.parseJSON(modelData);
 
-    for(var i=0; i<jsonArr.length; i++){
-       
+    for (var i = 0; i < jsonArr.length; i++) {
+
         var spot = jsonArr[i];
         var xRatio = spot.x;
         var yRatio = spot.y;
-        var xCoord = xRatio * (mapFinishX-mapStartX) + mapStartX;
-        var yCoord = yRatio * (mapFinishY-mapStartY) + mapStartY;
-        if(spot.type === 'EnterPoint'){
-            
-            enterPointInsert(xCoord, yCoord, spot.objectId);
-   
+        var xCoord = xRatio * (mapFinishX - mapStartX) + mapStartX;
+        var yCoord = yRatio * (mapFinishY - mapStartY) + mapStartY;
+        if (spot.type === 'EnterPoint') {
+            enterPointFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId);
+        } else if (spot.type === 'ExitPoint') {
+            exitPointFromSavedModel(xCoord, yCoord, spot.objectId, spot.prevId);
+        } else if (spot.type === 'Standart') {
+            moveSpotFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId, spot.prevId);
+        } else if (spot.type === 'TrafficLight') {
+            trafficLightFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId, spot.prevId,
+                    spot.greenStartTime, spot.greenDuration, spot.redDuration);
+        } else if (spot.type === 'Fork') {
+            forkFromSavedModel(spot.objectId, xCoord, yCoord, spot.prevId, spot.nextId, spot.alternativeNextId);
         }
-        else if(spot.type === 'ExitPoint'){
-            
-            exitPointInsert(xCoord, yCoord, spot.objectId);
+        else if (spot.type === 'Merge') {
+            mergeFromSavedModel(spot.objectId, xCoord, yCoord, spot.prevId, spot.nextId, spot.alternativePrevId);
         }
-        else if(spot.type === 'Standart'){
-            
-            moveSpotInsert(xCoord, yCoord, spot.objectId);
-            
-        }
-        
-         else if(spot.type === 'TrafficLight'){
-            
-            trafficLightInsert(xCoord, yCoord, spot.objectId, 
-                spot.greenStartTime, spot.greenDuration, spot.redDuration);
-            
-        }
-        
     }
     
+    var lastSpot = jsonArr[jsonArr.length-1];
+    var lastObjectId = lastSpot.objectId;
+       
+    // Set current spot the last added spot
+    // Model can be modified starting from last added spot
+    for (var i = 0; i < moveSpotObjects.length; i++) {
+        if (lastObjectId === moveSpotObjects[i].objectId) {
+            currentMoveSpot = moveSpotObjects[i];
+        }
+    }
+    
+    // Numeric Object Id To Set New Spot Ids
+    objectId = lastObjectId.substring(1);
 }

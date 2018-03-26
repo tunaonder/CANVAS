@@ -31,8 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "SimulationModel.findAll", query = "SELECT s FROM SimulationModel s")
     , @NamedQuery(name = "SimulationModel.findById", query = "SELECT s FROM SimulationModel s WHERE s.id = :id")
     , @NamedQuery(name = "SimulationModel.findByModeldata", query = "SELECT s FROM SimulationModel s WHERE s.modeldata = :modeldata")
-    , @NamedQuery(name = "SimulationModel.findSimulationModelByProjectId", query = "SELECT s FROM SimulationModel s WHERE s.projectId.id = :projectId")
-    , @NamedQuery(name = "SimulationModel.findByLastaddedelementid", query = "SELECT s FROM SimulationModel s WHERE s.lastaddedelementid = :lastaddedelementid")})
+    , @NamedQuery(name = "SimulationModel.findSimulationModelByProjectId", query = "SELECT s FROM SimulationModel s WHERE s.projectId.id = :projectId")})
 public class SimulationModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,9 +45,6 @@ public class SimulationModel implements Serializable {
     @Size(min = 1, max = 10000)
     @Column(name = "modeldata")
     private String modeldata;
-    @Size(max = 256)
-    @Column(name = "lastaddedelementid")
-    private String lastaddedelementid;
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     @ManyToOne
     private Project projectId;
@@ -65,9 +61,8 @@ public class SimulationModel implements Serializable {
         this.modeldata = modeldata;
     }
     
-    public SimulationModel(String modeldata, String lastaddedelementid, Project projectId){
+    public SimulationModel(String modeldata, Project projectId){
         this.modeldata = modeldata;
-        this.lastaddedelementid = lastaddedelementid;
         this.projectId = projectId;       
     }
 
@@ -85,14 +80,6 @@ public class SimulationModel implements Serializable {
 
     public void setModeldata(String modeldata) {
         this.modeldata = modeldata;
-    }
-
-    public String getLastaddedelementid() {
-        return lastaddedelementid;
-    }
-
-    public void setLastaddedelementid(String lastaddedelementid) {
-        this.lastaddedelementid = lastaddedelementid;
     }
 
     public Project getProjectId() {
