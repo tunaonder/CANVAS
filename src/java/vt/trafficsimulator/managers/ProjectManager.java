@@ -16,9 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -26,11 +24,8 @@ import org.primefaces.model.UploadedFile;
 import vt.trafficsimulator.entityclasses.Project;
 import vt.trafficsimulator.entityclasses.SimulationModel;
 import vt.trafficsimulator.entityclasses.User;
-import vt.trafficsimulator.entityclasses.UserFile;
-import vt.trafficsimulator.jsfclasses.UserFileController;
 import vt.trafficsimulator.sessionbeans.ProjectFacade;
 import vt.trafficsimulator.sessionbeans.UserFacade;
-import vt.trafficsimulator.sessionbeans.UserFileFacade;
 import vt.trafficsimulator.sessionbeans.SimulationModelFacade;
 
 /**
@@ -56,30 +51,11 @@ public class ProjectManager implements Serializable {
     @EJB
     private UserFacade userFacade;
 
-    /*
-    The instance variable 'userFileFacade' is annotated with the @EJB annotation.
-    The @EJB annotation directs the EJB Container (of the GlassFish AS) to inject (store) the object reference 
-    of the UserFileFacade object, after it is instantiated at runtime, into the instance variable 'userFileFacade'.
-     */
-    @EJB
-    private UserFileFacade userFileFacade;
-
     @EJB
     private ProjectFacade projectFacade;
 
     @EJB
     private SimulationModelFacade simulationModelFacade;
-
-    /*
-    The instance variable 'userFileController' is annotated with the @Inject annotation.
-    The @Inject annotation directs the JavaServer Faces (JSF) CDI Container to inject (store) the object reference 
-    of the UserFileController object, after it is instantiated at runtime, into the instance variable 'userFileController'.
-    
-    We can do this because we annotated the UserFileController class with @Named to indicate
-    that the CDI container will manage the objects instantiated from the UserFileController class.
-     */
-    @Inject
-    private UserFileController userFileController;
 
     // Resulting FacesMessage produced
     FacesMessage resultMsg;
@@ -126,16 +102,8 @@ public class ProjectManager implements Serializable {
         return userFacade;
     }
 
-    public UserFileFacade getUserFileFacade() {
-        return userFileFacade;
-    }
-
     public ProjectFacade getProjectFacade() {
         return projectFacade;
-    }
-
-    public UserFileController getUserFileController() {
-        return userFileController;
     }
 
     public String getNewProjectName() {
@@ -310,27 +278,11 @@ public class ProjectManager implements Serializable {
 
     }
 
-    // Show the File Upload Page
-    public String showFileUploadPage() {
-
-        return "UploadFile?faces-redirect=true";
-    }
-
     public void upload() throws IOException {
 
         if (getUploadedFile().getSize() != 0) {
             copyFile(getUploadedFile());
         }
-    }
-
-    /**
-     * cancel an upload
-     *
-     * @return
-     */
-    public String cancel() {
-        //message = "";
-        return "Maps?faces-redirect=true";
     }
 
     /**
@@ -396,19 +348,6 @@ public class ProjectManager implements Serializable {
         outStream.close();
 
         return targetFile;
-    }
-
-    /**
-     * Sets the file location
-     *
-     * @param data
-     */
-    public void setFileLocation(UserFile data) {
-
-        String fileName = data.getFilename();
-
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.getFlash().put("data", data);
     }
 
     public String getFileLocation() {
