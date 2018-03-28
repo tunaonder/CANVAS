@@ -33,6 +33,7 @@
                         <h:link outcome="index" styleClass="arialTen">
                             Home
                         </h:link>&nbsp;&nbsp;
+                        
 
                         <c:if test="#{accountManager.isLoggedIn() == true}">
 
@@ -54,6 +55,12 @@
                                 <i class="fa fa-user-plus">&nbsp;</i>Create an Account
                             </h:link>&nbsp;&nbsp;
                         </c:if>
+                        <h:link outcome="Help" styleClass="arialTen">
+                            Help
+                        </h:link>&nbsp;&nbsp;
+                        <h:link outcome="About" styleClass="arialTen">
+                            About
+                        </h:link>&nbsp;&nbsp;
                     </td>
                 </tr>
             </table>
