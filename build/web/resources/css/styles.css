@@ -46,6 +46,7 @@ canvas {
     display: inline-block;
     float: left;
     border-right: 2px solid #e95051;
+    height: calc(100% - 60px) !important;
     width: 300px;
     position: absolute;
     left: 0;
