@@ -473,3 +473,13 @@ function retrieveModel() {
     // Numeric Object Id To Set New Spot Ids (All Static Object Ids start with 's')
     objectId = lastObjectId.substring(1);
 }
+
+function zoomIn(){
+    camera.position.z = camera.position.z * 0.95;
+    
+}
+
+function zoomOut(){
+    camera.position.z = camera.position.z * 1.05;
+    
+}

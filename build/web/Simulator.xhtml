@@ -12,7 +12,7 @@
         <ui:define name="editableContent">
 
             <div id="controlPanel">
-                <h:outputText value="#{projectManager.selectedProjectName}" style="color: blue;"/>
+                <h:outputText value="#{projectManager.selectedProjectName}" style="color: blue; font-size: 20pt; font-weight: bold;"/>
                 <label class="controlLabel">Add Spot</label>
                 <button id="enterPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Enter Point</button>
                 <button id="exitPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Exit Point</button>
@@ -41,13 +41,23 @@
                 </h:form>
 
                 <div id="startSimDiv">
-                    <label class="controlLabel">Run</label>
+
+                    <label class="controlLabel">Simulator Commands</label> 
                     <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
                     <h:form id="simModelForm">
-                        <p:commandButton id="saveButton" class="btn panelButton" onclick="saveModel();"
+                        <h:commandButton id="saveButton" class="btn panelButton" onclick="saveModel();"
                                          action="#{projectManager.saveProjectModel}" value="Save Model"/>      
-                        <h:inputHidden id="hiddenSimulationModel" value="#{projectManager.simulationModelData}"/>
+                        <h:inputHidden id="hiddenSimulationModel" value="#{projectManager.simulationModelData}"/>                      
                     </h:form>
+                    
+                </div>
+
+                <div id="zoomDiv">
+
+                    <label class="controlLabel">Zoom In / Zoom Out</label>                        
+                    <button class="btn panelButton" onClick="zoomIn();"> + </button>
+                    <button class="btn panelButton" onClick="zoomOut();"> - </button>
+
                 </div>
 
 
@@ -63,4 +73,3 @@
     </ui:composition>
 
 </html>
-
