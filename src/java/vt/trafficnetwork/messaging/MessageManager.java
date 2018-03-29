@@ -4,6 +4,8 @@
  */
 package vt.trafficnetwork.messaging;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.json.JsonObject;
 import javax.json.spi.JsonProvider;
 import vt.trafficnetwork.component.Vehicle;
@@ -140,10 +142,19 @@ public class MessageManager {
 
     public void requestNewEventsToVisualize() {
         System.out.println("Messages are requested. Remaining Messages: " + messageList.getSize());
-        while(messageList.getSize() == 0){
+        
+        while (messageList.getSize() == 0) {
             // Wait until simulation has built and messages are genareted
             // Message request might come eariler than first simulion results
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
+        System.out.println("Sending new batch of messages. Current number: " + messageList.getSize());
+
         int messageCountPerRequest = 0;
         while (!messageList.isEmpty() && messageCountPerRequest < messageCountLimitPerRequest) {
             Message message = messageList.pollNextMessage();
