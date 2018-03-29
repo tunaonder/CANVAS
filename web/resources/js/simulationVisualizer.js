@@ -3,7 +3,7 @@
  * Copyright © 2018 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global eventQueue, renderer, scene, camera */
+/* global eventQueue, renderer, scene, camera, socket */
 
 //Array Of Current Vehicles 
 var vehicles = [];
@@ -19,6 +19,8 @@ var visualizationTime = 0;
 
 var simulationIsRunning = false;
 
+var eventsRequested = false;
+
 // This Function is Called 60 times in A Second!
 // Three.js main visualization processes are happening in this method.
 function render() {
@@ -26,7 +28,16 @@ function render() {
     requestAnimationFrame(render);
 
     if (simulationIsRunning) {
-
+        if(!eventsRequested && eventQueue.size() < 40){
+            console.log('Event Queue need more event from server');
+            var requestArray = [];
+            requestArray.push({
+                "action": "requestEvents"
+            });
+            socket.send(JSON.stringify(requestArray));  
+            eventsRequested = true;
+        }
+        
         //Render Until All events are processed
         if (eventQueue.size() !== 0) {
 
@@ -48,6 +59,7 @@ function render() {
                     earliestEventTime = eventQueue.getFirst().time;
 
                 }
+                console.log(eventQueue.size());
             }
         }
 

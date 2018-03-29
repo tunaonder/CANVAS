@@ -85,5 +85,9 @@ public class Simulator {
         rt.addObject(object);
         
     }
+    
+    public void requestNewEventsToVisualize(){
+        rt.requestNewEventsToVisualize();
+    }
 
 }

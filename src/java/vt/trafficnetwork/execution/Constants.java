@@ -10,6 +10,8 @@ package vt.trafficnetwork.execution;
  */
 public final class Constants {
     
+    // In terms of minutes
+    public static final double simulationDuration = 3;
     
     public static final double vehicleDistanceLimit = 20;
     public static final double vehicleToSpotDistanceLimit = 20;

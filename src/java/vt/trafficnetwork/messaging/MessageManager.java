@@ -1,4 +1,4 @@
- /*
+/*
  * Created by Sait Tuna Onder on 2017.04.03  * 
  * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
  */
@@ -13,7 +13,9 @@ import vt.trafficnetwork.messaging.helpers.MessageList;
 import vt.trafficnetwork.websocket.SimulationSessionHandler;
 
 /**
- * This class adds messages to a message list. When the length of queue gets high, it sends messages to the client
+ * This class adds messages to a message list. When the length of queue gets
+ * high, it sends messages to the client
+ *
  * @author Onder
  */
 public class MessageManager {
@@ -21,8 +23,8 @@ public class MessageManager {
     private final String sessionIdentifier;
     private int messageCount;
 
-    private final int messageQueueLimit = 100;
-    
+    private final int messageQueueStorageLimit = 500;
+    private final int messageCountLimitPerRequest = 100;
 
     private final MessageList messageList;
 
@@ -64,12 +66,10 @@ public class MessageManager {
         Message message = new Message(createMessage, eventTime);
         messageList.addMessage(message);
 
-
-        if (messageList.getSize() > messageQueueLimit) {
-            System.out.println(messageQueueLimit + " Messages are SENT");
-            sendMessage();
-        }
-
+//        if (messageList.getSize() > messageQueueStorageLimit) {
+//            System.out.println(messageQueueStorageLimit + " Messages are SENT");
+//            sendMessage();
+//        }
     }
 
     public void vehicleDirectionChange(Vehicle vehicle, int simTime) {
@@ -91,16 +91,9 @@ public class MessageManager {
                 .add("y", y)
                 .build();
 
-    //    System.out.println("direction change at: " + simTime);
-
+        //    System.out.println("direction change at: " + simTime);
         Message message = new Message(directionChangeMessage, simTime);
         messageList.addMessage(message);
-        
-        if (messageList.getSize() > messageQueueLimit) {
-            System.out.println(messageQueueLimit + " Messages are SENT");
-            sendMessage();
-        }
-
     }
 
     public void vehicleSpeedChange(Vehicle vehicle, String id, double updatedSpeed, int simTime) {
@@ -113,15 +106,9 @@ public class MessageManager {
                 .add("speed", updatedSpeed)
                 .build();
 
-       // System.out.println("speed change at: " + simTime + "for id: " + id + " from " + vehicle.getSpeed()+ " to " + updatedSpeed) ;
+        // System.out.println("speed change at: " + simTime + "for id: " + id + " from " + vehicle.getSpeed()+ " to " + updatedSpeed) ;
         Message message = new Message(speedChangeMessage, simTime);
         messageList.addMessage(message);
-        
-        if (messageList.getSize() > messageQueueLimit) {
-            System.out.println(messageQueueLimit + " Messages are SENT");
-            sendMessage();
-        }
-
     }
 
     public void vehicleDestroy(String id, int simTime) {
@@ -136,53 +123,32 @@ public class MessageManager {
         //System.out.println("vehicle destroy: " + simTime + "for id: " + id);
         Message message = new Message(destroyMessage, simTime);
         messageList.addMessage(message);
-        
-        if (messageList.getSize() > messageQueueLimit) {
-            System.out.println(messageQueueLimit + " Messages are SENT");
-            sendMessage();
-        }
-
     }
-    
-    public void trafficLightStateChange(String id, int simTime){
-        
+
+    public void trafficLightStateChange(String id, int simTime) {
+
         JsonProvider provider = JsonProvider.provider();
         JsonObject stateChangeMessage = provider.createObjectBuilder()
                 .add("action", "trafficLightStateChange")
                 .add("time", simTime)
                 .add("lightId", id)
                 .build();
-        
+
         Message message = new Message(stateChangeMessage, simTime);
         messageList.addMessage(message);
-        if (messageList.getSize() > messageQueueLimit) {
-            System.out.println(messageQueueLimit + " Messages are SENT");
-            sendMessage();
-        }
-        
-        
     }
 
-    //Send Messages To Client.
-    private void sendMessage() {
-
-        while (!messageList.isEmpty()) {
-            Message message = messageList.pollNextMessage();
-         //   System.out.println(message.getJSONObject());
-            messageCount++;
-            SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
+    public void requestNewEventsToVisualize() {
+        System.out.println("Messages are requested. Remaining Messages: " + messageList.getSize());
+        while(messageList.getSize() == 0){
+            // Wait until simulation has built and messages are genareted
+            // Message request might come eariler than first simulion results
         }
-
-    }
-
-    //Send Final Messages Waiting in the Queue
-    public void sendRemainingMessages() {
-        
-        System.out.println("Remaining Messages SENT");
-        while (!messageList.isEmpty()) {
-            messageCount++;
+        int messageCountPerRequest = 0;
+        while (!messageList.isEmpty() && messageCountPerRequest < messageCountLimitPerRequest) {
             Message message = messageList.pollNextMessage();
-
+            messageCount++;
+            messageCountPerRequest++;
             SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
         }
 

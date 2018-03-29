@@ -15,26 +15,25 @@ import javax.json.JsonArray;
 public class SimulationManager {
 
     //Simulation Manager Map, one for each user session
-    static Map managers;
+    static Map<String, SimulationManager> managers;
 
     //Unique identifier for each session
     String sessionIdentifier;
-    
+
     /**
-     * Simulation Executor Instance 
-     */    
+     * Simulation Executor Instance
+     */
     SimulationExecutor executor;
-    
+
     /**
      * Running instance of the simulation
      */
     SimulationRunner runner;
 
     public SimulationManager(String sessionIdentifier) {
-        
+
         this.sessionIdentifier = sessionIdentifier;
         this.runner = new SimulationRunner(sessionIdentifier);
-
     }
 
     /**
@@ -49,39 +48,63 @@ public class SimulationManager {
         if (managers == null) {
             managers = new HashMap();
         }
-                
+
         SimulationManager manager = new SimulationManager(sessionIdentifier);
         //Add This Manager Instance To The Static Hash Map
         managers.put(sessionIdentifier, manager);
 
         return manager;
     }
+    
+    public static SimulationManager getSimulationInstance(String sessionIdentifier){
+        return managers.get(sessionIdentifier);      
+    }
 
     public void requestExecution(JsonArray modelData) {
 
         // start execution thread
-        executor = new SimulationExecutor(modelData);      
+        executor = new SimulationExecutor(modelData);
         Thread exec = new Thread(executor, sessionIdentifier);
         //Set priority
         //exec.setPriority(Thread.currentThread().getPriority() - 1);
-        exec.start();   
+        exec.start();
+    }
+
+    public void requestEventsForVisualizer() {
+        
+        SimulationMessageRequester messageRequester = new SimulationMessageRequester();
+        Thread exec = new Thread(messageRequester);
+        exec.start();
     }
 
     private class SimulationExecutor implements Runnable {
-        
+
         private final JsonArray model;
-        
+
         public SimulationExecutor(JsonArray modelData) {
             this.model = modelData;
         }
 
         @Override
-        public void run() {            
-            try {               
+        public void run() {
+            try {
                 runner.execute(model);
-               
+
             } catch (Exception e) {
                 System.out.println("Runner Exception: " + e.getMessage());
+            }
+        }
+    };
+
+    private class SimulationMessageRequester implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                runner.requestNewEventsToVisualize();
+
+            } catch (Exception e) {
+                System.out.println("Message Requester Exception: " + e.getMessage());
             }
         }
     };

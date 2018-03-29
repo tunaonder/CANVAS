@@ -11,6 +11,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -54,12 +55,29 @@ public class WebSocketServer {
             JsonArray jsonArray = reader.readArray();
 
             System.out.println(jsonArray);
-  
-            //Create a New Simulation Instance for this session
-            SimulationManager sim = SimulationManager.addSimulationInstance(session.getId());
+            if (jsonArray != null && jsonArray.size() > 0) {
+                JsonObject first = (JsonObject) jsonArray.get(0);
+                // If an action is requested for existing simulation
+                if (first.containsKey("action")) {
+                    String requestType = first.getString("action");
+                    if(requestType.equals("requestEvents")){
+                        SimulationManager sim = SimulationManager.getSimulationInstance(session.getId());
+                        sim.requestEventsForVisualizer();
+                    }
+                                      
+                }
+                // If there is no action key in JSON format, it is new simulation request
+                // Then request Execution
+                else {
+                    //Create a New Simulation Instance for this session
+                    SimulationManager sim = SimulationManager.addSimulationInstance(session.getId());
 
-            //Request execution of the simulation
-            sim.requestExecution(jsonArray);
+                    //Request execution of the simulation
+                    sim.requestExecution(jsonArray);
+
+                }
+
+            }
 
         }
 

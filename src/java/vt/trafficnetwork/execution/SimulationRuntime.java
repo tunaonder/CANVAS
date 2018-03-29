@@ -61,8 +61,8 @@ public class SimulationRuntime {
 
         this.simulationTime = 0;
 
-        //Renderer renders 60 times in a sec. Total Limit of simulation is 4 min by default
-        simulationTimeLimit = 60 * 240;
+        //Renderer renders 60 times in a sec. Simulation duration is defined in terms of minutes
+        simulationTimeLimit = 60 * 60 * Constants.simulationDuration;
         //simulationTimeLimit = 100;
 
         eventFactory = new EventFactory();
@@ -93,7 +93,7 @@ public class SimulationRuntime {
         System.out.println("Total Number OF Vehicles Created: " + eventFactory.getNumberOfVehicles());
 
         //Send Remaining Messages In The Buffer at The end of the Simulation
-        sendRemainingMessages();
+       // sendRemainingMessages();
 
     }
 
@@ -209,16 +209,6 @@ public class SimulationRuntime {
         }
 
         earliestScheduledEvent = futureEventList.pollNextEvent();
-
-    }
-
-    /**
-     * Called At the end Of Simulation
-     */
-    private void sendRemainingMessages() {
-
-        System.out.println("Last Simulation Time: " + simulationTime);
-        messageManager.sendRemainingMessages();
 
     }
 
@@ -660,6 +650,10 @@ public class SimulationRuntime {
 
         return false;
 
+    }
+    
+    public void requestNewEventsToVisualize(){
+        messageManager.requestNewEventsToVisualize();
     }
 
 }

@@ -50,11 +50,8 @@ public class SimulationSessionHandler {
      * @param sessionIdentifier
      * @param message 
      */
-    public static void sendMessageToClient(String sessionIdentifier, JsonObject message){
-        
-       
-        sendToSession(sessions.get(sessionIdentifier), message);
-        
+    public static void sendMessageToClient(String sessionIdentifier, JsonObject message){    
+        sendToSession(sessions.get(sessionIdentifier), message);        
     }
 
 }

@@ -103,8 +103,10 @@ function startSimulation() {
 
 //This method is called automatically when client receives a message from server
 function onMessage(message) {
-
+    
     var event = JSON.parse(message.data);
     processEvent(event);
-
+    
+    console.log("Messages are received");
+    eventsRequested = false;
 }

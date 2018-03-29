@@ -20,8 +20,7 @@ public class SimulationRunner {
     public SimulationRunner(String sessionIdentifier) {
 
         //Build the simulation model using the data sent by client
-        this.simulationBuilder = new SimulationBuilder();
-        
+        this.simulationBuilder = new SimulationBuilder();        
         this.sim = new Simulator(sessionIdentifier);
 
     }
@@ -48,5 +47,9 @@ public class SimulationRunner {
             System.err.println("Simulation ended unexpectedly");
         }
 
+    }
+    
+    public void requestNewEventsToVisualize(){
+        sim.requestNewEventsToVisualize();      
     }
 }
