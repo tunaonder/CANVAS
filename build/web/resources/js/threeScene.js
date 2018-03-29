@@ -130,7 +130,7 @@ function onDocumentMouseDown(event) {
 
         //If the Mode is Convert To Fork or Convert to Merge
         if (mode === 'forkButton' || mode === 'mergeButton') {
-            moveSpotClicked();
+            moveSpotClicked(event);
             return;
         }
 
@@ -339,7 +339,8 @@ function retrieveModel() {
     if (modelData === ''){
         return;
     }        
-    var jsonArr = $.parseJSON(modelData);
+    var jsonArr = JSON.parse(modelData);
+    
     if (jsonArr.length === 0){
         return;
     }

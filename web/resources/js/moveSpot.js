@@ -261,10 +261,11 @@ function moveSpotCallback() {
 }
 
 /**
- * 
- * Finds the clicked move spot and calls its callback method
+ *  Finds the clicked move spot and calls its callback method
+ * @param {type} event
+ * @returns {undefined}
  */
-function moveSpotClicked() {
+function moveSpotClicked(event) {
 
     // Determine how much user has scrolled
     // Source: https://stackoverflow.com/questions/11373741/detecting-by-how-much-user-has-scrolled

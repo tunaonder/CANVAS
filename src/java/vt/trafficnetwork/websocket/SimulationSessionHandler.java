@@ -26,26 +26,15 @@ public class SimulationSessionHandler {
     private static final Map<String, Session> sessions = new HashMap<>();
 
     public void addSession(Session session) {
-        //sessions.add(session);
         sessions.put(session.getId(), session);
-        System.out.println("session is added");
+        System.out.println("Session is added. Number of Active Sessions: " + sessions.size());
 
     }
 
     public void removeSession(Session session) {
-        //sessions.remove(session);
         sessions.remove(session.getId());
+        System.out.println("Session is removed. Number of Active Sessions: " + sessions.size());
     }
-
-//    private void sendToAllConnectedSessions(JsonObject message) {
-//
-//        
-//        for (Session session: sessions.values()){
-//            
-//            sendToSession(session, message);
-//     
-//        }
-//    }
 
     private static void sendToSession(Session session, JsonObject message) {
         try {
