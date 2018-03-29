@@ -52,11 +52,7 @@ PriorityQueue.prototype.push = function (event, time) {
         }
     }
 
-
-
     this.data.splice(i, 0, [event, time]);
-
-
 };
 
 //Remove The first element and return it
@@ -74,7 +70,5 @@ PriorityQueue.prototype.size = function () {
 };
 
 var eventQueue = new PriorityQueue();
-
-
 
 

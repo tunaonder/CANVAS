@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global THREE, queue, eventQueue, currentMoveSpot, moveSpotObjects */
+/* global THREE, currentMoveSpot, moveSpotObjects */
 
 var camera;
 var scene;
@@ -28,20 +28,6 @@ var mapStartX;
 var mapStartY;
 var mapFinishX;
 var mapFinishY;
-
-//Array Of Current Vehicles 
-var vehicles = [];
-
-//Earliest Event
-var earliestEvent;
-
-//Earliest Event Time
-var earliestEventTime = 0;
-
-//Visualization Time
-var visualizationTime = 0;
-
-var simulationIsRunning = false;
 
 //Object Id will be incremented for each added objects
 var objectId = 0;
@@ -72,8 +58,6 @@ function setScene() {
         // While map gets bigger, camera zooms out
         // 0.55 is selected after tests. Number could be bigger to zoom out
         camera.position.z = backgroundWidth * 0.55;
-
-        //camera.position.z = backgroundWidth * 0.7;
 
         // Load the background texture
         var texture = THREE.ImageUtils.loadTexture(currentBackgroundMap);
@@ -111,79 +95,6 @@ function setScene() {
 
     img.src = currentBackgroundMap;
 
-}
-
-//This Function is Called 60 times in A Second!
-//Three.js main visualization processes are happening in this method.
-function render() {
-    //pauses when the user navigates to another browser tab
-    requestAnimationFrame(render);
-
-    if (simulationIsRunning) {
-
-
-        //Render Until All events are processed
-        if (eventQueue.size() !== 0) {
-
-            //Get The Earliest Event
-            earliestEventTime = eventQueue.getFirst().time;
-
-            //If there are multiple events at the same time, process all of them before incrementing
-            //visualizer time
-            while (earliestEventTime < visualizationTime + 1) {
-
-                if (eventQueue.size() !== 0) {
-
-                    //Pop The First Event
-                    var event = eventQueue.pop();
-                    //Process it
-                    processCurrentEvent(event);
-
-
-                    //Set the new earliest event time
-                    earliestEventTime = eventQueue.getFirst().time;
-
-                }
-            }
-        }
-
-        //Move All Vehicles
-        for (var i = 0; i < vehicles.length; i++) {
-            vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
-            vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
-        }
-        //increment Visualization Time
-        visualizationTime++;
-
-    }
-    renderer.render(scene, camera);
-
-
-}
-
-/**
- * Process Each event according to their types
- * @param {type} event
- * @returns {undefined}
- */
-function processCurrentEvent(event) {
-
-
-    if (event.type === "createVehicle") {
-        createNewVehicle(event);
-    } else if (event.type === "changeDirection") {
-        changeVehicleDirection(event);
-
-    } else if (event.type === "changeSpeed") {
-        changeVehicleSpeed(event);
-
-    } else if (event.type === "vehicleDestroy") {
-        destroyVehicle(event);
-
-    } else if (event.type === "trafficLightStateChange") {
-        changeTrafficLightState(event);
-
-    }
 }
 
 /*
@@ -433,7 +344,6 @@ function retrieveModel() {
         return;
     }
     
-
     for (var i = 0; i < jsonArr.length; i++) {
 
         var spot = jsonArr[i];
@@ -476,10 +386,8 @@ function retrieveModel() {
 
 function zoomIn(){
     camera.position.z = camera.position.z * 0.95;
-    
 }
 
 function zoomOut(){
     camera.position.z = camera.position.z * 1.05;
-    
 }

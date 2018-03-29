@@ -105,7 +105,6 @@ function startSimulation() {
 function onMessage(message) {
 
     var event = JSON.parse(message.data);
-
     processEvent(event);
 
 }
