@@ -68,10 +68,8 @@ public class MessageManager {
         Message message = new Message(createMessage, eventTime);
         messageList.addMessage(message);
 
-//        if (messageList.getSize() > messageQueueStorageLimit) {
-//            System.out.println(messageQueueStorageLimit + " Messages are SENT");
-//            sendMessage();
-//        }
+        checkMessageBuffer();
+
     }
 
     public void vehicleDirectionChange(Vehicle vehicle, int simTime) {
@@ -140,9 +138,24 @@ public class MessageManager {
         messageList.addMessage(message);
     }
 
+    private void checkMessageBuffer() {
+        synchronized (this) {
+            if (messageList.getSize() > messageQueueStorageLimit) {
+
+                try {
+                    System.out.println("Sleeping..."+sessionIdentifier);
+                    this.wait();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+    }
+
     public void requestNewEventsToVisualize() {
         System.out.println("Messages are requested. Remaining Messages: " + messageList.getSize());
-        
+
         while (messageList.getSize() == 0) {
             // Wait until simulation has built and messages are genareted
             // Message request might come eariler than first simulion results
@@ -152,7 +165,7 @@ public class MessageManager {
                 Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         System.out.println("Sending new batch of messages. Current number: " + messageList.getSize());
 
         int messageCountPerRequest = 0;
@@ -161,6 +174,11 @@ public class MessageManager {
             messageCount++;
             messageCountPerRequest++;
             SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
+        }
+
+        synchronized (this) {
+            System.out.println("woke up..." + sessionIdentifier);
+            this.notify();           
         }
 
     }
