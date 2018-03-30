@@ -28,12 +28,6 @@ body{
     border-bottom: 2px solid #e95051;
 }
 
-canvas {
-    position: absolute;
-    left: 300px;
-    width: calc(100% - 300px) !important;
-}
-
 #editableContent {
     /* Styles applied to the entire editableContent containing element of the site template */
     height: calc(100% - 60px) !important;
@@ -132,4 +126,35 @@ h1 {
 .previewImage {
     width: auto;
     height: 100px;
+}
+
+/* Override PrimeFaces style definitions for the Dialog component */
+.ui-dialog, .ui-dialog-content, .ui-dialog-buttonpane {
+    color: #800000; /* Maroon */
+    background-color: #FDF5E6;   /* OldLace */
+}
+
+/* Override PrimeFaces style definition for the fileUpload component */
+.ui-fileupload {
+    width: 80%;
+}
+
+.ui-fileupload-buttonbar {
+    padding: 0px 0px 8px 0px !important;
+}
+
+.ui-fileupload-content {
+    /* The drag-and-drop area height will increase as more files are dropped */
+    min-height: 200px;
+}
+
+/* Style PrimeFaces Command Button --> p:commandButton  */
+.commandButton, .ui-confirmdialog-yes, .ui-confirmdialog-no, .ui-fileupload-choose, .ui-fileupload-upload, .ui-fileupload-cancel {
+    border-radius: 2em !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 10pt !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: none;
+    color: black;
 }

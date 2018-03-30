@@ -11,6 +11,14 @@
         <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
+            <style> 
+                canvas {
+                    position: absolute;
+                    left: 300px;
+                    width: calc(100% - 300px) !important;
+                }
+            </style>
+
             <div id="controlPanel">
                 <h:outputText value="#{projectManager.selectedProjectName}" style="color: blue; font-size: 20pt; font-weight: bold;"/>
                 <label class="controlLabel">Add Spot</label>
@@ -49,7 +57,7 @@
                                          action="#{projectManager.saveProjectModel}" value="Save Model"/>      
                         <h:inputHidden id="hiddenSimulationModel" value="#{projectManager.simulationModelData}"/>                      
                     </h:form>
-                    
+
                 </div>
 
                 <div id="zoomDiv">
@@ -63,11 +71,18 @@
 
             </div>
             <div>
-                <h:inputHidden id="hiddenMapInput" value="#{projectManager.selectedProjectMap}"/>                
-                <script>
-                    setScene();
-                </script>
+                <h:inputHidden id="hiddenMapInput" value="#{projectManager.selectedProjectMap}"/>                               
                 <script src="resources/js/websocket.js"></script>
+                <script src="resources/js/three.js"></script>
+                <script src="resources/js/threeScene.js"></script>
+                <script src="resources/js/moveSpot.js"></script>
+                <script src="resources/js/eventProcessor.js"></script>
+                <script src="resources/js/vehicle.js"></script>
+                <script src="resources/js/PriorityQueue.js"></script>
+                <script src="resources/js/simulationVisualizer.js"></script>
+                <script>
+                        setScene();
+                </script>
             </div>
 
         </ui:define>
