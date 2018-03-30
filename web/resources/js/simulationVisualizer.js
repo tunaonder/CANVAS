@@ -8,6 +8,8 @@
 //Array Of Current Vehicles 
 var vehicles = [];
 
+var eventCountRequestLimit = 100;
+
 //Earliest Event
 var earliestEvent;
 
@@ -28,7 +30,9 @@ function render() {
     requestAnimationFrame(render);
 
     if (simulationIsRunning) {
-        if(!eventsRequested && eventQueue.size() < 40){
+        // If events are not requested and number of events are lower than the limit
+        // make a new event request
+        if(!eventsRequested && eventQueue.size() < eventCountRequestLimit){
             console.log('Event Queue need more event from server');
             var requestArray = [];
             requestArray.push({

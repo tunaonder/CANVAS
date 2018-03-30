@@ -107,6 +107,7 @@ function onMessage(message) {
     var event = JSON.parse(message.data);
     processEvent(event);
     
-    console.log("Messages are received");
+    // Event Request has returned messages. 
+    // Set it back to false to be able to make a new request
     eventsRequested = false;
 }

@@ -4,15 +4,21 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:composition template="/templates/siteTemplate.xhtml">
 
         <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
-           Welcome
-
+            <div align="center">
+                <h2> Welcome to CANVAS</h2>
+                <p:panel styleClass="galleriaPanel">
+                    <p:galleria value="#{imagesView.images}" var="image" panelWidth="650" showCaption="false">
+                        <p:graphicImage name="images/imageSliderPhotos/#{image}" alt="Image Description for #{image}" title="#{image}"/>
+                    </p:galleria>
+                </p:panel>
+            </div>
         </ui:define>
     </ui:composition>
 
