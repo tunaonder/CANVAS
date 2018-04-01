@@ -43,7 +43,7 @@ public class SimulationRuntime {
 
     private Event earliestScheduledEvent;
 
-    private final double simulationTimeLimit;
+    private int simulationTimeLimit;
 
     private final EventFactory eventFactory;
 
@@ -62,7 +62,7 @@ public class SimulationRuntime {
         this.simulationTime = 0;
 
         //Renderer renders 60 times in a sec. Simulation duration is defined in terms of minutes
-        simulationTimeLimit = 60 * 60 * Constants.simulationDuration;
+        //simulationTimeLimit = 60 * 60 * Constants.simulationDuration;
         //simulationTimeLimit = 100;
 
         eventFactory = new EventFactory();
@@ -75,6 +75,11 @@ public class SimulationRuntime {
 
     public double getSimulationTime() {
         return simulationTime;
+    }
+
+    public void setSimulationTimeLimit(int simulationTimeLimit) {
+        //Renderer renders 60 times in a sec. Simulation duration is defined in terms of minutes
+        this.simulationTimeLimit = simulationTimeLimit * 60 * 60;
     }
 
     public void simulate() {

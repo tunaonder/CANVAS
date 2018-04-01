@@ -5,6 +5,7 @@
 package vt.trafficnetwork.execution;
 
 import javax.json.JsonArray;
+import javax.json.JsonObject;
 import vt.trafficnetwork.builder.SimulationBuilder;
 
 /**
@@ -26,9 +27,11 @@ public class SimulationRunner {
     }
 
     public void execute(JsonArray modelData) {
-
-        try {
-            
+        
+        // First object of the simulation model has simulation duration information
+        String simDuration = ((JsonObject) modelData.get(0)).getString("duration");
+        
+        try {            
             //Build Simulation Model for Simulation instance to be ready to start
             simulationBuilder.buildModel(modelData, sim);
         
@@ -39,8 +42,9 @@ public class SimulationRunner {
         }
         
         try {
-
-            sim.start();
+            
+            int duration = Integer.parseInt(simDuration);
+            sim.start(duration);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());

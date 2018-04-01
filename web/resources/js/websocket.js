@@ -19,15 +19,35 @@ socket.onmessage = onMessage;
  */
 function startSimulation() {
 
-    var staticObjects = [];
+    var simDuration = document.getElementById("simulationDuration").value;
+    if (simDuration === "") {
+        alert("Please enter simulation duration");
+        return;
+    }
+
+    if (!simDuration.match(/^\d+$/)) {
+        alert("Simulation duration is not valid");
+        return;
+    }
+
+    if (simDuration <= 0) {
+        alert("Duration has to be a positive number in terms of minutes");
+        return;
+    }
+
+    var simulationModel = [];
+    
+    // Add Simulation duration before model components
+    simulationModel.push({
+        "duration": simDuration
+    });
 
     for (var i = 0; i < moveSpotObjects.length; i++) {
 
         var object = moveSpotObjects[i];
 
-
         if (object.type === "Standart") {
-            staticObjects.push({
+            simulationModel.push({
                 "type": object.type,
                 "objectId": object.objectId,
                 "x": object.x,
@@ -35,9 +55,8 @@ function startSimulation() {
                 "nextId": object.nextMoveSpotId,
                 "prevId": object.prevMoveSpotId
             });
-        }
-        else if (object.type === "Fork") {
-            staticObjects.push({
+        } else if (object.type === "Fork") {
+            simulationModel.push({
                 "type": object.type,
                 "objectId": object.objectId,
                 "x": object.x,
@@ -46,9 +65,8 @@ function startSimulation() {
                 "prevId": object.prevMoveSpotId,
                 "alternativeNextId": object.nextMoveSpotAlternativeId
             });
-        }
-        else if (object.type === "Merge") {
-            staticObjects.push({
+        } else if (object.type === "Merge") {
+            simulationModel.push({
                 "type": object.type,
                 "objectId": object.objectId,
                 "x": object.x,
@@ -57,9 +75,8 @@ function startSimulation() {
                 "prevId": object.prevMoveSpotId,
                 "alternativePrevId": object.prevMoveSpotAlternativeId
             });
-        }
-        else if (object.type === "EnterPoint") {
-            staticObjects.push({
+        } else if (object.type === "EnterPoint") {
+            simulationModel.push({
                 "type": object.type,
                 "objectId": object.objectId,
                 "x": object.x,
@@ -68,7 +85,7 @@ function startSimulation() {
             });
 
         } else if (object.type === "ExitPoint") {
-            staticObjects.push({
+            simulationModel.push({
                 "type": object.type,
                 "objectId": object.objectId,
                 "x": object.x,
@@ -76,9 +93,8 @@ function startSimulation() {
                 "prevId": object.prevMoveSpotId
             });
 
-        }
-        else if (object.type === "TrafficLight") {
-            staticObjects.push({
+        } else if (object.type === "TrafficLight") {
+            simulationModel.push({
                 "type": object.type,
                 "objectId": object.objectId,
                 "x": object.x,
@@ -94,19 +110,19 @@ function startSimulation() {
 
     //Start Rendering
     simulationIsRunning = true;
-    
+
     //Set The Button Styling to Green Background
     document.getElementById('startStopButton').style.background = "green";
 
-    socket.send(JSON.stringify(staticObjects));
+    socket.send(JSON.stringify(simulationModel));
 }
 
 //This method is called automatically when client receives a message from server
 function onMessage(message) {
-    
+
     var event = JSON.parse(message.data);
     processEvent(event);
-    
+
     // Event Request has returned messages. 
     // Set it back to false to be able to make a new request
     eventsRequested = false;

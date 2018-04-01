@@ -172,7 +172,7 @@ function onDocumentMouseDown(event) {
                 return;
             }
 
-            if (greenStartTime < 0 || greenDuration < 0 || redDuration < 0) {
+            if (greenStartTime < 0 || greenDuration <= 0 || redDuration <= 0) {
                 alert("Time cannot be smaller than 0");
                 return;
             }

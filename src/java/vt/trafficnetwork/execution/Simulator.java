@@ -29,7 +29,7 @@ public class Simulator {
 
     }
 
-    public void start() {
+    public void start(int simDuration) {
         if (this.isRunning()) {
             throw new IllegalStateException("Simulation is already in progress");
         }
@@ -39,7 +39,7 @@ public class Simulator {
         this.complete = false;
 
         // initialize the simulation objects
-        initialize();
+        initialize(simDuration);
         // run the simulation...
         doSimulation();
         // signal end of simulation
@@ -58,8 +58,9 @@ public class Simulator {
         return this.complete;
     }
 
-    protected void initialize() {
+    protected void initialize(int simDuration) {
         System.out.println("initializing simulator...");
+        rt.setSimulationTimeLimit(simDuration);
         rt.initializeFutureList();
         System.out.println("Future Event List initalized");
         

@@ -34,7 +34,8 @@ public class SimulationBuilder {
         System.out.println("==Simulation Model Build Start==");
         
         // First Read Each Json Object and Create Static Objects According to JSON Object Type
-        for (int i = 0; i < modelData.size(); i++) {
+        // First object of model data is saved for non-component information such as simulation duration
+        for (int i = 1; i < modelData.size(); i++) {
             
             JsonObject spot = modelData.getJsonObject(i);
 
@@ -98,7 +99,8 @@ public class SimulationBuilder {
         }
 
         //Second, Set the Connection Between Objects and add them to runtime
-        for (int i = 0; i < modelData.size(); i++) {
+        // First object of model data is saved for non-component information such as simulation duration
+        for (int i = 1; i < modelData.size(); i++) {
 
             JsonObject spot = modelData.getJsonObject(i);
 
