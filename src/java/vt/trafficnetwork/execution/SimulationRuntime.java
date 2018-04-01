@@ -50,6 +50,8 @@ public class SimulationRuntime {
     private final MessageManager messageManager;
 
     private final List<Vehicle> vehicles;
+    
+    private long sumOfVehicleDestroyTime;
 
     public SimulationRuntime(String sessionIdentifier) {
 
@@ -60,6 +62,7 @@ public class SimulationRuntime {
         vehicles = new ArrayList();
 
         this.simulationTime = 0;
+        this.sumOfVehicleDestroyTime = 0;
 
         //Renderer renders 60 times in a sec. Simulation duration is defined in terms of minutes
         //simulationTimeLimit = 60 * 60 * Constants.simulationDuration;
@@ -108,6 +111,10 @@ public class SimulationRuntime {
         }
 
         System.out.println("Total Number OF Vehicles Created: " + eventFactory.getNumberOfVehicles());
+        
+        long totalTimeSpent = sumOfVehicleDestroyTime - eventFactory.getSumOfVehicleCreationTime();
+        int averageTime = (int) (totalTimeSpent/eventFactory.getNumberOfVehicles());     
+        System.out.println("Avarage time a vehicle spends in the traffic: " + averageTime + " seconds.");
 
         //Send Remaining Messages In The Buffer at The end of the Simulation
        // sendRemainingMessages();
@@ -121,8 +128,9 @@ public class SimulationRuntime {
     }
 
     private void processEvent() {
-
-        while (simulationTime == earliestScheduledEvent.getTime()) {
+        
+        // Earliest scheduled event can be null especially if vehicle creation has stopped.
+        while (earliestScheduledEvent != null && simulationTime == earliestScheduledEvent.getTime()) {
 
             processScheduledEvent();
         }
@@ -142,7 +150,6 @@ public class SimulationRuntime {
                 scheduleVehicleCreation(event);
             }
             
-
             //Add The Created Vehicle To Dynamic Vehicle List
             vehicles.add(event.getVehicle());
             //   vehicleMap.put(event.getVehicle().getId(), event.getVehicle());
@@ -301,6 +308,7 @@ public class SimulationRuntime {
 
                         vehicles.remove(i);
                         //   vehicleMap.remove(vehicle.getId());
+                        sumOfVehicleDestroyTime += simulationTime/60;
 
                         messageManager.vehicleDestroy(vehicle.getId(), simulationTime);
 

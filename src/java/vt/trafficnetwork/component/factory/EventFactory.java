@@ -22,14 +22,14 @@ public class EventFactory {
     
     private final RandomVariate random;
     private int numberOfVehicles;
+    private long sumOfVehicleCreationTime;
 
 
     public EventFactory() {
         //nextDouble() chooses between 100 and 700 (600 time frame = 10 seconds)
         this.random = new UniformRandom(100, 400);
         numberOfVehicles = 0;
-
-        
+        sumOfVehicleCreationTime = 0;
     }
     
 
@@ -40,11 +40,10 @@ public class EventFactory {
         Vehicle vehicle = enterPoint.getNewVehicle();
        
         numberOfVehicles ++;
+        // Convert the time into seconds
+        sumOfVehicleCreationTime += time/60;
         
         return new VehicleCreateEvent(time, vehicle, enterPoint.getId());
-        
-       
-
     }
     
     public Event scheduleTrafficLightStateChange(TrafficLight light, int currentTime){
@@ -72,7 +71,9 @@ public class EventFactory {
     public void setNumberOfVehicles(int numberOfVehicles) {
         this.numberOfVehicles = numberOfVehicles;
     }
-    
-    
+
+    public long getSumOfVehicleCreationTime() {
+        return sumOfVehicleCreationTime;
+    }
 
 }

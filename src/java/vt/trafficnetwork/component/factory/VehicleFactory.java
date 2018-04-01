@@ -23,8 +23,6 @@ public class VehicleFactory {
     //Defines Numerical id of new car
     private int newId;
 
-
-
     public VehicleFactory(EnterPoint factoryOwner) {
         this.random = new UniformRandom();
 
