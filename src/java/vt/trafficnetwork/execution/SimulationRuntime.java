@@ -94,6 +94,18 @@ public class SimulationRuntime {
             updateSimulation();
 
         }
+        
+        // Simulation time is over, continue processing until all vehicles leave the simulation
+        while (vehicles.size() > 0) {
+
+            // Clock update
+            clockUpdate();
+            // Scan Scheduled Future Events
+            processEvent();
+            //
+            updateSimulation();
+
+        }
 
         System.out.println("Total Number OF Vehicles Created: " + eventFactory.getNumberOfVehicles());
 
@@ -123,9 +135,13 @@ public class SimulationRuntime {
 
             //Safely Cast It to VehicleCreateEvent
             VehicleCreateEvent event = (VehicleCreateEvent) earliestScheduledEvent;
-
-            //Schedule a New Vehicle Event to add to future event list
-            scheduleVehicleCreation(event);
+           
+            // Schedule a New Vehicle Event to add to future event list
+            // Stop scheduling future event if end of the simulation has come
+            if(simulationTime < simulationTimeLimit){               
+                scheduleVehicleCreation(event);
+            }
+            
 
             //Add The Created Vehicle To Dynamic Vehicle List
             vehicles.add(event.getVehicle());
