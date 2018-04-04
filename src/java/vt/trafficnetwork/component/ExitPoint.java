@@ -4,7 +4,7 @@
  */
 package vt.trafficnetwork.component;
 
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 
 /**
  *
@@ -12,24 +12,19 @@ import vt.trafficnetwork.component.helpers.MovementObject;
  */
 
 
-public class ExitPoint extends MovementObject{
+public class ExitPoint extends StaticObject{
     
-    private MovementObject prev;
+    private StaticObject prev;
     
     public ExitPoint(String id, double x, double y) {
         super(id, x, y);
     }
 
-    public MovementObject getPrev() {
+    public StaticObject getPrev() {
         return prev;
     }
 
-    public void setPrev(MovementObject prev) {
+    public void setPrev(StaticObject prev) {
         this.prev = prev;
     }
-    
-    
-
-    
-    
 }

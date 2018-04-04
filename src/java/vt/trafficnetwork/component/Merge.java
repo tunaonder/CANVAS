@@ -5,18 +5,18 @@
 package vt.trafficnetwork.component;
 
 import vt.trafficnetwork.component.helpers.DynamicObject;
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 
 /**
  *
  * @author Onder
  */
-public class Merge extends MovementObject {
+public class Merge extends StaticObject {
 
-    private MovementObject prev;
-    private MovementObject next;
+    private StaticObject prev;
+    private StaticObject next;
     //Fork Objects has an alternative Prev Spot that is different than Move Spots
-    private MovementObject prevAlternative;
+    private StaticObject prevAlternative;
     //Each Movement Object has an Incoming Car. However, Since merge has 2 previous spot, it has another 
     //INCOMING CAR
     private DynamicObject incomingCar2;
@@ -28,27 +28,27 @@ public class Merge extends MovementObject {
 
     }
 
-    public MovementObject getPrev() {
+    public StaticObject getPrev() {
         return prev;
     }
 
-    public void setPrev(MovementObject prev) {
+    public void setPrev(StaticObject prev) {
         this.prev = prev;
     }
 
-    public MovementObject getNext() {
+    public StaticObject getNext() {
         return next;
     }
 
-    public void setNext(MovementObject next) {
+    public void setNext(StaticObject next) {
         this.next = next;
     }
 
-    public MovementObject getPrevAlternative() {
+    public StaticObject getPrevAlternative() {
         return prevAlternative;
     }
 
-    public void setPrevAlternative(MovementObject prevAlternative) {
+    public void setPrevAlternative(StaticObject prevAlternative) {
         this.prevAlternative = prevAlternative;
     }
 

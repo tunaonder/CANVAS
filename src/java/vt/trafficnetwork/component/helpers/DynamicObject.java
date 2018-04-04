@@ -12,37 +12,28 @@ package vt.trafficnetwork.component.helpers;
  * Created by Sait Tuna Onder on 2017.03.18  * 
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
-
-
 /**
  *
  * @author Onder
  */
-public abstract class DynamicObject implements SimulationObject {
-    
-    private String id;
-    
-    private double x;
-    private double y;
+public abstract class DynamicObject extends SimulationObject {
+
     private double speed;
     private double tempSpeed;
     private double length;
-    
-    private MovementObject currentSpot;
-    private MovementObject targetSpot;
-    
+
+    private StaticObject currentSpot;
+    private StaticObject targetSpot;
+
     private DynamicObject prevCar;
     private DynamicObject nextCar;
-    
-    public DynamicObject(String id) {
 
-    }
+//    public DynamicObject(String id) {
+//
+//    }
+    public DynamicObject(String id, double x, double y, double speed, StaticObject current, StaticObject target, double length) {
 
-    public DynamicObject(String id, double x, double y, double speed, MovementObject current, MovementObject target, double length) {
-        
-        this.id = id;
-        this.x = x;
-        this.y = y;
+        super(id, x, y);
         this.speed = speed;
         this.tempSpeed = speed;
         this.currentSpot = current;
@@ -50,22 +41,6 @@ public abstract class DynamicObject implements SimulationObject {
         this.length = length;
         this.prevCar = null;
         this.nextCar = null;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public double getSpeed() {
@@ -76,28 +51,23 @@ public abstract class DynamicObject implements SimulationObject {
         this.speed = speed;
     }
 
-    public MovementObject getCurrentSpot() {
+    public StaticObject getCurrentSpot() {
         return currentSpot;
     }
 
-    public void setCurrentSpot(MovementObject currentSpot) {
+    public void setCurrentSpot(StaticObject currentSpot) {
         this.currentSpot = currentSpot;
     }
 
-    public MovementObject getTargetSpot() {
+    public StaticObject getTargetSpot() {
         return targetSpot;
     }
 
-    public void setTargetSpot(MovementObject targetSpot) {
+    public void setTargetSpot(StaticObject targetSpot) {
         this.targetSpot = targetSpot;
     }
-    
-    @Override
-    public String getId(){
-        return id;
-    }
-    
-        public DynamicObject getPrevCar() {
+
+    public DynamicObject getPrevCar() {
         return prevCar;
     }
 
@@ -112,7 +82,8 @@ public abstract class DynamicObject implements SimulationObject {
     public void setNextCar(DynamicObject nextCar) {
         this.nextCar = nextCar;
     }
-        public double getLength() {
+
+    public double getLength() {
         return length;
     }
 
@@ -128,11 +99,4 @@ public abstract class DynamicObject implements SimulationObject {
         this.tempSpeed = tempSpeed;
     }
 
-    
-    
-    
-    
-    
-    
 }
-

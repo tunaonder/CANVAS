@@ -4,7 +4,7 @@
  */
 package vt.trafficnetwork.component;
 
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 import vt.trafficnetwork.component.factory.VehicleFactory;
 
 
@@ -13,10 +13,10 @@ import vt.trafficnetwork.component.factory.VehicleFactory;
  * @author Onder
  */
 
-public class EnterPoint extends MovementObject{
+public class EnterPoint extends StaticObject{
 
    
-    private MovementObject next;
+    private StaticObject next;
     //Each Enter Point has a Vehicle Factory
     private VehicleFactory factory;
     
@@ -26,11 +26,11 @@ public class EnterPoint extends MovementObject{
         this.next = null;
     }
 
-    public MovementObject getNext() {
+    public StaticObject getNext() {
         return next;
     }
 
-    public void setNext(MovementObject next) {
+    public void setNext(StaticObject next) {
         this.next = next;
     }
 

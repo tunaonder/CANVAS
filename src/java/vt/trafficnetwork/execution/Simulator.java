@@ -4,7 +4,7 @@
  */
 package vt.trafficnetwork.execution;
 
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 
 /**
  *
@@ -82,7 +82,7 @@ public class Simulator {
      * 
      * @param object 
      */
-    public void addObject(MovementObject object){     
+    public void addObject(StaticObject object){     
         rt.addObject(object);
         
     }

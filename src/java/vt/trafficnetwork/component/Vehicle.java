@@ -5,7 +5,7 @@
 package vt.trafficnetwork.component;
 
 import vt.trafficnetwork.component.helpers.DynamicObject;
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 import vt.trafficnetwork.execution.Constants;
 
 /**
@@ -19,7 +19,7 @@ public class Vehicle extends DynamicObject {
      */
     private double rotation;
 
-    public Vehicle(String id, double x, double y, double speed, MovementObject current, MovementObject target, double length) {
+    public Vehicle(String id, double x, double y, double speed, StaticObject current, StaticObject target, double length) {
 
         super(id, x, y, speed, current, target, length);
 
@@ -70,7 +70,7 @@ public class Vehicle extends DynamicObject {
      * @param o1
      * @param o2 
      */
-    public void setRotation(MovementObject o1, MovementObject o2) {
+    public void setRotation(StaticObject o1, StaticObject o2) {
 
         double rot = calculateRotation(o1.getX(), o1.getY(), o2.getX(), o2.getY());
 
@@ -83,7 +83,7 @@ public class Vehicle extends DynamicObject {
      * @param targetSpot
      * @return False if target is occupied by another vehicle
      */
-    public boolean isSpotOccupiedByAnotherVehicle(MovementObject targetSpot) {
+    public boolean isSpotOccupiedByAnotherVehicle(StaticObject targetSpot) {
 
         if (targetSpot.getOccupierId().equals("")) {
             targetSpot.setOccupierId(this.getId());
@@ -120,7 +120,7 @@ public class Vehicle extends DynamicObject {
             return true;
         }
 
-        MovementObject targetSpot = this.getTargetSpot();
+        StaticObject targetSpot = this.getTargetSpot();
 
         //Get The First Car Moving to this target spot
         DynamicObject vehicleAhead;
@@ -321,7 +321,7 @@ public class Vehicle extends DynamicObject {
      *  Removes The all connections between the vehicle and its previous spot
      * @param previousSpot 
      */
-    public void removePreviosSpotConnections(MovementObject previousSpot) {
+    public void removePreviosSpotConnections(StaticObject previousSpot) {
 
         if (previousSpot.getLeavingCar() == this) {
             previousSpot.setLeavingCar(null);

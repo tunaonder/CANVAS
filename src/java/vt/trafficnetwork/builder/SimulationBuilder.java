@@ -14,7 +14,7 @@ import vt.trafficnetwork.component.Fork;
 import vt.trafficnetwork.component.Merge;
 import vt.trafficnetwork.component.MoveSpot;
 import vt.trafficnetwork.component.TrafficLight;
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 import vt.trafficnetwork.execution.Simulator;
 
 /**
@@ -46,7 +46,7 @@ public class SimulationBuilder {
             double y = spot.getJsonNumber("y").doubleValue();
 
             //Create Objects of Different Types and add to Hash Map
-            MovementObject object;
+            StaticObject object;
             
             
             switch (spot.getString("type")) {
@@ -113,12 +113,12 @@ public class SimulationBuilder {
              //Used For Merge
             String alternativePrevId;
 
-            MovementObject prev;
-            MovementObject next;
+            StaticObject prev;
+            StaticObject next;
             //Only For Fork Objects
-            MovementObject next2;
+            StaticObject next2;
             //Only For Merge Objects
-            MovementObject prev2;
+            StaticObject prev2;
 
             switch (spot.getString("type")) {
 
@@ -127,8 +127,8 @@ public class SimulationBuilder {
                     prevId = spot.getString("prevId");
                     nextId = spot.getString("nextId");
 
-                    prev = (MovementObject) objects.get(prevId);
-                    next = (MovementObject) objects.get(nextId);
+                    prev = (StaticObject) objects.get(prevId);
+                    next = (StaticObject) objects.get(nextId);
 
                     MoveSpot moveSpot = (MoveSpot) objects.get(id);
                     moveSpot.setPrev(prev);
@@ -142,9 +142,9 @@ public class SimulationBuilder {
                     nextId = spot.getString("nextId");
                     alternativeNextId = spot.getString("alternativeNextId");
 
-                    prev = (MovementObject) objects.get(prevId);
-                    next = (MovementObject) objects.get(nextId);
-                    next2 = (MovementObject) objects.get(alternativeNextId);
+                    prev = (StaticObject) objects.get(prevId);
+                    next = (StaticObject) objects.get(nextId);
+                    next2 = (StaticObject) objects.get(alternativeNextId);
 
                     Fork fork = (Fork) objects.get(id);
                     fork.setPrev(prev);
@@ -160,9 +160,9 @@ public class SimulationBuilder {
                     nextId = spot.getString("nextId");
                     alternativePrevId = spot.getString("alternativePrevId");
 
-                    prev = (MovementObject) objects.get(prevId);
-                    next = (MovementObject) objects.get(nextId);
-                    prev2 = (MovementObject) objects.get(alternativePrevId);
+                    prev = (StaticObject) objects.get(prevId);
+                    next = (StaticObject) objects.get(nextId);
+                    prev2 = (StaticObject) objects.get(alternativePrevId);
 
                     Merge merge = (Merge) objects.get(id);
                     merge.setPrev(prev);
@@ -178,7 +178,7 @@ public class SimulationBuilder {
 
                     nextId = spot.getString("nextId");
 
-                    next = (MovementObject) objects.get(nextId);
+                    next = (StaticObject) objects.get(nextId);
 
                     EnterPoint enterPoint = (EnterPoint) objects.get(id);
                     enterPoint.setNext(next);
@@ -191,7 +191,7 @@ public class SimulationBuilder {
                 case "ExitPoint":
                     prevId = spot.getString("prevId");
 
-                    prev = (MovementObject) objects.get(prevId);
+                    prev = (StaticObject) objects.get(prevId);
 
                     ExitPoint exitPoint = (ExitPoint) objects.get(id);
                     exitPoint.setPrev(prev);
@@ -205,8 +205,8 @@ public class SimulationBuilder {
                     nextId = spot.getString("nextId");
 //                    String stateInfo = spot.getString("state");
 
-                    prev = (MovementObject) objects.get(prevId);
-                    next = (MovementObject) objects.get(nextId);
+                    prev = (StaticObject) objects.get(prevId);
+                    next = (StaticObject) objects.get(nextId);
 
                     TrafficLight light = (TrafficLight) objects.get(id);
                     

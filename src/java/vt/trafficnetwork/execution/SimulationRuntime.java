@@ -18,7 +18,7 @@ import vt.trafficnetwork.component.TrafficLight;
 import vt.trafficnetwork.component.Vehicle;
 import vt.trafficnetwork.component.factory.EventFactory;
 import vt.trafficnetwork.component.helpers.DynamicObject;
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 import vt.trafficnetwork.execution.events.TrafficLightStateChangeEvent;
 import vt.trafficnetwork.execution.events.helpers.Event;
 import vt.trafficnetwork.execution.events.VehicleCreateEvent;
@@ -31,7 +31,7 @@ import vt.trafficnetwork.messaging.MessageManager;
  */
 public class SimulationRuntime {
 
-    Map<String, MovementObject> staticObjects;
+    Map<String, StaticObject> staticObjects;
 
     Map<String, EnterPoint> enterPoints;
     Map<String, TrafficLight> trafficLights;
@@ -209,7 +209,7 @@ public class SimulationRuntime {
      *
      * @param object
      */
-    protected void addObject(MovementObject object) {
+    protected void addObject(StaticObject object) {
 
         staticObjects.put(object.getId(), object);
 
@@ -280,10 +280,10 @@ public class SimulationRuntime {
                     vehicle.setY(targetY);
 
                     //Previous Spot
-                    MovementObject previousSpot = vehicle.getCurrentSpot();
+                    StaticObject previousSpot = vehicle.getCurrentSpot();
 
                     //Get The Target We Almost Reached
-                    MovementObject currentSpot = vehicle.getTargetSpot();
+                    StaticObject currentSpot = vehicle.getTargetSpot();
 
                     //Set It as Current Spot
                     vehicle.setCurrentSpot(currentSpot);
@@ -370,7 +370,7 @@ public class SimulationRuntime {
                     } else if (currentSpot instanceof Fork) {
                         Fork spot = (Fork) currentSpot;
 
-                        MovementObject nextSpot;
+                        StaticObject nextSpot;
 
                         Random rand = new Random();
                         int randomInt = rand.nextInt(2);
@@ -458,7 +458,7 @@ public class SimulationRuntime {
 
         if (vehicle.isCloseToTargetSpot()) {
 
-            MovementObject target = vehicle.getTargetSpot();
+            StaticObject target = vehicle.getTargetSpot();
             if (target instanceof Merge) {
 
                 Merge targetSpot = (Merge) target;

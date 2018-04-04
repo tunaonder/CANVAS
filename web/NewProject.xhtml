@@ -48,13 +48,13 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                         <h3>Please Upload Project Background Map</h3>
 
                         <div class="arialTen">
-                            Click Choose to select one or more files or drag one or more files and drop on the white area.
+                            Click Choose to select one or more files or drag one or more files and drop on the following area.
                         </div>
                         <br/>
 
                         <p:fileUpload fileUploadListener="#{projectManager.handleFileUpload}" multiple="true" 
                                       mode="advanced" sizeLimit="10000000" fileLimit="5"
-                                      dragDropSupport="true" update="messages" />
+                                      dragDropSupport="true" update="messages" style="width: 60%;" />
                         
                         <br/>
                         <!-- Allow maximum 10MB file size and no more than 5 files to upload at the same time -->

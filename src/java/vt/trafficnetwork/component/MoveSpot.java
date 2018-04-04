@@ -4,35 +4,35 @@
  */
 package vt.trafficnetwork.component;
 
-import vt.trafficnetwork.component.helpers.MovementObject;
+import vt.trafficnetwork.component.helpers.StaticObject;
 
 /**
  *
  * @author Onder
  */
-public class MoveSpot extends MovementObject {
+public class MoveSpot extends StaticObject {
 
-    private MovementObject prev;
-    private MovementObject next;
+    private StaticObject prev;
+    private StaticObject next;
 
     public MoveSpot(String id, double x, double y) {
         super(id, x, y);
         
     }
 
-    public MovementObject getPrev() {
+    public StaticObject getPrev() {
         return prev;
     }
 
-    public void setPrev(MovementObject prev) {
+    public void setPrev(StaticObject prev) {
         this.prev = prev;
     }
 
-    public MovementObject getNext() {
+    public StaticObject getNext() {
         return next;
     }
 
-    public void setNext(MovementObject next) {
+    public void setNext(StaticObject next) {
         this.next = next;
     }
 
