@@ -293,13 +293,13 @@ public class SimulationRuntime {
                         // vehicle.getCurrentSpot().setOccupied(false);
                         vehicle.getCurrentSpot().setOccupierId("");
 
-                        DynamicObject vehicleBehind = vehicle.getPrevCar();
+                        DynamicObject vehicleBehind = vehicle.getPrevDynamicObj();
 
                         //Set The Incoming Car The Previos One
-                        vehicle.getCurrentSpot().setIncomingCar(vehicleBehind);
+                        vehicle.getCurrentSpot().setIncomingDynamicObj(vehicleBehind);
 
                         if (vehicleBehind != null) {
-                            vehicleBehind.setNextCar(null);
+                            vehicleBehind.setNextDynamicObj(null);
                             //vehicleBehind.setTempSpeed(vehicleBehind.getSpeed());
 
                         }
@@ -324,17 +324,17 @@ public class SimulationRuntime {
                         vehicle.setRotation(spot, spot.getNext());
 
                         ////
-                        vehicle.getCurrentSpot().setIncomingCar(vehicle.getPrevCar());
+                        vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
                         //In the Next Run This Vehicle will leave the spot, so its' 
                         //vehicle.getCurrentSpot().setOccupied(false);
-                        spot.setLeavingCar(vehicle);
+                        spot.setLeavingDynamicObj(vehicle);
 
                         //Remove the connection between two cars
-                        if (vehicle.getPrevCar() != null) {
-                            vehicle.getPrevCar().setNextCar(null);
+                        if (vehicle.getPrevDynamicObj() != null) {
+                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
                         }
-                        vehicle.setPrevCar(null);
+                        vehicle.setPrevDynamicObj(null);
                         //Change car speed to previous speed
                         vehicle.setTempSpeed(vehicle.getSpeed());
                         //
@@ -350,17 +350,17 @@ public class SimulationRuntime {
                         vehicle.setRotation(spot, spot.getNext());
 
                         ////
-                        vehicle.getCurrentSpot().setIncomingCar(vehicle.getPrevCar());
+                        vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
                         //In the Next Run This Vehicle will leave the spot, so its' 
                         //vehicle.getCurrentSpot().setOccupied(false);
-                        spot.setLeavingCar(vehicle);
+                        spot.setLeavingDynamicObj(vehicle);
 
                         //Remove the connection between two cars
-                        if (vehicle.getPrevCar() != null) {
-                            vehicle.getPrevCar().setNextCar(null);
+                        if (vehicle.getPrevDynamicObj() != null) {
+                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
                         }
-                        vehicle.setPrevCar(null);
+                        vehicle.setPrevDynamicObj(null);
                         //Change car speed to previous speed
                         vehicle.setTempSpeed(vehicle.getSpeed());
                         //
@@ -387,17 +387,17 @@ public class SimulationRuntime {
                         vehicle.setRotation(spot, nextSpot);
 
                         ////
-                        vehicle.getCurrentSpot().setIncomingCar(vehicle.getPrevCar());
+                        vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
                         //In the Next Run This Vehicle will leave the spot, so its' 
                         //vehicle.getCurrentSpot().setOccupied(false);
-                        spot.setLeavingCar(vehicle);
+                        spot.setLeavingDynamicObj(vehicle);
 
                         //Remove the connection between two cars
-                        if (vehicle.getPrevCar() != null) {
-                            vehicle.getPrevCar().setNextCar(null);
+                        if (vehicle.getPrevDynamicObj() != null) {
+                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
                         }
-                        vehicle.setPrevCar(null);
+                        vehicle.setPrevDynamicObj(null);
                         //Change car speed to previous speed
                         vehicle.setTempSpeed(vehicle.getSpeed());
                         //
@@ -413,24 +413,24 @@ public class SimulationRuntime {
                         //Set New Rotation Of The Car According To Current and Target Spot
                         vehicle.setRotation(spot, spot.getNext());
 
-                        if (vehicle == vehicle.getCurrentSpot().getIncomingCar()) {
-                            spot.setIncomingCar(vehicle.getPrevCar());
+                        if (vehicle == vehicle.getCurrentSpot().getIncomingDynamicObj()) {
+                            spot.setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
                         } else {
-                            spot.setIncomingCar2(vehicle.getPrevCar());
+                            spot.setIncomingDynamicObject2(vehicle.getPrevDynamicObj());
 
                         }
 
                         //In the Next Run This Vehicle will leave the spot, so its' 
 //                        spot.setOccupied(false);
 //                        spot.setOccupier(Merge.OccupierRoute.None);
-                        spot.setLeavingCar(vehicle);
+                        spot.setLeavingDynamicObj(vehicle);
 
                         //Remove the connection between two cars
-                        if (vehicle.getPrevCar() != null) {
-                            vehicle.getPrevCar().setNextCar(null);
+                        if (vehicle.getPrevDynamicObj() != null) {
+                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
                         }
-                        vehicle.setPrevCar(null);
+                        vehicle.setPrevDynamicObj(null);
                         //Change car speed to previous speed
                         vehicle.setTempSpeed(vehicle.getSpeed());
                         //
@@ -464,14 +464,14 @@ public class SimulationRuntime {
                 Merge targetSpot = (Merge) target;
 
                 //If the Vehicle is the first car coming from either of the two routes
-                if (vehicle == targetSpot.getIncomingCar() || vehicle == targetSpot.getIncomingCar2()) {
+                if (vehicle == targetSpot.getIncomingDynamicObj() || vehicle == targetSpot.getIncomingDynamicObject2()) {
 
                     if (vehicle.isSpotOccupiedByAnotherVehicle(targetSpot)) {
 
                         //This is Cannot be Null because of the test
                         String occupierId = targetSpot.getOccupierId();
 
-                        DynamicObject leavingVehicle = target.getLeavingCar();
+                        DynamicObject leavingVehicle = target.getLeavingDynamicObj();
 
                         //Occupier Already Passed the Target
                         if (leavingVehicle != null && occupierId.equals(leavingVehicle.getId())) {
@@ -510,14 +510,14 @@ public class SimulationRuntime {
             } else if (target instanceof MoveSpot || target instanceof Fork) {
 
                 //Check If This is the First Vehicle Getting Close To the Target
-                if (vehicle == target.getIncomingCar()) {
+                if (vehicle == target.getIncomingDynamicObj()) {
 
                     //Check if Target Is Occupied By Another Vehicle
                     if (vehicle.isSpotOccupiedByAnotherVehicle(target)) {
 
                         //If this vehicle is the first one, and the target is occupied by someone else
                         //It is the leaving car
-                        DynamicObject occupierVehicle = target.getLeavingCar();
+                        DynamicObject occupierVehicle = target.getLeavingDynamicObj();
 
                         if (occupierVehicle == null) {
                             return true;
@@ -558,7 +558,7 @@ public class SimulationRuntime {
                 
 
                 //Check If This is the First Vehicle Getting Close To the Target
-                if (vehicle == target.getIncomingCar()) {
+                if (vehicle == target.getIncomingDynamicObj()) {
                     
                     
                     if(((TrafficLight) target).getState() == TrafficLight.STATE.RED){
@@ -577,7 +577,7 @@ public class SimulationRuntime {
 
                         //If this vehicle is the first one, and the target is occupied by someone else
                         //It is the leaving car
-                        DynamicObject occupierVehicle = target.getLeavingCar();
+                        DynamicObject occupierVehicle = target.getLeavingDynamicObj();
 
                         if (occupierVehicle == null) {
                             return true;
@@ -645,9 +645,9 @@ public class SimulationRuntime {
      */
     private void compareVehicleAndCurrentSpot(Vehicle vehicle) {
         //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
-        if (vehicle.getCurrentSpot().getLeavingCar() == vehicle && vehicle.isFarFromSpot()) {
+        if (vehicle.getCurrentSpot().getLeavingDynamicObj() == vehicle && vehicle.isFarFromSpot()) {
 
-            vehicle.getCurrentSpot().setLeavingCar(null);
+            vehicle.getCurrentSpot().setLeavingDynamicObj(null);
 
             //No Occupation on the Spot anymore
             vehicle.getCurrentSpot().setOccupierId("");
@@ -663,12 +663,12 @@ public class SimulationRuntime {
      */
     private boolean canVehicleSpeedUp(Vehicle vehicle) {
 
-        if (vehicle.getNextCar() == null) {
+        if (vehicle.getNextDynamicObj() == null) {
             vehicle.setTempSpeed(vehicle.getSpeed());
             messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
             return true;
         } else {
-            if (!vehicle.isVehicleClose(vehicle.getNextCar())) {
+            if (!vehicle.isVehicleClose(vehicle.getNextDynamicObj())) {
                 vehicle.setTempSpeed(vehicle.getSpeed());
                 messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
                 return true;

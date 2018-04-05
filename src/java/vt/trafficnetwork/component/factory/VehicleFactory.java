@@ -18,25 +18,21 @@ public class VehicleFactory {
 
     private final RandomVariate random;
     
-    private final EnterPoint factoryOwner;
-    
     //Defines Numerical id of new car
-    private int newId;
+    private int producedVehicleCount;
 
-    public VehicleFactory(EnterPoint factoryOwner) {
+    public VehicleFactory() {
         this.random = new UniformRandom();
-
-        this.factoryOwner = factoryOwner;
-        this.newId = 0;
+        this.producedVehicleCount = 0;
     }
 
-    public Vehicle getNewVehicle() {
+    public Vehicle getNewVehicle(EnterPoint factoryOwner) {
         
         //Set New Id
-        newId++;
+        producedVehicleCount++;
         
         //ID represents dynamic object id
-        String id = "d" + newId + factoryOwner.getId();
+        String id = "d" + producedVehicleCount + factoryOwner.getId();
 
         //Get random speed
         double speed = random.nextDouble(Constants.minSpeed, Constants.maxSpeed);

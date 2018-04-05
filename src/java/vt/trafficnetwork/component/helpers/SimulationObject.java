@@ -10,7 +10,7 @@ package vt.trafficnetwork.component.helpers;
  */
 public abstract class SimulationObject {
 
-    private String id;
+    private final String id;
     private double x;
     private double y;
 
@@ -22,10 +22,6 @@ public abstract class SimulationObject {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public double getX() {

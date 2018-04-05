@@ -19,12 +19,12 @@ public class Merge extends StaticObject {
     private StaticObject prevAlternative;
     //Each Movement Object has an Incoming Car. However, Since merge has 2 previous spot, it has another 
     //INCOMING CAR
-    private DynamicObject incomingCar2;
+    private DynamicObject incomingDynamicObject2;
 
 
     public Merge(String id, double x, double y) {
         super(id, x, y);
-        this.incomingCar2 = null;
+        this.incomingDynamicObject2 = null;
 
     }
 
@@ -52,12 +52,12 @@ public class Merge extends StaticObject {
         this.prevAlternative = prevAlternative;
     }
 
-    public DynamicObject getIncomingCar2() {
-        return incomingCar2;
+    public DynamicObject getIncomingDynamicObject2() {
+        return incomingDynamicObject2;
     }
 
-    public void setIncomingCar2(DynamicObject incomingCar2) {
-        this.incomingCar2 = incomingCar2;
+    public void setIncomingDynamicObject2(DynamicObject incomingDynamicObject2) {
+        this.incomingDynamicObject2 = incomingDynamicObject2;
     }
 
 }

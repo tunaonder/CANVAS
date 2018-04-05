@@ -10,30 +10,30 @@ package vt.trafficnetwork.component.helpers;
  */
 public abstract class StaticObject extends SimulationObject{
     
-    private DynamicObject incomingCar;
-    private DynamicObject leavingCar;
+    private DynamicObject incomingDynamicObj;
+    private DynamicObject leavingDynamicObj;
     private String occupierId;
 
     public StaticObject(String id, double x, double y) {
         super(id, x, y);
-        this.incomingCar = null;
+        this.incomingDynamicObj = null;
         this.occupierId = "";
     }
 
-    public DynamicObject getIncomingCar() {
-        return incomingCar;
+    public DynamicObject getIncomingDynamicObj() {
+        return incomingDynamicObj;
     }
 
-    public void setIncomingCar(DynamicObject incomingCar) {
-        this.incomingCar = incomingCar;
+    public void setIncomingDynamicObj(DynamicObject incomingDynamicObj) {
+        this.incomingDynamicObj = incomingDynamicObj;
     }
 
-    public DynamicObject getLeavingCar() {
-        return leavingCar;
+    public DynamicObject getLeavingDynamicObj() {
+        return leavingDynamicObj;
     }
 
-    public void setLeavingCar(DynamicObject leavingCar) {
-        this.leavingCar = leavingCar;
+    public void setLeavingDynamicObj(DynamicObject leavingDynamicObj) {
+        this.leavingDynamicObj = leavingDynamicObj;
     }
 
     public String getOccupierId() {

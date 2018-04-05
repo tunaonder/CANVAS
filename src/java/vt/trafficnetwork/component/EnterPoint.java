@@ -22,7 +22,7 @@ public class EnterPoint extends StaticObject{
     
     public EnterPoint(String id, double x, double y) {
         super(id,x,y);
-        this.factory = new VehicleFactory(this);
+        this.factory = new VehicleFactory();
         this.next = null;
     }
 
@@ -43,7 +43,7 @@ public class EnterPoint extends StaticObject{
     }
     
     public Vehicle getNewVehicle(){
-        return factory.getNewVehicle();
+        return factory.getNewVehicle(this);
     }
 
 

@@ -14,70 +14,12 @@ import vt.trafficnetwork.execution.Constants;
  */
 public class Vehicle extends DynamicObject {
 
-    /**
-     * Defines the length of the vehicle
-     */
-    private double rotation;
-
     public Vehicle(String id, double x, double y, double speed, StaticObject current, StaticObject target, double length) {
 
         super(id, x, y, speed, current, target, length);
 
-        this.rotation = calculateRotation(x, y, target.getX(), target.getY());
-
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
     }
     
-    /**
-     * This Method Calculates The rotation of the car according to current and target coordinates
-     * @param x
-     * @param y
-     * @param targetX
-     * @param targetY
-     * @return 
-     */
-    private double calculateRotation(double x, double y, double targetX, double targetY) {
-
-        double difX = targetX - x;
-        double difY = targetY - y;
-
-        //Define New Rotation
-        double rot = Math.atan(difY / difX);
-
-        if (difX == 0) {
-            rot += Math.PI;
-        } else if (difX > 0 && difY == 0) {
-            rot += Math.PI;
-        } else if (difY > 0 && difX > 0) {
-            rot += Math.PI;
-        } else if (difY < 0 && difX > 0) {
-            rot += Math.PI;
-        }
-
-        return rot;
-
-    }
-    
-    /**
-     * Calculate and Set the Rotation
-     * @param o1
-     * @param o2 
-     */
-    public void setRotation(StaticObject o1, StaticObject o2) {
-
-        double rot = calculateRotation(o1.getX(), o1.getY(), o2.getX(), o2.getY());
-
-        setRotation(rot);
-
-    }
-
     /**
      * 
      * @param targetSpot
@@ -93,7 +35,6 @@ public class Vehicle extends DynamicObject {
         }
 
         return true;
-
     }
 
 //    public boolean isMergeOccupiedByAnotherVehicle(Merge targetSpot) {
@@ -116,7 +57,7 @@ public class Vehicle extends DynamicObject {
     public boolean isThereVehicleAhead() {
 
         //Check if there is a vehicle ahead and it is already set
-        if (this.getNextCar() != null) {
+        if (this.getNextDynamicObj() != null) {
             return true;
         }
 
@@ -131,10 +72,10 @@ public class Vehicle extends DynamicObject {
 
         //If it is get the alternative vehicle
         if (isSpotMergeAlternative) {
-            vehicleAhead = ((Merge) targetSpot).getIncomingCar2();
+            vehicleAhead = ((Merge) targetSpot).getIncomingDynamicObject2();
 
         } else {
-            vehicleAhead = targetSpot.getIncomingCar();
+            vehicleAhead = targetSpot.getIncomingDynamicObj();
 
         }
 
@@ -146,22 +87,22 @@ public class Vehicle extends DynamicObject {
         if (vehicleAhead == null) {
 
             if (isSpotMergeAlternative) {
-                ((Merge) targetSpot).setIncomingCar2(this);
+                ((Merge) targetSpot).setIncomingDynamicObject2(this);
             } else {
-                targetSpot.setIncomingCar(this);
+                targetSpot.setIncomingDynamicObj(this);
             }
 
             return false;
         }
 
         //If there are vehicle moving to the target spot, get the last one
-        while (vehicleAhead.getPrevCar() != null && vehicleAhead.getPrevCar() != this) {
-            vehicleAhead = vehicleAhead.getPrevCar();
+        while (vehicleAhead.getPrevDynamicObj() != null && vehicleAhead.getPrevDynamicObj() != this) {
+            vehicleAhead = vehicleAhead.getPrevDynamicObj();
         }
 
         //Set the connection in between
-        vehicleAhead.setPrevCar(this);
-        this.setNextCar(vehicleAhead);
+        vehicleAhead.setPrevDynamicObj(this);
+        this.setNextDynamicObj(vehicleAhead);
 
         return true;
 
@@ -175,7 +116,7 @@ public class Vehicle extends DynamicObject {
     public boolean canMoveWithSameSpeed() {
 
         double distance = calculateDistance(this.getX(), this.getY(),
-                this.getNextCar().getX(), this.getNextCar().getY());
+                this.getNextDynamicObj().getX(), this.getNextDynamicObj().getY());
 
         return isDistanceEnough(distance);
 
@@ -215,7 +156,7 @@ public class Vehicle extends DynamicObject {
 
     private boolean isDistanceEnough(double distance) {
 
-        DynamicObject vehicleAhead = this.getNextCar();
+        DynamicObject vehicleAhead = this.getNextDynamicObj();
 
         double length1 = this.getLength() / 2;
         double length2 = vehicleAhead.getLength() / 2;
@@ -323,8 +264,8 @@ public class Vehicle extends DynamicObject {
      */
     public void removePreviosSpotConnections(StaticObject previousSpot) {
 
-        if (previousSpot.getLeavingCar() == this) {
-            previousSpot.setLeavingCar(null);
+        if (previousSpot.getLeavingDynamicObj() == this) {
+            previousSpot.setLeavingDynamicObj(null);
         }
         if (previousSpot.getOccupierId().equals(this.getId())) {
             previousSpot.setOccupierId("");
