@@ -300,14 +300,12 @@ public class SimulationRuntime {
 
                         if (vehicleBehind != null) {
                             vehicleBehind.setNextDynamicObj(null);
-                            //vehicleBehind.setTempSpeed(vehicleBehind.getSpeed());
 
                         }
 
-                        vehicle.removePreviosSpotConnections(previousSpot);
+                        //vehicle.removePreviosSpotConnections(previousSpot);
 
                         vehicles.remove(i);
-                        //   vehicleMap.remove(vehicle.getId());
                         sumOfVehicleDestroyTime += simulationTime/60;
 
                         messageManager.vehicleDestroy(vehicle.getId(), simulationTime);

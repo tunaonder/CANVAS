@@ -62,7 +62,7 @@ function setScene() {
         // Load the background texture
         var texture = THREE.ImageUtils.loadTexture(currentBackgroundMap);
 
-
+        
         var backgroundMesh = new THREE.Mesh(
                 new THREE.PlaneBufferGeometry(backgroundWidth, backgroundHeight, 0),
                 new THREE.MeshBasicMaterial({
@@ -83,13 +83,16 @@ function setScene() {
         mapFinishY = bbox.max.y;
 
         retrieveModel();
+        
+        createExampleVehicle('+');
+        
 
         //Renders the app in half resolution, but display in full size.
         renderer.setSize(canvasWidth, canvasHeight);
         //Set Background Color to the Scene
         renderer.setClearColor(0xafcedf);
         document.body.appendChild(renderer.domElement);
-
+        
         render();
     };
 
