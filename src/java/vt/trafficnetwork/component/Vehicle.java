@@ -113,12 +113,12 @@ public class Vehicle extends DynamicObject {
      * and checks the distance
      * @return 
      */
-    public boolean canMoveWithSameSpeed() {
+    public boolean canMoveWithSameSpeed(int vehicleDistanceLimit) {
 
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getNextDynamicObj().getX(), this.getNextDynamicObj().getY());
 
-        return isDistanceEnough(distance);
+        return isDistanceEnough(distance, vehicleDistanceLimit);
 
     }
     
@@ -126,14 +126,15 @@ public class Vehicle extends DynamicObject {
      * Calculates the distance with this vehicle and the next one
      * and checks the distance
      * @param vehicleAhead
+     * @param vehicleDistanceLimit
      * @return 
      */
-    public boolean canMoveWithTheSameSpeed(DynamicObject vehicleAhead) {
+    public boolean canMoveWithTheSameSpeed(DynamicObject vehicleAhead, int vehicleDistanceLimit) {
 
         double distance = calculateDistance(this.getX(), this.getY(),
                 vehicleAhead.getX(), vehicleAhead.getY());
 
-        return isDistanceEnough(vehicleAhead, distance);
+        return isDistanceEnough(vehicleAhead, distance, vehicleDistanceLimit);
 
     }
 
@@ -154,7 +155,7 @@ public class Vehicle extends DynamicObject {
 
     }
 
-    private boolean isDistanceEnough(double distance) {
+    private boolean isDistanceEnough(double distance, int vehicleDistanceLimit) {
 
         DynamicObject vehicleAhead = this.getNextDynamicObj();
 
@@ -162,7 +163,7 @@ public class Vehicle extends DynamicObject {
         double length2 = vehicleAhead.getLength() / 2;
 
         //If there is enough distance between two vehicles return true
-        if (distance > length1 + length2 + Constants.vehicleDistanceLimit) {
+        if (distance > length1 + length2 + vehicleDistanceLimit) {
             return true;
         }
 
@@ -178,13 +179,13 @@ public class Vehicle extends DynamicObject {
 
     }
 
-    private boolean isDistanceEnough(DynamicObject vehicleAhead, double distance) {
+    private boolean isDistanceEnough(DynamicObject vehicleAhead, double distance, int vehicleDistanceLimit) {
 
         double length1 = this.getLength() / 2;
         double length2 = vehicleAhead.getLength() / 2;
 
         //If there is enough distance between two vehicles return true
-        if (distance > length1 + length2 + Constants.vehicleDistanceLimit) {
+        if (distance > length1 + length2 + vehicleDistanceLimit) {
             return true;
         }
 
@@ -214,28 +215,30 @@ public class Vehicle extends DynamicObject {
 
     /**
      * Checks the distance between vehicle and its target spot
+     * @param vehicleToSpotDistanceLimit
      * @return 
      */
-    public boolean isCloseToTargetSpot() {
+    public boolean isCloseToTargetSpot(int vehicleToSpotDistanceLimit) {
 
         //Calculate the Distance Between the vehicle and its' target spot
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getTargetSpot().getX(), this.getTargetSpot().getY());
 
-        return distance < Constants.vehicleToSpotDistanceLimit + this.getLength() / 2;
+        return distance < vehicleToSpotDistanceLimit + this.getLength() / 2;
 
     }
 
     /**
      * Checks the distance between two vehicle
      * @param vehicle
+     * @param vehicleDistanceLimit
      * @return true if the distance between two vehicle is shorter than the vehicle distance limit
      */
-       public boolean isVehicleClose(DynamicObject vehicle) {
+       public boolean isVehicleClose(DynamicObject vehicle, int vehicleDistanceLimit) {
         double distance = calculateDistance(this.getX(), this.getY(),
                 vehicle.getX(), vehicle.getY());
 
-        return distance < Constants.vehicleDistanceLimit + this.getLength() / 2 + vehicle.getLength() / 2;
+        return distance < vehicleDistanceLimit + this.getLength() / 2 + vehicle.getLength() / 2;
 
     }
 

@@ -45,12 +45,14 @@ public class SimulationRuntime {
 
     private int simulationTimeLimit;
 
+    private Constants simulationConstants;
+
     private final EventFactory eventFactory;
 
     private final MessageManager messageManager;
 
     private final List<Vehicle> vehicles;
-    
+
     private long sumOfVehicleDestroyTime;
 
     public SimulationRuntime(String sessionIdentifier) {
@@ -67,13 +69,19 @@ public class SimulationRuntime {
         //Renderer renders 60 times in a sec. Simulation duration is defined in terms of minutes
         //simulationTimeLimit = 60 * 60 * Constants.simulationDuration;
         //simulationTimeLimit = 100;
-
         eventFactory = new EventFactory();
 
         futureEventList = new EventList();
 
         messageManager = new MessageManager(sessionIdentifier);
 
+    }
+
+    public void setSimulationConstants(int vehicleLength) {
+        simulationConstants = new Constants(vehicleLength);
+        for (EnterPoint point : enterPoints.values()) {
+            point.getFactory().setFactoryConstants(simulationConstants);
+        }
     }
 
     public double getSimulationTime() {
@@ -97,7 +105,7 @@ public class SimulationRuntime {
             updateSimulation();
 
         }
-        
+
         // Simulation time is over, continue processing until all vehicles leave the simulation
         while (vehicles.size() > 0) {
 
@@ -111,14 +119,13 @@ public class SimulationRuntime {
         }
 
         System.out.println("Total Number OF Vehicles Created: " + eventFactory.getNumberOfVehicles());
-        
+
         long totalTimeSpent = sumOfVehicleDestroyTime - eventFactory.getSumOfVehicleCreationTime();
-        int averageTime = (int) (totalTimeSpent/eventFactory.getNumberOfVehicles());     
+        int averageTime = (int) (totalTimeSpent / eventFactory.getNumberOfVehicles());
         System.out.println("Avarage time a vehicle spends in the traffic: " + averageTime + " seconds.");
 
         //Send Remaining Messages In The Buffer at The end of the Simulation
-       // sendRemainingMessages();
-
+        // sendRemainingMessages();
     }
 
     private void clockUpdate() {
@@ -128,7 +135,7 @@ public class SimulationRuntime {
     }
 
     private void processEvent() {
-        
+
         // Earliest scheduled event can be null especially if vehicle creation has stopped.
         while (earliestScheduledEvent != null && simulationTime == earliestScheduledEvent.getTime()) {
 
@@ -143,32 +150,33 @@ public class SimulationRuntime {
 
             //Safely Cast It to VehicleCreateEvent
             VehicleCreateEvent event = (VehicleCreateEvent) earliestScheduledEvent;
-           
+
             // Schedule a New Vehicle Event to add to future event list
             // Stop scheduling future event if end of the simulation has come
-            if(simulationTime < simulationTimeLimit){               
+            if (simulationTime < simulationTimeLimit) {
                 scheduleVehicleCreation(event);
             }
-            
+
             //Add The Created Vehicle To Dynamic Vehicle List
             vehicles.add(event.getVehicle());
             //   vehicleMap.put(event.getVehicle().getId(), event.getVehicle());
 
             //send message
             messageManager.vehicleCreated(event);
+
         } else if (earliestScheduledEvent instanceof TrafficLightStateChangeEvent) {
 
             TrafficLightStateChangeEvent event = (TrafficLightStateChangeEvent) earliestScheduledEvent;
-            
+
             // State is already set in the beginning of the simulation
             // No need to change the state
-            if(simulationTime != 0){
+            if (simulationTime != 0) {
                 //Change the state of the light
                 event.getLight().changeState();
-            }       
-            
+            }
+
             //Schedule the next Event
-            scheduleTrafficLightStateChange(event);           
+            scheduleTrafficLightStateChange(event);
 
             messageManager.trafficLightStateChange(event.getLight().getId(), simulationTime);
 
@@ -260,7 +268,7 @@ public class SimulationRuntime {
 
                 //If the Vehicle is not close to target, update its coordinates
                 //Max Speed of A vehicle is the biggest possible location change in a time frame.
-                if (distanceX > Constants.maxSpeed || distanceY > Constants.maxSpeed) {
+                if (distanceX > simulationConstants.maxSpeed || distanceY > simulationConstants.maxSpeed) {
 
                     x += vehicle.getTempSpeed() * Math.cos(vehicle.getRotation()) * -1;
                     y += vehicle.getTempSpeed() * Math.sin(vehicle.getRotation()) * -1;
@@ -303,10 +311,9 @@ public class SimulationRuntime {
 
                         }
 
-                        //vehicle.removePreviosSpotConnections(previousSpot);
-
+                        vehicle.removePreviosSpotConnections(previousSpot);
                         vehicles.remove(i);
-                        sumOfVehicleDestroyTime += simulationTime/60;
+                        sumOfVehicleDestroyTime += simulationTime / 60;
 
                         messageManager.vehicleDestroy(vehicle.getId(), simulationTime);
 
@@ -454,7 +461,7 @@ public class SimulationRuntime {
 
     private boolean canMove(Vehicle vehicle) {
 
-        if (vehicle.isCloseToTargetSpot()) {
+        if (vehicle.isCloseToTargetSpot(simulationConstants.vehicleToSpotDistanceLimit)) {
 
             StaticObject target = vehicle.getTargetSpot();
             if (target instanceof Merge) {
@@ -474,7 +481,7 @@ public class SimulationRuntime {
                         //Occupier Already Passed the Target
                         if (leavingVehicle != null && occupierId.equals(leavingVehicle.getId())) {
 
-                            if (vehicle.isVehicleClose(leavingVehicle)) {
+                            if (vehicle.isVehicleClose(leavingVehicle, simulationConstants.vehicleDistanceLimit)) {
 
                                 if (vehicle.shouldSlowDown(leavingVehicle)) {
                                     //If vehicle cannot move with the same speed, change its speed
@@ -521,7 +528,7 @@ public class SimulationRuntime {
                             return true;
                         }
 
-                        if (vehicle.isVehicleClose(occupierVehicle)) {
+                        if (vehicle.isVehicleClose(occupierVehicle, simulationConstants.vehicleDistanceLimit)) {
 
                             if (vehicle.shouldSlowDown(occupierVehicle)) {
                                 //If vehicle cannot move with the same speed, change its speed
@@ -553,23 +560,19 @@ public class SimulationRuntime {
                 }
 
             } else if (target instanceof TrafficLight) {
-                
 
                 //Check If This is the First Vehicle Getting Close To the Target
                 if (vehicle == target.getIncomingDynamicObj()) {
-                    
-                    
-                    if(((TrafficLight) target).getState() == TrafficLight.STATE.RED){
+
+                    if (((TrafficLight) target).getState() == TrafficLight.STATE.RED) {
                         if (vehicle.getTempSpeed() != 0) {
                             vehicle.setTempSpeed(0);
                             messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
                         }
                         return false;
-                        
+
                     }
-                    
-                    
-                    
+
                     //Check if Target Is Occupied By Another Vehicle
                     if (vehicle.isSpotOccupiedByAnotherVehicle(target)) {
 
@@ -581,7 +584,7 @@ public class SimulationRuntime {
                             return true;
                         }
 
-                        if (vehicle.isVehicleClose(occupierVehicle)) {
+                        if (vehicle.isVehicleClose(occupierVehicle, simulationConstants.vehicleDistanceLimit)) {
 
                             if (vehicle.shouldSlowDown(occupierVehicle)) {
                                 //If vehicle cannot move with the same speed, change its speed
@@ -623,8 +626,8 @@ public class SimulationRuntime {
         if (!vehicle.isThereVehicleAhead()) {
             return true;
         }
-     //   System.out.println(simulationTime);
-        if (vehicle.canMoveWithSameSpeed()) {
+        //   System.out.println(simulationTime);
+        if (vehicle.canMoveWithSameSpeed(simulationConstants.vehicleDistanceLimit)) {
             //System.out.println(vehicle.getId() + " new speed " + vehicle.getTempSpeed());
             return true;
         }
@@ -638,8 +641,10 @@ public class SimulationRuntime {
     }
 
     /**
-     * If the vehicle got far away from its last spot, do not occupy the spot anymore
-     * @param vehicle 
+     * If the vehicle got far away from its last spot, do not occupy the spot
+     * anymore
+     *
+     * @param vehicle
      */
     private void compareVehicleAndCurrentSpot(Vehicle vehicle) {
         //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
@@ -653,11 +658,13 @@ public class SimulationRuntime {
         }
 
     }
-    
+
     /**
-     * Checks if the vehicle has open space in front of it to speed up its original speed
+     * Checks if the vehicle has open space in front of it to speed up its
+     * original speed
+     *
      * @param vehicle
-     * @return 
+     * @return
      */
     private boolean canVehicleSpeedUp(Vehicle vehicle) {
 
@@ -666,7 +673,7 @@ public class SimulationRuntime {
             messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
             return true;
         } else {
-            if (!vehicle.isVehicleClose(vehicle.getNextDynamicObj())) {
+            if (!vehicle.isVehicleClose(vehicle.getNextDynamicObj(), simulationConstants.vehicleDistanceLimit)) {
                 vehicle.setTempSpeed(vehicle.getSpeed());
                 messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
                 return true;
@@ -678,8 +685,8 @@ public class SimulationRuntime {
         return false;
 
     }
-    
-    public void requestNewEventsToVisualize(){
+
+    public void requestNewEventsToVisualize() {
         messageManager.requestNewEventsToVisualize();
     }
 

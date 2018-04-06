@@ -8,19 +8,37 @@ package vt.trafficnetwork.execution;
  *
  * @author Onder
  */
-public final class Constants {
-    
+public class Constants {
+
     // In terms of minutes
-    public static final double simulationDuration = 60;
-    
-    public static final double vehicleDistanceLimit = 20;
-    public static final double vehicleToSpotDistanceLimit = 20;
-    
-    public static final int vehicleLength1 = 16;
-    public static final int vehicleLength2 = 26;
-    public static final int vehicleLength3 = 30;
-    public static final int vehicleLength4 = 40;
-    
-    public static final double minSpeed = 0.7;
-    public static final double maxSpeed = 2.0;
+    // public static final double simulationDuration = 60;
+    public int vehicleDistanceLimit = 20;
+    public int vehicleToSpotDistanceLimit = 20;
+
+    public int vehicleLength1 = 16;
+    public int vehicleLength2 = 26;
+    public int vehicleLength3 = 30;
+    public int vehicleLength4 = 40;
+
+    public double minSpeed = 0.7;
+    public double maxSpeed = 2.0;
+
+    public Constants(int vehicleLength) {
+       
+        double ratio = vehicleLength / 16.0;
+        vehicleLength1 = (int)vehicleLength;
+        vehicleLength2 *= ratio;
+        vehicleLength3 *= ratio;
+        vehicleLength4 *= ratio;
+        
+        System.out.println(ratio);
+        
+        minSpeed *= ratio;
+        maxSpeed *= ratio;
+        
+        vehicleDistanceLimit *= ratio;
+        vehicleToSpotDistanceLimit *= ratio;
+        
+    }
+
 }

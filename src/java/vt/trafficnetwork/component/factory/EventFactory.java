@@ -26,8 +26,8 @@ public class EventFactory {
 
 
     public EventFactory() {
-        //nextDouble() chooses between 100 and 700 (600 time frame = 10 seconds)
-        this.random = new UniformRandom(100, 400);
+        //nextDouble() chooses between 100 and 400 (600 time frame = 10 seconds)
+        this.random = new UniformRandom(120, 360);
         numberOfVehicles = 0;
         sumOfVehicleCreationTime = 0;
     }

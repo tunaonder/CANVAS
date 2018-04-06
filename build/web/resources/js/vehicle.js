@@ -6,7 +6,12 @@
 /* global THREE, scene, vehicles, mapFinishY */
 var degree = Math.PI / 180;
 
-var vehicleLength = 25;
+var vehicleLength = 16;
+
+var lengthRatio;
+var vehicleLength2 = 26;
+var vehicleLength3 = 30;
+var vehicleLength4 = 40;
 
 //Vehicle Images
 var vehicleTextures = ['resources/images/Hatchback_red.png', 'resources/images/Blue_Porshe.png', 'resources/images/Porsche_black.png', 'resources/images/Porsche_blue.png',
@@ -42,41 +47,59 @@ function createNewVehicle(event) {
     var targetX = event.targetX;
     var targetY = event.targetY;
     var rotation = event.rotation;
-
+    
     //Choose a Random Index According to the length of the new vehicle
     //If it is short, it is standart vehicle
     //According to random index, set the vehicle texture
-    if (length === 16) {
+    var vehicleImagePath;
+    if (length === vehicleLength) {
         var index = Math.floor((Math.random() * 8));
-        vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[index]);
-    } else if (length === 26) {
+        vehicleImagePath = vehicleTextures[index];
+    } else if (length === vehicleLength2) {
         var index = Math.floor((Math.random() * 2));
-        vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[8 + index]);
+        vehicleImagePath = vehicleTextures[8 + index];
 
-    } else if (length === 30) {
-        vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[10]);
+    } else if (length === vehicleLength3) {
+        vehicleImagePath = vehicleTextures[10];
+    } else if (length === vehicleLength4) {
+        vehicleImagePath = vehicleTextures[11];
     } else {
-        vehicleTexture = THREE.ImageUtils.loadTexture(vehicleTextures[11]);
+        return;
     }
 
-    //Create Mesh
-    vehicleMaterial = new THREE.MeshBasicMaterial({map: vehicleTexture, transparent: true});
+    vehicleTexture = THREE.ImageUtils.loadTexture(vehicleImagePath);
 
-    var vehicleGeometry = new THREE.PlaneBufferGeometry(vehicleWidth, length, 0);
+    var img = new Image();
+    img.onload = function () {
+        var height = img.height;
+        var width = img.width;
+        var ratio = width / height;
 
-    //Vehicle is also a Three.js mesh
-    Vehicle.prototype = new THREE.Mesh();
-    var vehicle = new Vehicle(vehicleGeometry, vehicleMaterial, vehicleId, speed, length, rotation, x, y, targetX, targetY);
+        //Create Mesh
+        vehicleMaterial = new THREE.MeshBasicMaterial({map: vehicleTexture, transparent: true});
 
-    //Set the Positions in the scene
-    vehicle.position.x = vehicle.x;
-    vehicle.position.y = vehicle.y;
-    //Set vehicle rotation
-    vehicle.rotation.z = vehicle.carRotation + degree * 90;
+        var vehicleGeometry = new THREE.PlaneBufferGeometry(length * ratio, length, 0);
 
-    //Add to the scene and vehicle array
-    scene.add(vehicle);
-    vehicles.push(vehicle);
+        //Vehicle is also a Three.js mesh
+        Vehicle.prototype = new THREE.Mesh();
+        var vehicle = new Vehicle(vehicleGeometry, vehicleMaterial, vehicleId, speed, length, rotation, x, y, targetX, targetY);
+
+        //Set the Positions in the scene
+        vehicle.position.x = vehicle.x;
+        vehicle.position.y = vehicle.y;
+        //Set vehicle rotation
+        vehicle.rotation.z = vehicle.carRotation + degree * 90;
+
+        //Add to the scene and vehicle array
+        scene.add(vehicle);
+        vehicles.push(vehicle);
+
+    };
+
+    img.src = vehicleImagePath;
+
+
+
 
 }
 
@@ -161,7 +184,7 @@ function destroyVehicle(event) {
 }
 
 function createExampleVehicle(newVehicleMode) {
-    
+
     // exampleVehicle is not null if page is already loaded
     if (exampleVehicle !== null) {
         // Remove the existing vehicle

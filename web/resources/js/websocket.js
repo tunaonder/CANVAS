@@ -4,7 +4,7 @@
  */
 
 
-/* global moveSpotObjects, eventQueue */
+/* global moveSpotObjects, eventQueue, vehicleLength */
 
 //var socket = new WebSocket("ws://shark.cs.vt.edu/TrafficSimulator/actions");
 var socket = new WebSocket("ws://localhost:8080/TrafficSimulator/actions");
@@ -37,9 +37,18 @@ function startSimulation() {
 
     var simulationModel = [];
     
+    lengthRatio = vehicleLength / 16;
+    vehicleLength2 =  Math.floor(vehicleLength2 * lengthRatio);
+    vehicleLength3 = Math.floor(vehicleLength3 * lengthRatio);
+    vehicleLength4 = Math.floor(vehicleLength4 * lengthRatio);
+    
+    console.log(lengthRatio);
+   
+    
     // Add Simulation duration before model components
     simulationModel.push({
-        "duration": simDuration
+        "duration": simDuration,
+        "vehicleLength": vehicleLength
     });
 
     for (var i = 0; i < moveSpotObjects.length; i++) {

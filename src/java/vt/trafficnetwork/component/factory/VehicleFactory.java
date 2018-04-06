@@ -20,10 +20,27 @@ public class VehicleFactory {
     
     //Defines Numerical id of new car
     private int producedVehicleCount;
+    
+    private double minSpeed;
+    private double maxSpeed;
+    private int vehicleLength1;
+    private int vehicleLength2;
+    private int vehicleLength3;
+    private int vehicleLength4;
 
     public VehicleFactory() {
         this.random = new UniformRandom();
         this.producedVehicleCount = 0;
+    }
+    
+    public void setFactoryConstants(Constants simulationConstants){
+        minSpeed = simulationConstants.minSpeed;
+        maxSpeed = simulationConstants.maxSpeed;
+        vehicleLength1 = simulationConstants.vehicleLength1;
+        vehicleLength2 = simulationConstants.vehicleLength2;
+        vehicleLength3 = simulationConstants.vehicleLength3;
+        vehicleLength4 = simulationConstants.vehicleLength4;
+        
     }
 
     public Vehicle getNewVehicle(EnterPoint factoryOwner) {
@@ -35,26 +52,25 @@ public class VehicleFactory {
         String id = "d" + producedVehicleCount + factoryOwner.getId();
 
         //Get random speed
-        double speed = random.nextDouble(Constants.minSpeed, Constants.maxSpeed);
+        double speed = random.nextDouble(minSpeed, maxSpeed);
         
         double length;
         
         int lengthGenerator = (int)random.nextDouble(1, 12);
         
         if(lengthGenerator < 9){
-            length = Constants.vehicleLength1;
+            length = vehicleLength1;
         }
         else if(lengthGenerator == 9){
-            length = Constants.vehicleLength2;
+            length = vehicleLength2;
         }
         else if(lengthGenerator == 10){
-            length = Constants.vehicleLength3;
+            length = vehicleLength3;
         }
         else{
-            length = Constants.vehicleLength4;
+            length = vehicleLength4;
         }
-        
-        
+             
         //Set the length later
         Vehicle vehicle = new Vehicle(id, factoryOwner.getX(), factoryOwner.getY(), speed,
                 factoryOwner, factoryOwner.getNext(), length);

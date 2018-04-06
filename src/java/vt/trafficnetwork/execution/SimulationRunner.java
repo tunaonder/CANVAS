@@ -30,6 +30,7 @@ public class SimulationRunner {
         
         // First object of the simulation model has simulation duration information
         String simDuration = ((JsonObject) modelData.get(0)).getString("duration");
+        int vehicleLength = ((JsonObject) modelData.get(0)).getInt("vehicleLength");
         
         try {            
             //Build Simulation Model for Simulation instance to be ready to start
@@ -44,7 +45,7 @@ public class SimulationRunner {
         try {
             
             int duration = Integer.parseInt(simDuration);
-            sim.start(duration);
+            sim.start(duration, vehicleLength);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
