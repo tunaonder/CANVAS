@@ -42,9 +42,6 @@ function startSimulation() {
     vehicleLength3 = Math.floor(vehicleLength3 * lengthRatio);
     vehicleLength4 = Math.floor(vehicleLength4 * lengthRatio);
     
-    console.log(lengthRatio);
-   
-    
     // Add Simulation duration before model components
     simulationModel.push({
         "duration": simDuration,

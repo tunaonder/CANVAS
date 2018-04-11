@@ -8,7 +8,7 @@
 //Array Of Current Vehicles 
 var vehicles = [];
 
-var eventCountRequestLimit = 500;
+var eventCountRequestLimit = 100;
 
 //Earliest Event
 var earliestEvent;

@@ -633,7 +633,7 @@ public class SimulationRuntime {
         }
         //System.out.println(vehicle.getId() + " new speed " + vehicle.getTempSpeed());
 
-        //If vehicle cannot move with the same speed, change its speed
+        //If vehicle cannot move with the same speed, change its speed        
         messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
 
         return true;

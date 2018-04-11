@@ -111,6 +111,7 @@ public class Vehicle extends DynamicObject {
     /**
      * Calculates the distance with this vehicle and the next one
      * and checks the distance
+     * @param vehicleDistanceLimit
      * @return 
      */
     public boolean canMoveWithSameSpeed(int vehicleDistanceLimit) {

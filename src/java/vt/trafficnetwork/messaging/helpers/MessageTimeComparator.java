@@ -11,23 +11,13 @@ import java.util.Comparator;
  * @author Onder
  */
 public class MessageTimeComparator implements Comparator<Message> {
-    
+
     @Override
     public int compare(Message m1, Message m2) {
-        if(m1.getTime() < m2.getTime()) return -1;
-        else if(m1.getTime() > m2.getTime()) return 1;
-        else{
-
-            
-//            if(m1.getJSONObject().get("action").equals("createVehicle") &&  m2.getJSONObject().get("action").equals("changeSpeed")){
-//                return 1;
-//            }
-//            else if(m2.getJSONObject().get("action").equals("createVehicle") &&  m1.getJSONObject().get("action").equals("changeSpeed")){
-//                return -1;
-//            }
-            
-            
-            
+        if (m1.getTime() < m2.getTime()) {
+            return -1;
+        } else if (m1.getTime() > m2.getTime()) {
+            return 1;
         }
         return 0;
 

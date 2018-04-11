@@ -68,35 +68,43 @@ function createNewVehicle(event) {
     }
 
     vehicleTexture = THREE.ImageUtils.loadTexture(vehicleImagePath);
+    vehicleMaterial = new THREE.MeshBasicMaterial({map: vehicleTexture, transparent: true});
+    
+    // This is a simple hack. Width to height ratio is accepted as 1/2
+    // However it might change from vehicle to vehicle
+    // The ratio is updated when vehicle image is loaded
+    // This hack is required because image is loaded asychronously
+    var vehicleGeometry = new THREE.PlaneBufferGeometry(length * 1 / 2, length, 0);
 
+    var newVehicle;
+    //Vehicle is also a Three.js mesh
+    Vehicle.prototype = new THREE.Mesh();
+    newVehicle = new Vehicle(vehicleGeometry, vehicleMaterial, vehicleId, speed, length, rotation, x, y, targetX, targetY);
+
+    //Set the Positions in the scene
+    newVehicle.position.x = newVehicle.x;
+    newVehicle.position.y = newVehicle.y;
+    //Set vehicle rotation
+    newVehicle.rotation.z = newVehicle.carRotation + degree * 90;
+
+    //Add to the scene and vehicle array
+    scene.add(newVehicle);
+    vehicles.push(newVehicle); 
+    
+    // Get the Width/Height ratio from the image
+    // Update the vehicle geometry
     var img = new Image();
     img.onload = function () {
         var height = img.height;
         var width = img.width;
         var ratio = width / height;
 
-        //Create Mesh
-        vehicleMaterial = new THREE.MeshBasicMaterial({map: vehicleTexture, transparent: true});
-
         var vehicleGeometry = new THREE.PlaneBufferGeometry(length * ratio, length, 0);
-
-        //Vehicle is also a Three.js mesh
-        Vehicle.prototype = new THREE.Mesh();
-        var vehicle = new Vehicle(vehicleGeometry, vehicleMaterial, vehicleId, speed, length, rotation, x, y, targetX, targetY);
-
-        //Set the Positions in the scene
-        vehicle.position.x = vehicle.x;
-        vehicle.position.y = vehicle.y;
-        //Set vehicle rotation
-        vehicle.rotation.z = vehicle.carRotation + degree * 90;
-
-        //Add to the scene and vehicle array
-        scene.add(vehicle);
-        vehicles.push(vehicle);
-
+        newVehicle.geometry = vehicleGeometry;
     };
 
     img.src = vehicleImagePath;
+    
 
 
 
@@ -144,10 +152,17 @@ function changeVehicleSpeed(event) {
     var vehicleId = event.vehicleId;
     var speed = event.speed;
 
+
+    if(vehicleId === 'd7s1'){
+                console.log(event.vehicleId + ' changeSpeed ' + event.time + ' ' + event.speed);
+            }
     for (var i = 0; i < vehicles.length; i++) {
 
         if (vehicleId === vehicles[i].vehicleId) {
-
+            if(vehicleId === 'd7s1'){
+                console.log(event.vehicleId + ' changeSpeed ' + event.time + ' ' + event.speed);
+            }
+            
             vehicles[i].speed = speed;
 
             break;

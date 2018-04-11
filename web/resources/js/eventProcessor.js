@@ -146,7 +146,7 @@ function processCurrentEvent(event) {
     } else if (event.type === "changeDirection") {
         changeVehicleDirection(event);
 
-    } else if (event.type === "changeSpeed") {
+    } else if (event.type === "changeSpeed") {        
         changeVehicleSpeed(event);
 
     } else if (event.type === "vehicleDestroy") {
