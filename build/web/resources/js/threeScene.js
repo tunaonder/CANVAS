@@ -134,10 +134,10 @@ function onDocumentMouseDown(event) {
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
 
         //If the Mode is Convert To Fork or Convert to Merge
-        if (mode === 'forkButton' || mode === 'mergeButton') {
-            moveSpotClicked(event);
+        
+        if (moveSpotClicked(event)) {
             return;
-        }
+        }     
 
         //Check If The New Spot is very close to Current Spot. If it is do not add the spot
         if (currentMoveSpot !== null) {

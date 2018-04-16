@@ -27,6 +27,8 @@ var moveSpotColor = 0xffff00;
 var forkColor = 0x0000ff;
 var mergeColor = 0x9932CC;
 
+var lastClickedTrafficLightId = 'none';
+
 //Standart Move Spot 
 function MoveSpot(geometry, material, id, x, y, nextId, prevId, type) {
     THREE.Mesh.call(this, geometry, material);
@@ -141,8 +143,6 @@ function trafficLightInsert(xCoord, yCoord, objectId, greenStartTime, greenDurat
         material = new THREE.MeshBasicMaterial({color: trafficLightRed});
     }
 
-    //Create A New Fork Containing clicked MoveSpot Info
-    TrafficLight.prototype = new MoveSpot();
     var trafficLight = new TrafficLight(geometry, material, objectId, xCoord,
             yCoord, 0, 0, "TrafficLight", greenStartTime, greenDuration, redDuration);
 
@@ -158,6 +158,7 @@ function trafficLightInsert(xCoord, yCoord, objectId, greenStartTime, greenDurat
 
     //Add to the Scene
     scene.add(trafficLight);
+    trafficLight.callback = trafficLightCallback;
 }
 
 function moveSpotInsert(xCoord, yCoord, objectId) {
@@ -272,7 +273,89 @@ function moveSpotCallback() {
         currentMoveSpot = null;
 
         alert('Move Spot is Converted to Merge');
+    }    
+}
+
+function trafficLightCallback(){
+        // Display Traffic Light Form
+        if (document.getElementById("trafficLightForm").style.display === 'none') {
+            document.getElementById("trafficLightForm").style.display = 'inline';
+            document.getElementById("trafficLightChangeButton").style.display = 'inline';
+            document.getElementById("trafficLightForm:greenStartTime").value = this.greenStartTime;
+            document.getElementById("trafficLightForm:greenDuration").value = this.greenDuration;
+            document.getElementById("trafficLightForm:redDuration").value = this.redDuration;
+            lastClickedTrafficLightId = this.objectId;
+            
+        } else {
+            document.getElementById("trafficLightForm").style.display = 'none';
+            document.getElementById("trafficLightChangeButton").style.display = 'none';
+            document.getElementById("trafficLightForm:greenStartTime").value = "";
+            document.getElementById("trafficLightForm:greenDuration").value = "";
+            document.getElementById("trafficLightForm:redDuration").value = "";
+            lastClickedTrafficLightId = 'none';
+        }
+    
+}
+
+// This Method is Called to update an existing Traffic Light
+function saveTrafficLightChanges(){
+    // If a traffic light is not selected return
+    if(lastClickedTrafficLightId === 'none') return;
+    
+    var greenStartTime = document.getElementById("trafficLightForm:greenStartTime").value;
+    var greenDuration = document.getElementById("trafficLightForm:greenDuration").value;
+    var redDuration = document.getElementById("trafficLightForm:redDuration").value;
+    
+    // Check values
+    if (greenStartTime === "" || greenDuration === "" || redDuration === "") {
+        alert("Please Fill Traffic Light Details");
+        return;
     }
+
+    var isNumber1 = greenStartTime.match(/^\d+$/);
+    var isNumber2 = greenDuration.match(/^\d+$/);
+    var isNumber3 = redDuration.match(/^\d+$/);
+    if (!isNumber1 || !isNumber2 || !isNumber3) {
+        alert("Traffic Light Details is not valid");
+        return;
+    }
+
+    if (greenStartTime < 0 || greenDuration <= 0 || redDuration <= 0) {
+        alert("Time cannot be smaller than 0");
+        return;
+    }  
+    
+    // Find the traffic light object
+    var trafficLight;
+    for(var i = 0; i<moveSpotObjects.length; i++){
+        if(lastClickedTrafficLightId === moveSpotObjects[i].objectId){
+            trafficLight = moveSpotObjects[i];
+            break;
+        }
+    }
+    
+    // Update traffic light values
+    trafficLight.greenStartTime = greenStartTime;
+    trafficLight.redDuration = redDuration;
+    trafficLight.greenDuration = greenDuration;   
+    if (greenStartTime === '0') {
+        material = new THREE.MeshBasicMaterial({color: trafficLightGreen});
+    } else {
+        material = new THREE.MeshBasicMaterial({color: trafficLightRed});
+    }
+    trafficLight.material = material;
+    
+    // Hide the Settings Display
+    document.getElementById("trafficLightForm").style.display = 'none';
+    document.getElementById("trafficLightChangeButton").style.display = 'none';
+    document.getElementById("trafficLightForm:greenStartTime").value = "";
+    document.getElementById("trafficLightForm:greenDuration").value = "";
+    document.getElementById("trafficLightForm:redDuration").value = "";
+    lastClickedTrafficLightId = 'none';
+    
+    alert('Traffic Light is successfully updated!');
+
+    
 }
 
 /**
@@ -295,7 +378,9 @@ function moveSpotClicked(event) {
 
     if (intersects.length > 0) {
         intersects[0].object.callback();
+        return true;
     }
+    return false;
 }
 
 //Removes The Last Added Move Spot
@@ -413,7 +498,7 @@ function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId,
         material = new THREE.MeshBasicMaterial({color: trafficLightRed});
     }
 
-    TrafficLight.prototype = new MoveSpot();
+    // TrafficLight.prototype = new MoveSpot();
     var trafficLight = new TrafficLight(geometry, material, objectId, xCoord,
             yCoord, nextId, prevId, "TrafficLight", greenStartTime, greenDuration, redDuration);
 
@@ -423,6 +508,7 @@ function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId,
     moveSpotObjects.push(trafficLight);
     //Add to the Scene
     scene.add(trafficLight);
+    trafficLight.callback = trafficLightCallback;
 }
 
 function forkFromSavedModel(objectId, xCoord, yCoord, prevMoveSpotId,

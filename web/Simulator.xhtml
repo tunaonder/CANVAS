@@ -30,8 +30,8 @@
                 <button id="mergeButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Merge</button>
                 <button id="removeButton" class="btn panelButton" onClick="removeMoveSpot();"> Remove Last</button>
                 <button id="hideButton" class="btn panelButton" onClick="hideShowModelDetails(this);"> Hide Spots</button>
+                
                 <h:form id="trafficLightForm" style="display: none;">
-
                     <label class="controlLabel">Set Traffic Light</label>
                     <h:panelGrid columns="2" cellpadding="5" columnClasses="trafficLight-label, trafficLight-input">
                         <h:outputLabel for="greenStartTime" value="Green Start Time: " />
@@ -40,8 +40,9 @@
                         <h:inputText a:placeholder="15 seconds" id="greenDuration" class="form-control" />
                         <p:outputLabel for="redDuration" value="Red Duration: " />
                         <h:inputText a:placeholder="45 seconds" id="redDuration" class="form-control"  />
-                    </h:panelGrid>
+                    </h:panelGrid>                    
                 </h:form>
+                <button id="trafficLightChangeButton" class="btn panelButton" onClick="saveTrafficLightChanges();" style="display: none;"> Save Changes </button>
                 <br/>
                 <div id="zoomDiv">                   
                     <label class="controlLabel">Vehicle Size</label>                        
