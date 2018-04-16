@@ -21,9 +21,8 @@ public class SimulationRunner {
     public SimulationRunner(String sessionIdentifier) {
 
         //Build the simulation model using the data sent by client
-        this.simulationBuilder = new SimulationBuilder();        
+        this.simulationBuilder = new SimulationBuilder(sessionIdentifier);        
         this.sim = new Simulator(sessionIdentifier);
-
     }
 
     public void execute(JsonArray modelData) {
@@ -32,9 +31,10 @@ public class SimulationRunner {
         String simDuration = ((JsonObject) modelData.get(0)).getString("duration");
         int vehicleLength = ((JsonObject) modelData.get(0)).getInt("vehicleLength");
         
+        boolean buildSuccess;
         try {            
             //Build Simulation Model for Simulation instance to be ready to start
-            simulationBuilder.buildModel(modelData, sim);
+            buildSuccess = simulationBuilder.buildModel(modelData, sim);
         
         } catch (Exception e) {
             System.err.println(e);
@@ -42,8 +42,10 @@ public class SimulationRunner {
             return;
         }
         
-        try {
-            
+        // If Simulation is not built, return.
+        if(!buildSuccess) return;
+        
+        try {            
             int duration = Integer.parseInt(simDuration);
             sim.start(duration, vehicleLength);
 

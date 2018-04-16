@@ -78,7 +78,7 @@ function enterPointInsert(xCoord, yCoord, objectId) {
     var material = new THREE.MeshBasicMaterial({color: enterPointColor});
 
     //Set The Id Of Next Object
-    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, 0, "EnterPoint");
+    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, "none", "none", "EnterPoint");
 
     //position.x and position.y defines the coordinates of the MESH. It is related to Three.js
     //x and y holds the coordinate info
@@ -107,7 +107,7 @@ function exitPointInsert(xCoord, yCoord, objectId) {
     var material = new THREE.MeshBasicMaterial({color: exitPointColor});
 
     //Set The Id Of Next Object
-    var exitPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, 0, "ExitPoint");
+    var exitPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, "none", "none", "ExitPoint");
 
     //position.x and position.y defines the coordinates of the MESH. It is related to Three.js
     //x and y holds the coordinate info
@@ -167,7 +167,7 @@ function moveSpotInsert(xCoord, yCoord, objectId) {
     MoveSpot.prototype = new THREE.Mesh();
 
     //Set the id of the next object
-    var addedMoveSpot = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, 0, "Standart");
+    var addedMoveSpot = new MoveSpot(geometry, material, objectId, xCoord, yCoord, "none", "none", "Standart");
 
     addedMoveSpot.position.x = addedMoveSpot.x;
     addedMoveSpot.position.y = addedMoveSpot.y;
@@ -189,6 +189,11 @@ function moveSpotCallback() {
 
     //If Mode is FORK
     if (mode === 'forkButton') {
+        if(this.nextMoveSpotId === 'none'){
+            alert('Error: A static object must have a next object before converting to a Fork!');
+            return;
+        }
+        
         var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
         var material = new THREE.MeshBasicMaterial({color: forkColor});
 
@@ -196,7 +201,7 @@ function moveSpotCallback() {
         Fork.prototype = new MoveSpot();
 
         //Set the Next Object Id - 1, because alternativeId will be the Next Object of this object
-        var fork = new Fork(geometry, material, this.objectId, this.x, this.y, -1, this.prevMoveSpotId, "Fork");
+        var fork = new Fork(geometry, material, this.objectId, this.x, this.y, "none", this.prevMoveSpotId, "Fork");
         //Set the Alternative Next Move Spot Id
         fork.nextMoveSpotAlternativeId = this.nextMoveSpotId;
 
@@ -226,6 +231,16 @@ function moveSpotCallback() {
 
 
     } else if (mode === 'mergeButton') {
+        if (this.nextMoveSpotId === 'none') {
+            alert('Error: A static object must have a next object before converting to a Merge!');
+            return;
+        }
+        if(currentMoveSpot === null){
+            alert('Error: The clicked object cannot be converted into a Merge since there is not a valid previous object!');
+            return;     
+        }
+        
+        
         var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
         var material = new THREE.MeshBasicMaterial({color: mergeColor});
 
@@ -335,7 +350,7 @@ function enterPointFromSavedModel(xCoord, yCoord, objectId, nextId) {
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: enterPointColor});
 
-    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, nextId, 0, "EnterPoint");
+    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, nextId, "none", "EnterPoint");
 
     startPoint.position.x = startPoint.x;
     startPoint.position.y = startPoint.y;
@@ -355,7 +370,7 @@ function exitPointFromSavedModel(xCoord, yCoord, objectId, prevId) {
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: exitPointColor});
 
-    var exitPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, 0, prevId, "ExitPoint");
+    var exitPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, "none", prevId, "ExitPoint");
 
     exitPoint.position.x = exitPoint.x;
     exitPoint.position.y = exitPoint.y;

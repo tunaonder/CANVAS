@@ -152,22 +152,11 @@ function changeVehicleSpeed(event) {
     var vehicleId = event.vehicleId;
     var speed = event.speed;
 
-
-    if(vehicleId === 'd7s1'){
-                console.log(event.vehicleId + ' changeSpeed ' + event.time + ' ' + event.speed);
-            }
     for (var i = 0; i < vehicles.length; i++) {
 
-        if (vehicleId === vehicles[i].vehicleId) {
-            if(vehicleId === 'd7s1'){
-                console.log(event.vehicleId + ' changeSpeed ' + event.time + ' ' + event.speed);
-            }
-            
+        if (vehicleId === vehicles[i].vehicleId) {            
             vehicles[i].speed = speed;
-
             break;
-
-
         }
 
     }

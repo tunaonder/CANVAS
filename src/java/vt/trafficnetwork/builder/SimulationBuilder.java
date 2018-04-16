@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.spi.JsonProvider;
 import vt.trafficnetwork.component.EnterPoint;
 import vt.trafficnetwork.component.ExitPoint;
 import vt.trafficnetwork.component.Fork;
@@ -16,6 +17,7 @@ import vt.trafficnetwork.component.MoveSpot;
 import vt.trafficnetwork.component.TrafficLight;
 import vt.trafficnetwork.component.helpers.StaticObject;
 import vt.trafficnetwork.execution.Simulator;
+import vt.trafficnetwork.websocket.SimulationSessionHandler;
 
 /**
  * This Class Builds The Simulation Model with the Model Information sent by the Client
@@ -24,16 +26,23 @@ import vt.trafficnetwork.execution.Simulator;
 public class SimulationBuilder {
 
     Map objects;
+    private final String sessionIdentifier;
 
-    public SimulationBuilder() {
+    public SimulationBuilder(String sessionIdentifier) {
         objects = new HashMap();
+        this.sessionIdentifier = sessionIdentifier;
+        
     }
 
-    public void buildModel(JsonArray modelData, Simulator sim) throws Exception {
-
+    public boolean buildModel(JsonArray modelData, Simulator sim) throws Exception {
+        
+        int enterPointCount = 0;
+        int exitPointCount = 0;
+        
+        
         System.out.println("==Simulation Model Build Start==");
         
-        // First Read Each Json Object and Create Static Objects According to JSON Object Type
+        // First, Read Each Json Object and Create Static Objects According to JSON Object Type
         // First object of model data is saved for non-component information such as simulation duration
         for (int i = 1; i < modelData.size(); i++) {
             
@@ -60,12 +69,14 @@ public class SimulationBuilder {
 
                     object = new EnterPoint(id, x, y);
                     objects.put(object.getId(), object);
+                    enterPointCount ++;
 
                     break;
                 case "ExitPoint":
 
                     object = new ExitPoint(id, x, y);
                     objects.put(object.getId(), object);
+                    exitPointCount++;
 
                     break;
 
@@ -97,6 +108,18 @@ public class SimulationBuilder {
             }
 
         }
+        
+        // Check if Model has at least one Enter point
+        if(enterPointCount == 0){
+            sendErrorMessage("Missing Enter Point");
+            return false;            
+        }
+        // Check if Model has at least one Exit point
+        if(exitPointCount == 0){
+             sendErrorMessage("Missing Exit Point");
+            return false;            
+        }
+        
 
         //Second, Set the Connection Between Objects and add them to runtime
         // First object of model data is saved for non-component information such as simulation duration
@@ -106,30 +129,43 @@ public class SimulationBuilder {
 
             String id = spot.getString("objectId");
 
-            String prevId;
-            String nextId;
+            String prevId = "";
+            String nextId = "";
             //Used For Fork
             String alternativeNextId;
              //Used For Merge
             String alternativePrevId;
 
-            StaticObject prev;
-            StaticObject next;
+            StaticObject prev = null;
+            StaticObject next = null;
             //Only For Fork Objects
             StaticObject next2;
             //Only For Merge Objects
             StaticObject prev2;
+            
+            if(!spot.getString("type").equals("ExitPoint")){
+                nextId = spot.getString("nextId"); 
+                if(nextId.equals("none")){
+                    String numberId = id.substring(1);
+                    sendErrorMessage("Object " + numberId + " does not have a valid next object!");
+                    return false;
+                }   
+                next = (StaticObject) objects.get(nextId);                            
+            }
+            else if(!spot.getString("type").equals("EnterPoint")){
+                prevId = spot.getString("prevId");
+                if(prevId.equals("none")){
+                    String numberId = id.substring(1);
+                    sendErrorMessage("Object " + numberId + " does not have a valid previous object!");
+                    return false;
+                }  
+                prev = (StaticObject) objects.get(prevId);            
+            }
 
             switch (spot.getString("type")) {
 
                 //Standart type has prev and next objects
                 case "Standart":
-                    prevId = spot.getString("prevId");
-                    nextId = spot.getString("nextId");
-
-                    prev = (StaticObject) objects.get(prevId);
-                    next = (StaticObject) objects.get(nextId);
-
                     MoveSpot moveSpot = (MoveSpot) objects.get(id);
                     moveSpot.setPrev(prev);
                     moveSpot.setNext(next);
@@ -138,12 +174,16 @@ public class SimulationBuilder {
 
                     break;
                 case "Fork":
-                    prevId = spot.getString("prevId");
-                    nextId = spot.getString("nextId");
+
                     alternativeNextId = spot.getString("alternativeNextId");
 
-                    prev = (StaticObject) objects.get(prevId);
-                    next = (StaticObject) objects.get(nextId);
+                    if (alternativeNextId.equals("none") || alternativeNextId.equals(nextId) || nextId.equals(prevId)
+                            || alternativeNextId.equals(prevId)) {
+                        String numberId = id.substring(1);
+                        sendErrorMessage("Objet" + numberId + " is not a valid Fork");
+                        return false;
+                    }
+
                     next2 = (StaticObject) objects.get(alternativeNextId);
 
                     Fork fork = (Fork) objects.get(id);
@@ -156,14 +196,17 @@ public class SimulationBuilder {
                     break;
                     
                 case "Merge":
-                    prevId = spot.getString("prevId");
-                    nextId = spot.getString("nextId");
+
                     alternativePrevId = spot.getString("alternativePrevId");
 
-                    prev = (StaticObject) objects.get(prevId);
-                    next = (StaticObject) objects.get(nextId);
-                    prev2 = (StaticObject) objects.get(alternativePrevId);
+                    if (alternativePrevId.equals("none") || alternativePrevId.equals(prevId) || nextId.equals(prevId)
+                            || alternativePrevId.equals(nextId)) {
+                        String numberId = id.substring(1);
+                        sendErrorMessage("Objet" + numberId + " is not a valid Merge");
+                        return false;
+                    }
 
+                    prev2 = (StaticObject) objects.get(alternativePrevId);
                     Merge merge = (Merge) objects.get(id);
                     merge.setPrev(prev);
                     merge.setNext(next);
@@ -176,10 +219,6 @@ public class SimulationBuilder {
                 //EnterPoint has next object
                 case "EnterPoint":
 
-                    nextId = spot.getString("nextId");
-
-                    next = (StaticObject) objects.get(nextId);
-
                     EnterPoint enterPoint = (EnterPoint) objects.get(id);
                     enterPoint.setNext(next);
 
@@ -189,9 +228,6 @@ public class SimulationBuilder {
 
                 //Exit point has prev object    
                 case "ExitPoint":
-                    prevId = spot.getString("prevId");
-
-                    prev = (StaticObject) objects.get(prevId);
 
                     ExitPoint exitPoint = (ExitPoint) objects.get(id);
                     exitPoint.setPrev(prev);
@@ -200,29 +236,7 @@ public class SimulationBuilder {
 
                     break;
                 case "TrafficLight":
-                    
-                    prevId = spot.getString("prevId");
-                    nextId = spot.getString("nextId");
-//                    String stateInfo = spot.getString("state");
-
-                    prev = (StaticObject) objects.get(prevId);
-                    next = (StaticObject) objects.get(nextId);
-
                     TrafficLight light = (TrafficLight) objects.get(id);
-                    
-                    
-//                    if(stateInfo.equals("Green")){
-//                        light.setState(TrafficLight.STATE.GREEN);
-//                        
-//                    }else if(stateInfo.equals("Red")){
-//                        light.setState(TrafficLight.STATE.RED);
-//                       
-//                    }
-//                    else{
-//                       
-//                        throw new Exception("Traffic Light is Invalid");
-//                        
-//                    }
                     light.setPrev(prev);
                     light.setNext(next);
 
@@ -236,5 +250,23 @@ public class SimulationBuilder {
 
         }
         System.out.println("==Simulation Model Build Final--");
+
+        // Send Success Message To Client
+        JsonProvider provider = JsonProvider.provider();
+        JsonObject message = provider.createObjectBuilder()
+                .add("action", "buildSuccess")
+                .build();
+        SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message);
+        return true;
     }
+    
+    private void sendErrorMessage(String errorDetail){
+                     JsonProvider provider = JsonProvider.provider();
+             JsonObject errorMessage = provider.createObjectBuilder()
+                .add("action", "buildError")
+                .add("errorDetail", errorDetail)
+                .build();
+            SimulationSessionHandler.sendMessageToClient(sessionIdentifier, errorMessage);        
+    }
+   
 }

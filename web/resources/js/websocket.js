@@ -114,12 +114,6 @@ function startSimulation() {
         }
     }
 
-    //Start Rendering
-    simulationIsRunning = true;
-
-    //Set The Button Styling to Green Background
-    document.getElementById('startStopButton').style.background = "green";
-
     socket.send(JSON.stringify(simulationModel));
 }
 

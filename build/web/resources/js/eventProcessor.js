@@ -8,6 +8,7 @@
 
 //Event Id. Will be Incremented for each received message
 var eventId = 0;
+var buildErrorInfo = 'Simulation Could not be Built!';
 
 // Vehicle Create Event
 function Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, targetY, eventId) {
@@ -129,6 +130,16 @@ function processEvent(event) {
         var lightId = event.lightId;
         var newEvent = new Event5(type, time, lightId);
         eventQueue.push(newEvent, time);
+    }
+    
+    else if (event.action === "buildError") {
+
+        var errorDetail = event.errorDetail;
+        alert(buildErrorInfo + '\nError: ' + errorDetail);
+    }
+    else if (event.action === "buildSuccess") {
+        //Start Rendering
+        simulationIsRunning = true;
     }
 
 }

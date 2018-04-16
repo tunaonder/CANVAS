@@ -220,7 +220,6 @@ public class SimulationRuntime {
     protected void addObject(StaticObject object) {
 
         staticObjects.put(object.getId(), object);
-
         if (object instanceof EnterPoint) {
             enterPoints.put(object.getId(), (EnterPoint) object);
         } else if (object instanceof TrafficLight) {
