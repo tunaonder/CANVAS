@@ -32,6 +32,8 @@ var mapFinishY;
 //Object Id will be incremented for each added objects
 var objectId = 0;
 
+var staticObjectDisplay = true;
+
 //Set The When Application Displays the Map
 function setScene() {
 
@@ -394,4 +396,25 @@ function zoomIn(){
 
 function zoomOut(){
     camera.position.z = camera.position.z * 1.05;
+}
+
+function hideShowModelDetails(button){
+    if (staticObjectDisplay) {
+        for (var i = 0; i < moveSpotObjects.length; i++) {
+            var obj = moveSpotObjects[i];
+            if (obj.type !== "TrafficLight") {
+                obj.visible = false;
+            }
+        }
+        staticObjectDisplay = false;
+        button.innerText= 'Display Spots';
+    }
+    else{
+        for (var i = 0; i < moveSpotObjects.length; i++) {
+            moveSpotObjects[i].visible = true;
+        }
+        staticObjectDisplay = true;
+        button.innerText = 'Hide Spots';
+    }
+    
 }
