@@ -20,10 +20,15 @@ public class EnterPoint extends StaticObject{
     //Each Enter Point has a Vehicle Factory
     private VehicleFactory factory;
     
-    public EnterPoint(String id, double x, double y) {
+    private final int minGenerationTime;
+    private final int maxGenerationTime;
+    
+    public EnterPoint(String id, double x, double y, int minTime, int maxTime) {
         super(id,x,y);
         this.factory = new VehicleFactory();
         this.next = null;
+        this.minGenerationTime = minTime;
+        this.maxGenerationTime = maxTime;
     }
 
     public StaticObject getNext() {
@@ -46,10 +51,13 @@ public class EnterPoint extends StaticObject{
         return factory.getNewVehicle(this);
     }
 
+    public int getMinGenerationTime() {
+        return minGenerationTime;
+    }
 
-    
-    
-    
-    
+    public int getMaxGenerationTime() {
+        return maxGenerationTime;
+    }
+
 
 }

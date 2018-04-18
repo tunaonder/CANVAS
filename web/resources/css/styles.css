@@ -83,13 +83,19 @@ body{
     margin-top: 20px; 
 }
 
-.trafficLight-label {
+.trafficLight-label .enterPoint-label {
     padding-right: 10px;
 }
 
 .trafficLight-input input {
     display: block;
     width: 120px;
+    margin-top: 10px;  
+}
+
+.enterPoint-input input {
+    display: block;
+    width: 100px;
     margin-top: 10px;  
 }
 

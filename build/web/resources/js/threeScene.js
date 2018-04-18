@@ -133,8 +133,7 @@ function onDocumentMouseDown(event) {
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
 
-        //If the Mode is Convert To Fork or Convert to Merge
-        
+        //If the Mode is Convert To Fork or Convert to Merge       
         if (moveSpotClicked(event)) {
             return;
         }     
@@ -150,8 +149,40 @@ function onDocumentMouseDown(event) {
         }
 
         if (mode === 'enterPointButton') {
+            var minTime = document.getElementById("enterPointForm:minVehicleGenerationTime").value;
+            var maxTime = document.getElementById("enterPointForm:maxVehicleGenerationTime").value;
+
+            if (minTime === "" || maxTime === "") {
+                alert("Please Fill Enter Point Details");
+                return;
+            }
+
+            var isNumber1 = minTime.match(/^\d+$/);
+            var isNumber2 = maxTime.match(/^\d+$/);
+            if (!isNumber1 || !isNumber2) {
+                alert("Enter Point Details is not valid");
+                return;
+            }
+
+            if (minTime <= 0 || maxTime <= 0) {
+                alert("Time cannot be zero or negative");
+                return;
+            }
+            
+            if (minTime > maxTime) {
+                alert("Minimum time cannot be bigger than maximum time!");
+                return;
+            }
+
             objectId++;
-            enterPointInsert(vector.x, vector.y, 's' + objectId);
+            enterPointInsert(vector.x, vector.y, 's' + objectId, minTime, maxTime);
+
+            document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
+            document.getElementById("enterPointForm").style.display = 'none';
+            document.getElementById("enterPointButton").style.background = "white";
+            mode = ''; 
+            
         } else if (mode === 'moveSpotButton') {
             objectId++;
             moveSpotInsert(vector.x, vector.y, 's' + objectId);
@@ -226,6 +257,15 @@ function buttonClicked(id) {
             document.getElementById("trafficLightForm:greenStartTime").value = "";
             document.getElementById("trafficLightForm:greenDuration").value = "";
             document.getElementById("trafficLightForm:redDuration").value = "";
+        }
+    } else if (id === 'enterPointButton') {
+        // Display Traffic Light Form
+        if (document.getElementById("enterPointForm").style.display === 'none') {
+            document.getElementById("enterPointForm").style.display = 'inline';
+        } else {
+            document.getElementById("enterPointForm").style.display = 'none';
+            document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
         }
     }
 }
@@ -307,7 +347,9 @@ function saveModel() {
                 "objectId": object.objectId,
                 "x": xRelativeLocation,
                 "y": yRelativeLocation,
-                "nextId": object.nextMoveSpotId
+                "nextId": object.nextMoveSpotId,
+                "minTime": object.minTime,
+                "maxTime": object.maxTime
             });
 
         } else if (object.type === "ExitPoint") {
@@ -358,7 +400,7 @@ function retrieveModel() {
         var xCoord = xRatio * (mapFinishX - mapStartX) + mapStartX;
         var yCoord = yRatio * (mapFinishY - mapStartY) + mapStartY;
         if (spot.type === 'EnterPoint') {
-            enterPointFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId);
+            enterPointFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId, spot.minTime, spot.maxTime);
         } else if (spot.type === 'ExitPoint') {
             exitPointFromSavedModel(xCoord, yCoord, spot.objectId, spot.prevId);
         } else if (spot.type === 'Standart') {

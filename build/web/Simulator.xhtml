@@ -43,6 +43,19 @@
                     </h:panelGrid>                    
                 </h:form>
                 <button id="trafficLightChangeButton" class="btn panelButton" onClick="saveTrafficLightChanges();" style="display: none;"> Save Changes </button>
+                
+                <h:form id="enterPointForm" style="display: none;">
+                    <label class="controlLabel">Vehicle Generation Timing</label>
+                    <h:panelGrid columns="2" cellpadding="5" columnClasses=", enterPoint-input">
+                        <p:outputLabel for="minVehicleGenerationTime" value="Random Time Minimum:" />
+                        <h:inputText a:placeholder="2 seconds" id="minVehicleGenerationTime" class="form-control" />
+                        <p:outputLabel for="maxVehicleGenerationTime" value="Random Time Maximum:" />
+                        <h:inputText a:placeholder="5 seconds" id="maxVehicleGenerationTime" class="form-control" />
+                    </h:panelGrid>                    
+                </h:form>
+                <button id="enterPointChangeButton" class="btn panelButton" onClick="saveEnterPointChanges();" style="display: none;"> Save Changes </button>
+                
+                
                 <br/>
                 <div id="zoomDiv">                   
                     <label class="controlLabel">Vehicle Size</label>                        

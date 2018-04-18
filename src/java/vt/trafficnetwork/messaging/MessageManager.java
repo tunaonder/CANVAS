@@ -26,7 +26,7 @@ public class MessageManager {
     private int messageCount;
 
     private final int messageQueueStorageLimit = 500;
-    private final int messageCountLimitPerRequest = 100;
+    private final int messageCountLimitPerRequest = 200;
 
     private final MessageList messageList;
 

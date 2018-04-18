@@ -20,20 +20,22 @@ import vt.trafficnetwork.execution.random.UniformRandom;
  */
 public class EventFactory {
     
-    private final RandomVariate random;
     private int numberOfVehicles;
     private long sumOfVehicleCreationTime;
 
 
     public EventFactory() {
-        //nextDouble() chooses between 100 and 400 (600 time frame = 10 seconds)
-        this.random = new UniformRandom(120, 360);
         numberOfVehicles = 0;
         sumOfVehicleCreationTime = 0;
     }
     
 
     public Event scheduleVehicleCreation(EnterPoint enterPoint, int currentTime) {
+        
+        // A time frame is 1/60 seconds
+        // Generation Times are provided in terms of seconds
+        RandomVariate random = new UniformRandom(enterPoint.getMinGenerationTime()*60, 
+                 enterPoint.getMaxGenerationTime()*60);
         //Get random creation time
         int time = (int)random.nextDouble() + currentTime;
                

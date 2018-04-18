@@ -66,8 +66,10 @@ public class SimulationBuilder {
 
                     break;
                 case "EnterPoint":
-
-                    object = new EnterPoint(id, x, y);
+                    int minTime = Integer.parseInt(spot.getString("minTime"));
+                    int maxTime = Integer.parseInt(spot.getString("maxTime"));
+                    
+                    object = new EnterPoint(id, x, y, minTime, maxTime);
                     objects.put(object.getId(), object);
                     enterPointCount ++;
 

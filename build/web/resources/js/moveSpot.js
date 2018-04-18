@@ -28,6 +28,7 @@ var forkColor = 0x0000ff;
 var mergeColor = 0x9932CC;
 
 var lastClickedTrafficLightId = 'none';
+var lastClickedEnterPointId = 'none';
 
 //Standart Move Spot 
 function MoveSpot(geometry, material, id, x, y, nextId, prevId, type) {
@@ -66,35 +67,42 @@ function TrafficLight(geometry, material, id, x, y, nextId, prevId,
     }
 }
 
+function EnterPoint(geometry, material, id, x, y, nextId, prevId, type, minTime, maxTime){
+    MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
+    this.minTime = minTime;
+    this.maxTime = maxTime;    
+}
+
 //This Methold is called to add an enter Point
 // xCoord: 
 // yCoord: 
-function enterPointInsert(xCoord, yCoord, objectId) {
+function enterPointInsert(xCoord, yCoord, objectId, minTime, maxTime) {
 
     //Create Enter Point   
     //Set MoveSpot as a child of Mesh
-    MoveSpot.prototype = new THREE.Mesh();
+    EnterPoint.prototype = new THREE.Mesh();
 
     //Create The Geometry and the material for the Mesh
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: enterPointColor});
 
     //Set The Id Of Next Object
-    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, "none", "none", "EnterPoint");
+    var enterPoint = new EnterPoint(geometry, material, objectId, xCoord, yCoord, "none", "none", "EnterPoint", minTime, maxTime);
 
     //position.x and position.y defines the coordinates of the MESH. It is related to Three.js
     //x and y holds the coordinate info
-    startPoint.position.x = startPoint.x;
-    startPoint.position.y = startPoint.y;
+    enterPoint.position.x = enterPoint.x;
+    enterPoint.position.y = enterPoint.y;
 
     //Set the Current Spot
-    currentMoveSpot = startPoint;
+    currentMoveSpot = enterPoint;
 
     //Push it To the Queue
-    moveSpotObjects.push(startPoint);
+    moveSpotObjects.push(enterPoint);
 
     //Add to the Three.js Scene
-    scene.add(startPoint);
+    scene.add(enterPoint);
+    enterPoint.callback = enterPointCallback;
 
 }
 
@@ -297,6 +305,25 @@ function trafficLightCallback(){
     
 }
 
+function enterPointCallback(){
+        // Display Traffic Light Form
+        if (document.getElementById("enterPointForm").style.display === 'none') {
+            document.getElementById("enterPointForm").style.display = 'inline';
+            document.getElementById("enterPointChangeButton").style.display = 'inline';
+            document.getElementById("enterPointForm:minVehicleGenerationTime").value = this.minTime;
+            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = this.maxTime;
+            lastClickedEnterPointId = this.objectId;
+            
+        } else {
+            document.getElementById("enterPointForm").style.display = 'none';
+            document.getElementById("enterPointChangeButton").style.display = 'none';
+            document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
+            lastClickedEnterPointId = 'none';
+        }
+    
+}
+
 // This Method is Called to update an existing Traffic Light
 function saveTrafficLightChanges(){
     // If a traffic light is not selected return
@@ -355,7 +382,62 @@ function saveTrafficLightChanges(){
     
     alert('Traffic Light is successfully updated!');
 
-    
+}
+
+// This Method is Called to update an existing Enter Point
+function saveEnterPointChanges(){
+    // If a traffic light is not selected return
+    if (lastClickedEnterPointId === 'none')
+        return;
+
+    var minTime = document.getElementById("enterPointForm:minVehicleGenerationTime").value;
+    var maxTime = document.getElementById("enterPointForm:maxVehicleGenerationTime").value;
+
+    if (minTime === "" || maxTime === "") {
+        alert("Please Fill Enter Point Details");
+        return;
+    }
+
+    var isNumber1 = minTime.match(/^\d+$/);
+    var isNumber2 = maxTime.match(/^\d+$/);
+    if (!isNumber1 || !isNumber2) {
+        alert("Enter Point Details is not valid");
+        return;
+    }
+
+    if (minTime <= 0 || maxTime <= 0) {
+        alert("Time cannot be zero or negative");
+        return;
+    }
+
+    if (minTime > maxTime) {
+        alert("Minimum time cannot be bigger than maximum time!");
+        return;
+    }
+
+    // Find the traffic light object
+    var enterPoint;
+    for (var i = 0; i < moveSpotObjects.length; i++) {
+        if (lastClickedEnterPointId === moveSpotObjects[i].objectId) {
+            enterPoint = moveSpotObjects[i];
+            break;
+        }
+    }
+
+    // Update traffic light values
+    enterPoint.minTime = minTime;
+    enterPoint.maxTime = maxTime;
+
+
+    // Hide the Settings Display
+    document.getElementById("enterPointForm").style.display = 'none';
+    document.getElementById("enterPointChangeButton").style.display = 'none';
+    document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+    document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+    lastClickedEnterPointId = 'none';
+
+    alert('Enter Point is successfully updated!');
+
 }
 
 /**
@@ -394,8 +476,14 @@ function removeMoveSpot() {
     scene.remove(currentMoveSpot);
     //Remove From the Array
     moveSpotObjects.splice(-1, 1);
-    //Set the new Current Move Spot
-    currentMoveSpot = moveSpotObjects[moveSpotObjects.length - 1];
+    
+    if(moveSpotObjects.length === 0){
+        currentMoveSpot = null;
+    }
+    else{
+        //Set the new Current Move Spot
+        currentMoveSpot = moveSpotObjects[moveSpotObjects.length - 1];
+    } 
 }
 
 /**
@@ -427,24 +515,25 @@ function changeTrafficLightState(event) {
 
 // RETRIEVE MODEL FUNCTIONS
 
-function enterPointFromSavedModel(xCoord, yCoord, objectId, nextId) {
+function enterPointFromSavedModel(xCoord, yCoord, objectId, nextId, minTime, maxTime) {
 
-    MoveSpot.prototype = new THREE.Mesh();
+    EnterPoint.prototype = new THREE.Mesh();
 
     //Create The Geometry and the material for the Mesh
     var geometry = new THREE.CircleGeometry(enterExitRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: enterPointColor});
 
-    var startPoint = new MoveSpot(geometry, material, objectId, xCoord, yCoord, nextId, "none", "EnterPoint");
+    var enterPoint = new EnterPoint(geometry, material, objectId, xCoord, yCoord, nextId, "none", "EnterPoint", minTime, maxTime);
 
-    startPoint.position.x = startPoint.x;
-    startPoint.position.y = startPoint.y;
+    enterPoint.position.x = enterPoint.x;
+    enterPoint.position.y = enterPoint.y;
 
     //Push it To the Queue
-    moveSpotObjects.push(startPoint);
+    moveSpotObjects.push(enterPoint);
 
     //Add to the Three.js Scene
-    scene.add(startPoint);
+    scene.add(enterPoint);
+    enterPoint.callback = enterPointCallback;
 
 }
 

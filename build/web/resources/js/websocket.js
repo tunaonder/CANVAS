@@ -87,7 +87,9 @@ function startSimulation() {
                 "objectId": object.objectId,
                 "x": object.x,
                 "y": object.y,
-                "nextId": object.nextMoveSpotId
+                "nextId": object.nextMoveSpotId,
+                "minTime": object.minTime,
+                "maxTime": object.maxTime
             });
 
         } else if (object.type === "ExitPoint") {
