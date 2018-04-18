@@ -571,6 +571,18 @@ public class SimulationRuntime {
                         return false;
 
                     }
+                    else{
+                        // If spot after the traffic light is occupied do not move
+                        StaticObject spotAfterTrafficLight = ((TrafficLight) target).getNext();
+                        if (!spotAfterTrafficLight.getOccupierId().equals("")) {
+                            if (vehicle.getTempSpeed() != 0) {
+                                vehicle.setTempSpeed(0);
+                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                            }
+                            return false;
+                        }
+                        
+                    }
 
                     //Check if Target Is Occupied By Another Vehicle
                     if (vehicle.isSpotOccupiedByAnotherVehicle(target)) {
