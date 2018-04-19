@@ -29,6 +29,7 @@ var mergeColor = 0x9932CC;
 
 var lastClickedTrafficLightId = 'none';
 var lastClickedEnterPointId = 'none';
+var lastClickedForkId = 'none';
 
 //Standart Move Spot 
 function MoveSpot(geometry, material, id, x, y, nextId, prevId, type) {
@@ -43,8 +44,9 @@ function MoveSpot(geometry, material, id, x, y, nextId, prevId, type) {
 }
 
 // Fork extends Move Spot. Has an Alternative Next Spot
-function Fork(geometry, material, id, x, y, nextId, prevId, type) {
+function Fork(geometry, material, id, x, y, nextId, prevId, type, newPathProbability) {
     MoveSpot.call(this, geometry, material, id, x, y, nextId, prevId, type);
+    this.newPathProbability = newPathProbability;
     this.nextMoveSpotAlternativeId = null;
 }
 
@@ -198,19 +200,39 @@ function moveSpotCallback() {
 
     //If Mode is FORK
     if (mode === 'forkButton') {
-        if(this.nextMoveSpotId === 'none'){
+        if (this.nextMoveSpotId === 'none') {
             alert('Error: A static object must have a next object before converting to a Fork!');
             return;
         }
         
+        var newPathProbability = document.getElementById("convertToForkForm:forkNewPathProbability").value;
+
+        // Check values
+        if (newPathProbability === "") {
+            alert("Please Fill Fork Details");
+            return;
+        }
+
+        var isNumber = newPathProbability.match(/^\d+$/);
+        if (!isNumber) {
+            alert("Fork Details is not valid");
+            return;
+        }
+
+        if (newPathProbability <= 0 || newPathProbability >= 100) {
+            alert("Fork Path Selection Probability must be a number between 0 and 100");
+            return;
+        }
+
         var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
         var material = new THREE.MeshBasicMaterial({color: forkColor});
 
         //Create A New Fork Containing clicked MoveSpot Info
-        Fork.prototype = new MoveSpot();
+        Fork.prototype = new THREE.Mesh();
 
-        //Set the Next Object Id - 1, because alternativeId will be the Next Object of this object
-        var fork = new Fork(geometry, material, this.objectId, this.x, this.y, "none", this.prevMoveSpotId, "Fork");
+        //Set the Next Object Id none, because alternativeId will be the Next Object of this object
+        var fork = new Fork(geometry, material, this.objectId, this.x,
+                this.y, "none", this.prevMoveSpotId, "Fork", newPathProbability);
         //Set the Alternative Next Move Spot Id
         fork.nextMoveSpotAlternativeId = this.nextMoveSpotId;
 
@@ -234,9 +256,13 @@ function moveSpotCallback() {
         scene.add(fork);
         //Remove The MoveSpot
         scene.remove(this);
-
+        
+        fork.callback = forkCallback;
 
         alert('MoveSpot is Converted To Fork');
+        
+        document.getElementById("convertToForkForm").style.display = 'none';
+        document.getElementById("convertToForkForm:forkNewPathProbability").value = "";
 
 
     } else if (mode === 'mergeButton') {
@@ -253,9 +279,8 @@ function moveSpotCallback() {
         var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
         var material = new THREE.MeshBasicMaterial({color: mergeColor});
 
-        Merge.prototype = new MoveSpot();
+        Merge.prototype = new THREE.Mesh();
         var merge = new Merge(geometry, material, this.objectId, this.x, this.y, this.nextMoveSpotId, this.prevMoveSpotId, "Merge");
-
 
         merge.prevMoveSpotAlternativeId = currentMoveSpot.objectId;
         currentMoveSpot.nextMoveSpotId = merge.objectId;
@@ -284,43 +309,59 @@ function moveSpotCallback() {
     }    
 }
 
-function trafficLightCallback(){
-        // Display Traffic Light Form
-        if (document.getElementById("trafficLightForm").style.display === 'none') {
-            document.getElementById("trafficLightForm").style.display = 'inline';
-            document.getElementById("trafficLightChangeButton").style.display = 'inline';
-            document.getElementById("trafficLightForm:greenStartTime").value = this.greenStartTime;
-            document.getElementById("trafficLightForm:greenDuration").value = this.greenDuration;
-            document.getElementById("trafficLightForm:redDuration").value = this.redDuration;
-            lastClickedTrafficLightId = this.objectId;
-            
-        } else {
-            document.getElementById("trafficLightForm").style.display = 'none';
-            document.getElementById("trafficLightChangeButton").style.display = 'none';
-            document.getElementById("trafficLightForm:greenStartTime").value = "";
-            document.getElementById("trafficLightForm:greenDuration").value = "";
-            document.getElementById("trafficLightForm:redDuration").value = "";
-            lastClickedTrafficLightId = 'none';
-        }
-    
+function trafficLightCallback() {
+    // Display Traffic Light Form
+    if (document.getElementById("trafficLightForm").style.display === 'none') {
+        document.getElementById("trafficLightForm").style.display = 'inline';
+        document.getElementById("trafficLightChangeButton").style.display = 'inline';
+        document.getElementById("trafficLightForm:greenStartTime").value = this.greenStartTime;
+        document.getElementById("trafficLightForm:greenDuration").value = this.greenDuration;
+        document.getElementById("trafficLightForm:redDuration").value = this.redDuration;
+        lastClickedTrafficLightId = this.objectId;
+
+    } else {
+        document.getElementById("trafficLightForm").style.display = 'none';
+        document.getElementById("trafficLightChangeButton").style.display = 'none';
+        document.getElementById("trafficLightForm:greenStartTime").value = "";
+        document.getElementById("trafficLightForm:greenDuration").value = "";
+        document.getElementById("trafficLightForm:redDuration").value = "";
+        lastClickedTrafficLightId = 'none';
+    }
+
 }
 
-function enterPointCallback(){
-        // Display Traffic Light Form
-        if (document.getElementById("enterPointForm").style.display === 'none') {
-            document.getElementById("enterPointForm").style.display = 'inline';
-            document.getElementById("enterPointChangeButton").style.display = 'inline';
-            document.getElementById("enterPointForm:minVehicleGenerationTime").value = this.minTime;
-            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = this.maxTime;
-            lastClickedEnterPointId = this.objectId;
-            
-        } else {
-            document.getElementById("enterPointForm").style.display = 'none';
-            document.getElementById("enterPointChangeButton").style.display = 'none';
-            document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
-            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
-            lastClickedEnterPointId = 'none';
-        }
+function enterPointCallback() {
+    // Display Traffic Light Form
+    if (document.getElementById("enterPointForm").style.display === 'none') {
+        document.getElementById("enterPointForm").style.display = 'inline';
+        document.getElementById("enterPointChangeButton").style.display = 'inline';
+        document.getElementById("enterPointForm:minVehicleGenerationTime").value = this.minTime;
+        document.getElementById("enterPointForm:maxVehicleGenerationTime").value = this.maxTime;
+        lastClickedEnterPointId = this.objectId;
+
+    } else {
+        document.getElementById("enterPointForm").style.display = 'none';
+        document.getElementById("enterPointChangeButton").style.display = 'none';
+        document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+        document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
+        lastClickedEnterPointId = 'none';
+    }
+
+}
+
+function forkCallback(){
+    if (document.getElementById("convertToForkForm").style.display === 'none') {
+        document.getElementById("convertToForkForm").style.display = 'inline';
+        document.getElementById("convertForkChangeButton").style.display = 'inline';
+        document.getElementById("convertToForkForm:forkNewPathProbability").value = this.newPathProbability;
+        lastClickedForkId = this.objectId;
+
+    } else {
+        document.getElementById("convertForkChangeButton").style.display = 'none';
+        document.getElementById("convertToForkForm").style.display = 'none';
+        document.getElementById("convertToForkForm:forkNewPathProbability").value = "";
+        lastClickedForkId = 'none';
+    }
     
 }
 
@@ -415,7 +456,6 @@ function saveEnterPointChanges(){
         return;
     }
 
-    // Find the traffic light object
     var enterPoint;
     for (var i = 0; i < moveSpotObjects.length; i++) {
         if (lastClickedEnterPointId === moveSpotObjects[i].objectId) {
@@ -437,6 +477,45 @@ function saveEnterPointChanges(){
     lastClickedEnterPointId = 'none';
 
     alert('Enter Point is successfully updated!');
+
+}
+
+function saveConvertForkChanges() {
+    var newPathProbability = document.getElementById("convertToForkForm:forkNewPathProbability").value;
+
+    // Check values
+    if (newPathProbability === "") {
+        alert("Please Fill Fork Details");
+        return;
+    }
+
+    var isNumber = newPathProbability.match(/^\d+$/);
+    if (!isNumber) {
+        alert("Fork Details is not valid");
+        return;
+    }
+
+    if (newPathProbability <= 0 || newPathProbability >= 100) {
+        alert("Fork Path Selection Probability must be a number between 0 and 100");
+        return;
+    }
+    
+    var fork;
+    for (var i = 0; i < moveSpotObjects.length; i++) {
+        if (lastClickedForkId === moveSpotObjects[i].objectId) {
+            fork = moveSpotObjects[i];
+            break;
+        }
+    }
+    
+    fork.newPathProbability = newPathProbability;
+    
+    document.getElementById("convertForkChangeButton").style.display = 'none';
+    document.getElementById("convertToForkForm").style.display = 'none';
+    document.getElementById("convertToForkForm:forkNewPathProbability").value = "";
+    lastClickedForkId = 'none';
+    
+    alert('Fork is successfully updated!');
 
 }
 
@@ -587,7 +666,6 @@ function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId,
         material = new THREE.MeshBasicMaterial({color: trafficLightRed});
     }
 
-    // TrafficLight.prototype = new MoveSpot();
     var trafficLight = new TrafficLight(geometry, material, objectId, xCoord,
             yCoord, nextId, prevId, "TrafficLight", greenStartTime, greenDuration, redDuration);
 
@@ -601,14 +679,14 @@ function trafficLightFromSavedModel(xCoord, yCoord, objectId, nextId, prevId,
 }
 
 function forkFromSavedModel(objectId, xCoord, yCoord, prevMoveSpotId,
-        nextMoveSpotId, nextAlternativeMoveSpotId) {
+        nextMoveSpotId, nextAlternativeMoveSpotId, newPathProbability) {
 
     var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: forkColor});
 
-    Fork.prototype = new MoveSpot();
+    Fork.prototype = new THREE.Mesh();
 
-    var fork = new Fork(geometry, material, objectId, xCoord, yCoord, nextMoveSpotId, prevMoveSpotId, "Fork");
+    var fork = new Fork(geometry, material, objectId, xCoord, yCoord, nextMoveSpotId, prevMoveSpotId, "Fork", newPathProbability);
 
     fork.nextMoveSpotAlternativeId = nextAlternativeMoveSpotId;
 
@@ -619,6 +697,8 @@ function forkFromSavedModel(objectId, xCoord, yCoord, prevMoveSpotId,
     moveSpotObjects.push(fork);
 
     scene.add(fork);
+    
+    fork.callback = forkCallback;
 
 }
 
@@ -627,7 +707,7 @@ function mergeFromSavedModel(objectId, xCoord, yCoord, prevId, nextId, alternati
     var geometry = new THREE.CircleGeometry(moveSpotRadius, 32);
     var material = new THREE.MeshBasicMaterial({color: mergeColor});
 
-    Merge.prototype = new MoveSpot();
+    Merge.prototype = new THREE.Mesh();
     var merge = new Merge(geometry, material, objectId, xCoord, yCoord, nextId, prevId, "Merge");
     merge.prevMoveSpotAlternativeId = alternativePrevId;
 

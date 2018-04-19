@@ -132,7 +132,6 @@ function onDocumentMouseDown(event) {
 
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
-
         //If the Mode is Convert To Fork or Convert to Merge       
         if (moveSpotClicked(event)) {
             return;
@@ -268,6 +267,14 @@ function buttonClicked(id) {
             document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
         }
     }
+    else if (id === 'forkButton') {
+        if (document.getElementById("convertToForkForm").style.display === 'none') {
+            document.getElementById("convertToForkForm").style.display = 'inline';
+
+        } else {
+            document.getElementById("convertToForkForm").style.display = 'none';
+        }
+    }
 }
 
 /*
@@ -329,7 +336,8 @@ function saveModel() {
                 "y": yRelativeLocation,
                 "nextId": object.nextMoveSpotId,
                 "prevId": object.prevMoveSpotId,
-                "alternativeNextId": object.nextMoveSpotAlternativeId
+                "alternativeNextId": object.nextMoveSpotAlternativeId,
+                "newPathProbability": object.newPathProbability
             });
         } else if (object.type === "Merge") {
             staticObjects.push({
@@ -409,7 +417,7 @@ function retrieveModel() {
             trafficLightFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId, spot.prevId,
                     spot.greenStartTime, spot.greenDuration, spot.redDuration);
         } else if (spot.type === 'Fork') {
-            forkFromSavedModel(spot.objectId, xCoord, yCoord, spot.prevId, spot.nextId, spot.alternativeNextId);
+            forkFromSavedModel(spot.objectId, xCoord, yCoord, spot.prevId, spot.nextId, spot.alternativeNextId, spot.newPathProbability);
         }
         else if (spot.type === 'Merge') {
             mergeFromSavedModel(spot.objectId, xCoord, yCoord, spot.prevId, spot.nextId, spot.alternativePrevId);

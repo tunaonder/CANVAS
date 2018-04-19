@@ -69,7 +69,8 @@ function startSimulation() {
                 "y": object.y,
                 "nextId": object.nextMoveSpotId,
                 "prevId": object.prevMoveSpotId,
-                "alternativeNextId": object.nextMoveSpotAlternativeId
+                "alternativeNextId": object.nextMoveSpotAlternativeId,
+                "newPathProbability": object.newPathProbability
             });
         } else if (object.type === "Merge") {
             simulationModel.push({

@@ -377,8 +377,8 @@ public class SimulationRuntime {
                         StaticObject nextSpot;
 
                         Random rand = new Random();
-                        int randomInt = rand.nextInt(2);
-                        if (randomInt == 0) {
+                        int randomInt = rand.nextInt(100) + 1;
+                        if (randomInt <= spot.getNewPathProbability()) {
                             nextSpot = spot.getNext();
                         } else {
                             nextSpot = spot.getNextAlternative();

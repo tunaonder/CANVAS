@@ -83,8 +83,8 @@ public class SimulationBuilder {
                     break;
 
                 case "Fork":
-
-                    object = new Fork(id, x, y);
+                    int newPathProbability = Integer.parseInt(spot.getString("newPathProbability"));
+                    object = new Fork(id, x, y, newPathProbability);
                     objects.put(object.getId(), object);
 
                     break;

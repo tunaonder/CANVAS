@@ -16,9 +16,11 @@ public class Fork extends StaticObject{
     private StaticObject next;
     //Fork Objects has an alternative Next Spot that is different than Move Spots
     private StaticObject nextAlternative;
+    private final int newPathProbability;
 
-    public Fork(String id, double x, double y) {
+    public Fork(String id, double x, double y, int newPathProbability) {
         super(id, x, y);  
+        this.newPathProbability = newPathProbability;
     }
 
     public StaticObject getPrev() {
@@ -44,7 +46,9 @@ public class Fork extends StaticObject{
     public void setNextAlternative(StaticObject nextAlternative) {
         this.nextAlternative = nextAlternative;
     }
-    
-    
-    
+
+    public int getNewPathProbability() {
+        return newPathProbability;
+    }
+
 }

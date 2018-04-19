@@ -87,16 +87,29 @@ body{
     padding-right: 10px;
 }
 
-.trafficLight-input input {
+.trafficLight-input{
     display: block;
     width: 120px;
-    margin-top: 10px;  
+    margin-top: 10px;
+    margin-left: 10px;
 }
 
-.enterPoint-input input {
+.enterPoint-input{
     display: block;
     width: 100px;
-    margin-top: 10px;  
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.fork-label{
+    margin-right: -40px;
+}
+
+.fork-input{
+    display: block;
+    width: 100px;
+    margin-top: 10px;
+    margin-right: 20px;
 }
 
 .simulationCommandsColumn1{
