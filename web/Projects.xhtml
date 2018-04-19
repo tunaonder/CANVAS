@@ -19,7 +19,7 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
         <ui:define name="editableContent">
 
             <div align="center" >
-                <h:form>
+                <h:form id="projectForm">
                     <p:growl id="msgs" showDetail="true" />           
 
                     <br/>
@@ -38,10 +38,57 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                     <br/>
                     <p:commandButton id="selectProjectButton" value="Select Project" 
                                      class="btn btn-default" update="msgs" action="#{projectManager.selectProject()}"/>
-                    <p:button id="createProjectButton" value=" Create Project" 
-                              class="btn btn-default" outcome="NewProject"/>
+                    <p:commandButton id="makePublicButton" value="Make Project Public" class="btn btn-default"
+                                     action="#{projectManager.makeProjectPublic()}" update="publicProjectForm:publicProjectList"/>
+                    <br/>
+                    <p:button id="createProjectButton" value="Create Project" 
+                              class="btn btn-default" outcome="NewProject" style="margin-top: 10px;"/>
+
+                             
+
+                    <br/>
+                    <br/>
+                    <br/>
                 </h:form>
+                <h:form id="publicProjectForm">
+                    <p:growl id="msgs2" showDetail="true" />  
+                    <div>
+                        <p:orderList id="publicProjectList" value="#{projectManager.publicProjectNames}" var="project" controlsLocation="none"
+                                     itemLabel="#{project}" itemValue="#{project}">
+                            <f:facet name="caption">Public Projects</f:facet>
+                            <p:ajax event="select" listener="#{projectManager.onSelect2}" update="msgs2"/>
+                        </p:orderList>
+
+                        <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                        <p:dialog header="Set Project Name" widgetVar="dlg" resizable="false">
+                            <h:panelGrid columns="2" cellpadding="5" style="margin-top: 10px;">
+                                <h:outputLabel for="projectName" value="Name:" />
+                                <p:inputText id="projectName" value="#{projectManager.publicToMyProjectsProjectName}" required="true" label="projectName" />
+
+                                <f:facet name="footer">
+                                    <p:commandButton value="Add" update="growl projectForm:projectList" actionListener="#{projectManager.addToMyProjects()}"
+                                                     oncomplete="handleLoginRequest(args)" style="margin-top: 30px;"/>
+                                </f:facet>  
+                            </h:panelGrid>
+                        </p:dialog>
+
+                    </div>
+                    <br/>
+                    <p:commandButton id="selectPublicProjectButton" value="Add to My Projects" 
+                                     class="btn btn-default" update="msgs2" onclick="PF('dlg').show();"/>
+
+                </h:form>                
             </div>
+
+            <script type="text/javascript">
+                function handleLoginRequest(args) {
+                    if (args.validationFailed) {
+                        PF('dlg').jq.effect("shake", {times: 5}, 100);
+                    } else {
+                        PF('dlg').hide();
+                    }
+                }
+            </script>
 
         </ui:define>
     </ui:composition>

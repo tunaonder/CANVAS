@@ -1,5 +1,5 @@
 /*
- * Created by Sait Tuna Onder on 2018.03.21  * 
+ * Created by Sait Tuna Onder on 2018.04.18  * 
  * Copyright © 2018 Sait Tuna Onder. All rights reserved. * 
  */
 package vt.trafficsimulator.entityclasses;

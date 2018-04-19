@@ -46,5 +46,15 @@ public class ProjectFacade extends AbstractFacade<Project> {
 
         return projects;
     }
+    
+    public List<Project> findPublicProjects(){  
+        
+         List<Project> projects = em.createNamedQuery("Project.findByPublicProject")
+                 .setParameter("publicProject", true)
+                 .getResultList();
+        
+        return projects;
+        
+    }
 
 }

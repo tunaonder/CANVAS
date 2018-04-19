@@ -69,6 +69,13 @@ public class ProjectManager implements Serializable {
     private String selectedProjectName;
     private String selectedProjectMap;
     private String simulationModelData = "";
+    
+    private List<Project> publicProjects;
+    private List<String> publicProjectNames;
+    private String selectedPublicProjectName;
+    
+    private String publicToMyProjectsProjectName = "";
+    
 
     @PostConstruct
     public void init() {
@@ -81,6 +88,8 @@ public class ProjectManager implements Serializable {
         for (int i = 0; i < userProjects.size(); i++) {
             userProjectNames.add(userProjects.get(i).getProjectname());
         }
+        getPublicProjectsFromFacade();
+
     }
 
     /*
@@ -154,10 +163,57 @@ public class ProjectManager implements Serializable {
         this.userProjectNames = userProjectNames;
     }
 
+    public List<Project> getPublicProjects() {
+        return publicProjects;
+    }
+
+    public void setPublicProjects(List<Project> publicProjects) {
+        this.publicProjects = publicProjects;
+    }
+
+    public List<String> getPublicProjectNames() {
+        return publicProjectNames;
+    }
+
+    public void setPublicProjectNames(List<String> publicProjectNames) {
+        this.publicProjectNames = publicProjectNames;
+    }
+
+    public String getPublicToMyProjectsProjectName() {
+        return publicToMyProjectsProjectName;
+    }
+
+    public void setPublicToMyProjectsProjectName(String publicToMyProjectsProjectName) {
+        this.publicToMyProjectsProjectName = publicToMyProjectsProjectName;
+    }
+
+    public String getSelectedPublicProjectName() {
+        return selectedPublicProjectName;
+    }
+
+    public void setSelectedPublicProjectName(String selectedPublicProjectName) {
+        this.selectedPublicProjectName = selectedPublicProjectName;
+    }
+    
+    public void getPublicProjectsFromFacade(){
+        publicProjects = getProjectFacade().findPublicProjects();
+        publicProjectNames = new ArrayList<>();
+        for (int i = 0; i < publicProjects.size(); i++) {
+            Project proj = publicProjects.get(i);
+            publicProjectNames.add(proj.getProjectname());
+        }       
+    }
+
     public void onSelect(SelectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Selected!", event.getObject().toString()));
         selectedProjectName = event.getObject().toString();
+    }
+    
+    public void onSelect2(SelectEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Public Project Selected!", event.getObject().toString()));
+        selectedPublicProjectName = event.getObject().toString();
     }
 
     public String selectProject() {
@@ -179,6 +235,55 @@ public class ProjectManager implements Serializable {
 
         return "Simulator.xhtml?faces-redirect=true";
     }
+    
+    public void makeProjectPublic(){
+        if (selectedProjectName.equals("")) {
+            resultMsg = new FacesMessage("Please select a project!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return;
+        }
+        
+        Project project = projectFacade.findByProjectName(selectedProjectName).get(0);
+        project.setPublicProject(true);
+        
+        getProjectFacade().edit(project);
+        
+        getPublicProjectsFromFacade();
+        
+    }
+    
+    public void addToMyProjects(){
+
+        if (publicToMyProjectsProjectName.equals("")){
+            return;
+        }
+        
+        List<Project> projectsFound = getProjectFacade().findByProjectName(publicToMyProjectsProjectName);
+        if (projectsFound != null  && !projectsFound.isEmpty()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Name already exists! Please Select another name!", ""));
+            return;
+        }
+        
+        Project proj = projectFacade.findByProjectName(selectedPublicProjectName).get(0);
+        
+        Project newProject = new Project(publicToMyProjectsProjectName, proj.getMapname(), user);
+        getProjectFacade().create(newProject);
+        
+        SimulationModel model = simulationModelFacade.findSimulationModelByProjectId(proj.getId());
+        SimulationModel newModel = new SimulationModel(model.getModeldata(), newProject);
+        
+        simulationModelFacade.create(newModel);
+             
+        // Update Current Projects Dynamically
+        userProjects = getProjectFacade().findProjectsByUserID(user.getId());
+        userProjectNames = new ArrayList<>();
+        for (int i = 0; i < userProjects.size(); i++) {
+            userProjectNames.add(userProjects.get(i).getProjectname());
+        }
+        
+    }
+    
 
     public String createProject() {
 
@@ -188,7 +293,7 @@ public class ProjectManager implements Serializable {
             return "";
 
         }
-
+        
         List<Project> projectsFound = getProjectFacade().findByProjectName(newProjectName);
         if (!projectsFound.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
