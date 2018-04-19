@@ -102,14 +102,13 @@ body{
 }
 
 .fork-label{
-    margin-right: -40px;
+    margin-right: 20px;
 }
 
 .fork-input{
     display: block;
     width: 100px;
-    margin-top: 10px;
-    margin-right: 20px;
+    margin-left: 10px;
 }
 
 .simulationCommandsColumn1{
