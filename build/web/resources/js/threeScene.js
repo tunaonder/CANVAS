@@ -253,28 +253,33 @@ function buttonClicked(id) {
         if (document.getElementById("trafficLightForm").style.display === 'none') {
             document.getElementById("trafficLightForm").style.display = 'inline';
         } else {
-            document.getElementById("trafficLightForm").style.display = 'none';
-            document.getElementById("trafficLightForm:greenStartTime").value = "";
-            document.getElementById("trafficLightForm:greenDuration").value = "";
-            document.getElementById("trafficLightForm:redDuration").value = "";
+            hideTrafficLightForm();
         }
     } else if (id === 'enterPointButton') {
         // Display Traffic Light Form
         if (document.getElementById("enterPointForm").style.display === 'none') {
             document.getElementById("enterPointForm").style.display = 'inline';
         } else {
-            document.getElementById("enterPointForm").style.display = 'none';
-            document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
-            document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
+            hideEnterPointForm();
         }
-    }
-    else if (id === 'forkButton') {
+    } else if (id === 'forkButton') {
         if (document.getElementById("convertToForkForm").style.display === 'none') {
             document.getElementById("convertToForkForm").style.display = 'inline';
 
         } else {
-            document.getElementById("convertToForkForm").style.display = 'none';
+            hideForkForm();
         }
+    }
+
+    if (id !== 'trafficLightButton') {
+        hideTrafficLightForm();
+    }
+    if (id !== 'enterPointButton') {
+        hideEnterPointForm();
+    }
+
+    if (id !== 'forkButton') {
+        hideForkForm();
     }
 }
 
@@ -449,7 +454,7 @@ function zoomOut(){
     camera.position.z = camera.position.z * 1.05;
 }
 
-function hideShowModelDetails(button){
+function hideShowModelDetails(button) {
     if (staticObjectDisplay) {
         for (var i = 0; i < moveSpotObjects.length; i++) {
             var obj = moveSpotObjects[i];
@@ -458,14 +463,32 @@ function hideShowModelDetails(button){
             }
         }
         staticObjectDisplay = false;
-        button.innerText= 'Display Spots';
-    }
-    else{
+        button.innerText = 'Display Spots';
+    } else {
         for (var i = 0; i < moveSpotObjects.length; i++) {
             moveSpotObjects[i].visible = true;
         }
         staticObjectDisplay = true;
         button.innerText = 'Hide Spots';
     }
-    
+
+}
+
+function hideTrafficLightForm() {
+
+    document.getElementById("trafficLightForm").style.display = 'none';
+    document.getElementById("trafficLightForm:greenStartTime").value = "";
+    document.getElementById("trafficLightForm:greenDuration").value = "";
+    document.getElementById("trafficLightForm:redDuration").value = "";
+}
+
+function hideEnterPointForm() {
+    document.getElementById("enterPointForm").style.display = 'none';
+    document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
+    document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
+}
+
+function hideForkForm() {
+    document.getElementById("convertToForkForm").style.display = 'none';
+    document.getElementById("convertToForkForm:forkNewPathProbability").value = "";
 }
