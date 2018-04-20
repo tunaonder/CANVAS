@@ -66,14 +66,14 @@ public class ProjectManager implements Serializable {
     private User user;
     private List<Project> userProjects;
     private List<String> userProjectNames;
-    private String selectedProjectName;
+    private String selectedProjectName = "";
     private String selectedProjectMap;
     private String simulationModelData = "";
     
     private List<Project> publicProjects;
     private List<String> publicProjectNames;
-    private String selectedPublicProjectName;
     
+    private String selectedPublicProjectName = "";    
     private String publicToMyProjectsProjectName = "";
     
 
@@ -90,6 +90,14 @@ public class ProjectManager implements Serializable {
         }
         getPublicProjectsFromFacade();
 
+    }
+    
+    public void onload(){
+        simulationModelData = "";
+        selectedProjectName = "";
+        selectedPublicProjectName = "";   
+        publicToMyProjectsProjectName = "";
+        
     }
 
     /*
@@ -195,13 +203,21 @@ public class ProjectManager implements Serializable {
         this.selectedPublicProjectName = selectedPublicProjectName;
     }
     
-    public void getPublicProjectsFromFacade(){
+    private void getPublicProjectsFromFacade(){
         publicProjects = getProjectFacade().findPublicProjects();
         publicProjectNames = new ArrayList<>();
         for (int i = 0; i < publicProjects.size(); i++) {
             Project proj = publicProjects.get(i);
             publicProjectNames.add(proj.getProjectname());
         }       
+    }
+    
+    private void getUserProjectsFromFacade(){
+        userProjects = getProjectFacade().findProjectsByUserID(user.getId());
+        userProjectNames = new ArrayList<>();
+        for (int i = 0; i < userProjects.size(); i++) {
+            userProjectNames.add(userProjects.get(i).getProjectname());
+        }    
     }
 
     public void onSelect(SelectEvent event) {
@@ -236,6 +252,32 @@ public class ProjectManager implements Serializable {
         return "Simulator.xhtml?faces-redirect=true";
     }
     
+    public void deleteProject(){
+        if (selectedProjectName.equals("")) {
+            resultMsg = new FacesMessage("Please select a project!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return;
+        }
+        
+        List<Project> list = projectFacade.findByProjectName(selectedProjectName);
+        if(list == null || list.isEmpty()){
+            resultMsg = new FacesMessage("Please select a project!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return;
+        }
+        Project project = list.get(0);
+        getProjectFacade().remove(project);
+        
+        // Updates the current user and public project list
+        getUserProjectsFromFacade();
+        getPublicProjectsFromFacade();
+        
+        resultMsg = new FacesMessage("Project is deleted successfully!");
+        FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+        
+        selectedProjectName = "";        
+    }
+    
     public void makeProjectPublic(){
         if (selectedProjectName.equals("")) {
             resultMsg = new FacesMessage("Please select a project!");
@@ -243,7 +285,20 @@ public class ProjectManager implements Serializable {
             return;
         }
         
-        Project project = projectFacade.findByProjectName(selectedProjectName).get(0);
+        List<Project> list = projectFacade.findByProjectName(selectedProjectName);
+        if(list == null || list.isEmpty()){
+            resultMsg = new FacesMessage("Please select a project!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return;
+        }
+        Project project = list.get(0);
+        
+        if(project.getPublicProject()){
+            resultMsg = new FacesMessage("Project is already Public!");
+            FacesContext.getCurrentInstance().addMessage(null, resultMsg);
+            return;
+        }
+        
         project.setPublicProject(true);
         
         getProjectFacade().edit(project);
@@ -255,13 +310,21 @@ public class ProjectManager implements Serializable {
     public void addToMyProjects(){
 
         if (publicToMyProjectsProjectName.equals("")){
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Enter a Project Name!", ""));       
             return;
         }
+
+        if (selectedPublicProjectName.equals("")){
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select a Project!", ""));       
+            return;
+        }       
         
         List<Project> projectsFound = getProjectFacade().findByProjectName(publicToMyProjectsProjectName);
         if (projectsFound != null  && !projectsFound.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Name already exists! Please Select another name!", ""));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Name already exists! Please Select another name!", ""));            
             return;
         }
         
@@ -282,6 +345,7 @@ public class ProjectManager implements Serializable {
             userProjectNames.add(userProjects.get(i).getProjectname());
         }
         
+        publicToMyProjectsProjectName = "";
     }
     
 
