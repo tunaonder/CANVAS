@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode, headerHeight, controlPanelWidth */
+/* global vector, THREE, renderer, raycaster, mouse, camera, controlPanelHeight, scene, mode, headerHeight, controlPanelWidth, simulationHasStarted */
 
 //List Of ALL STATIC OBJECTS
 var moveSpotObjects = [];
@@ -546,6 +546,13 @@ function moveSpotClicked(event) {
 
 //Removes The Last Added Move Spot
 function removeMoveSpot() {
+    
+    if(simulationHasStarted){
+        alert('Simulation model cannot be modified during the simulation\nPlease refresh the page to remove the last added spot');
+        return;       
+    }
+    
+    
     if (currentMoveSpot === null) {
         alert('There is no MoveSpot to Remove');
         return;

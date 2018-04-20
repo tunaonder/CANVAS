@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
 
-/* global THREE, currentMoveSpot, moveSpotObjects */
+/* global THREE, currentMoveSpot, moveSpotObjects, simulationHasStarted */
 
 var camera;
 var scene;
@@ -132,6 +132,13 @@ function onDocumentMouseDown(event) {
 
     //If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
+        
+        if (simulationHasStarted) {
+            alert('Interactions with the model is not allowed after simulation has started\n\
+                    Please refresh the page to update the model');
+            return;
+        }
+        
         //If the Mode is Convert To Fork or Convert to Merge       
         if (moveSpotClicked(event)) {
             return;
@@ -245,7 +252,12 @@ function calculateDistance(x1, y1, x2, y2) {
 }
 
 function buttonClicked(id) {
-
+    
+    if (simulationHasStarted) {
+        alert('Model is not modifiable during the simulation visualization\nPlease refresh the page to add a new component');
+        return;
+    }
+    
     changeInsertMode(id);
 
     if (id === 'trafficLightButton') {

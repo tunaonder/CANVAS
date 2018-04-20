@@ -23,6 +23,10 @@ function startSimulation() {
         alert('Simulation is already running!');
         return;
     }
+    
+    hideEnterPointForm();
+    hideForkForm();
+    hideTrafficLightForm();
 
     var simDuration = document.getElementById("simulationDuration").value;
     if (simDuration === "") {
