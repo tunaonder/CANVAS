@@ -81,7 +81,7 @@
                         <h:inputText a:placeholder="10 minutes" id="simulationDuration" class="form-control" style="width: 120px;"/>
                     </h:panelGrid>
                     <button id="startStopButton" class="btn panelButton" onClick="startSimulation();"> Start Simulation</button>
-                    <button id="pauseButton" class="btn panelButton" onClick=""> Pause Simulation</button>
+                    <button id="pauseButton" class="btn panelButton" onClick="pauseSimulation(this);"> Pause Simulation</button>
                     <h:form id="simModelForm">
                         <h:commandButton id="saveButton" class="btn panelButton" onclick="saveModel();"
                                          action="#{projectManager.saveProjectModel}" value="Save Model"/>      

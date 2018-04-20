@@ -3,7 +3,7 @@
  * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
  */
 
-/* global THREE, scene, vehicles, mapFinishY */
+/* global THREE, scene, vehicles, mapFinishY, simulationIsRunning, simulationHasStarted */
 var degree = Math.PI / 180;
 
 var vehicleLength = 16;
@@ -188,6 +188,11 @@ function destroyVehicle(event) {
 }
 
 function createExampleVehicle(newVehicleMode) {
+
+    if(simulationHasStarted){
+        alert('Vehicle size cannot be updated after the simulation has started!');
+        return;
+    }
 
     // exampleVehicle is not null if page is already loaded
     if (exampleVehicle !== null) {

@@ -22,6 +22,7 @@ var visualizationTime = 0;
 var simulationIsRunning = false;
 
 var eventsRequested = false;
+var simulationHasStarted = false;
 
 // This Function is Called 60 times in A Second!
 // Three.js main visualization processes are happening in this method.
@@ -77,4 +78,21 @@ function render() {
 
     }
     renderer.render(scene, camera);
+}
+
+function pauseSimulation(button){
+    if(!simulationHasStarted){
+        alert('Simulation has not started yet!');
+        return;      
+    }
+    
+    if(simulationIsRunning){
+        button.innerText= 'Continue';
+        simulationIsRunning = false;
+    }
+    else{
+        button.innerText= 'Pause Simulation';
+        simulationIsRunning = true;
+    }
+    
 }

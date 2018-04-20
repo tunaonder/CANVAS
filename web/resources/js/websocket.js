@@ -18,6 +18,11 @@ socket.onmessage = onMessage;
  * It prepared JSON objects and send them to the server
  */
 function startSimulation() {
+    
+    if(simulationHasStarted){
+        alert('Simulation is already running!');
+        return;
+    }
 
     var simDuration = document.getElementById("simulationDuration").value;
     if (simDuration === "") {
@@ -117,6 +122,7 @@ function startSimulation() {
         }
     }
 
+    simulationHasStarted = true;
     socket.send(JSON.stringify(simulationModel));
 }
 
