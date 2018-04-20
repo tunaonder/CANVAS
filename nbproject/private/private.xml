@@ -4,10 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/Simulator.xhtml</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/resources/js/threeScene.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/component/Fork.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/execution/SimulationRuntime.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/resources/js/moveSpot.js</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficsimulator/entityclasses/SimulationModel.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficsimulator/managers/ProjectManager.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficsimulator/sessionbeans/ProjectFacade.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/Projects.xhtml</file>
         </group>
     </open-files>
 </project-private>

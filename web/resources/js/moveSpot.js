@@ -421,7 +421,7 @@ function saveTrafficLightChanges(){
     document.getElementById("trafficLightForm:redDuration").value = "";
     lastClickedTrafficLightId = 'none';
     
-    alert('Traffic Light is successfully updated!');
+    alert('Traffic Light is successfully updated!\nDo not forget to Save Model to keep changes!');
 
 }
 
@@ -451,7 +451,7 @@ function saveEnterPointChanges(){
         return;
     }
 
-    if (minTime > maxTime) {
+    if (parseFloat(minTime) > parseFloat(maxTime)) {
         alert("Minimum time cannot be bigger than maximum time!");
         return;
     }
@@ -476,7 +476,7 @@ function saveEnterPointChanges(){
     document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
     lastClickedEnterPointId = 'none';
 
-    alert('Enter Point is successfully updated!');
+    alert('Enter Point is successfully updated!\nDo not forget to Save Model to keep changes!');
 
 }
 
@@ -515,7 +515,7 @@ function saveConvertForkChanges() {
     document.getElementById("convertToForkForm:forkNewPathProbability").value = "";
     lastClickedForkId = 'none';
     
-    alert('Fork is successfully updated!');
+    alert('Fork is successfully updated!\nDo not forget to Save Model to keep changes!');
 
 }
 

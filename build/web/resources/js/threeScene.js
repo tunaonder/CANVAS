@@ -167,8 +167,9 @@ function onDocumentMouseDown(event) {
                 alert("Time cannot be zero or negative");
                 return;
             }
+
             
-            if (minTime > maxTime) {
+            if (parseFloat(minTime) > parseFloat(maxTime)) {
                 alert("Minimum time cannot be bigger than maximum time!");
                 return;
             }
