@@ -6,7 +6,7 @@
 
 /* global moveSpotObjects, eventQueue, vehicleLength */
 
-//var socket = new WebSocket("ws://shark.cs.vt.edu/TrafficSimulator/actions");
+//var socket = new WebSocket("ws://shark.cs.vt.edu/canvas/actions");
 var socket = new WebSocket("ws://localhost:8080/TrafficSimulator/actions");
 
 //Call onMessage method when socket gets a message from the server

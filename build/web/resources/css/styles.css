@@ -19,6 +19,7 @@ body{
     margin: 0;
     position: relative;
     min-height: 100% !important;
+    background-color: #FDF5E6 !important;
 }
 
 #header {
@@ -197,4 +198,10 @@ h1 {
 
 .ui-galleria-nav-prev, .ui-galleria-nav-next{
     background-color: red;
+}
+
+/* This is welcome page GIF displayer component id(PrimeFaces Galleria)*/ 
+#j_idt36{
+    background-color: #FDF5E6 !important;
+    
 }

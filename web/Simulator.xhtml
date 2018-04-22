@@ -88,6 +88,19 @@
                         <h:inputHidden id="hiddenSimulationModel" value="#{projectManager.simulationModelData}"/>                      
                     </h:form>
                 </div>
+                
+               
+                    
+                <h:form id="simResultForm" style="display: none;">
+                    <label class="controlLabel">Simulation Results</label>
+                    <h:panelGrid columns="2" cellpadding="5" columnClasses="simulationCommandsColumn1, simulationCommandsColumn1">
+                        <h:outputLabel for="vehicleCount" value="Total Number Of Vehicles: " />
+                        <h:inputText  id="vehicleCount" class="form-control" style="width: 120px;" readonly="true"/>
+                        <h:outputLabel for="averageTime" value="Average Time Spent In the Traffic Network: " />
+                        <h:inputText  id="averageTime" class="form-control" style="width: 120px;" readonly="true"/>
+                    </h:panelGrid>
+                </h:form>
+              
 
             </div>
             <div>

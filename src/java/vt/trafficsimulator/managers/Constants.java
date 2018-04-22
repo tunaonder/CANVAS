@@ -14,7 +14,7 @@ public class Constants {
         for the storage and retrieval of user's files.
      */
     public static final String FILES_ABSOLUTE_PATH = "/Users/Onder/TrafficSimulatorFileStorage/";
-   // public static final String FILES_ABSOLUTE_PATH = "/home/Onder/TrafficSimulatorFileStorage/";
+//    public static final String FILES_ABSOLUTE_PATH = "/home/Onder/TrafficSimulatorFileStorage/";
 
     /*
     In glassfish-web.xml file, we designated the '/TrafficSimulatorFileStorage/' directory as the

@@ -137,6 +137,20 @@ public class MessageManager {
         Message message = new Message(stateChangeMessage, simTime);
         messageList.addMessage(message);
     }
+    
+    public void endOfSimulation(int vehicleCount, int averageTime, int simTime){
+        JsonProvider provider = JsonProvider.provider();
+        JsonObject endOfSimMessage = provider.createObjectBuilder()
+                .add("action", "endOfSimulation")
+                .add("vehicleCount", vehicleCount)
+                .add("averageTime", averageTime)
+                .add("time", simTime)
+                .build();
+
+        Message message = new Message(endOfSimMessage, simTime);
+        messageList.addMessage(message);
+        
+    }
 
     private void checkMessageBuffer() {
         synchronized (this) {

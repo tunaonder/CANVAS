@@ -63,6 +63,13 @@ function Event5(type, time, lightId) {
 
 }
 
+function EndOfSimulationEvent(type, time, vehicleCount, averageTime) {
+    this.type = type;
+    this.time = time;
+    this.vehicleCount = vehicleCount;
+    this.averageTime = averageTime;
+}
+
 
 // This Method is called by websocket.js when a new message is received
 // Events are created accordingly and added to Event Queue
@@ -141,6 +148,16 @@ function processEvent(event) {
         //Start Rendering
         simulationIsRunning = true;
     }
+    
+    else if(event.action === "endOfSimulation"){
+        var type = event.action;
+        var time = event.time;
+        var vehicleCount = event.vehicleCount;
+        var averageTime = event.averageTime;
+        var endOfSimEvent = new EndOfSimulationEvent(type, time, vehicleCount, averageTime);
+           
+        eventQueue.push(endOfSimEvent, time);
+    }
 
 }
 
@@ -150,7 +167,6 @@ function processEvent(event) {
  * @returns {undefined}
  */
 function processCurrentEvent(event) {
-
 
     if (event.type === "createVehicle") {
         createNewVehicle(event);
@@ -167,6 +183,21 @@ function processCurrentEvent(event) {
         changeTrafficLightState(event);
 
     }
+    else if(event.type === "endOfSimulation"){
+        processEndOfSimulation(event.vehicleCount, event.averageTime);
+    }
+    
+}
+
+function processEndOfSimulation(vehicleCount, averageTime){
+    
+    alert("End of the Simulation!");
+
+    document.getElementById("simResultForm:vehicleCount").value = vehicleCount;
+    document.getElementById("simResultForm:averageTime").value = averageTime + " seconds";
+    
+    document.getElementById("simResultForm").style.display = 'inline';
+    
 }
 
 

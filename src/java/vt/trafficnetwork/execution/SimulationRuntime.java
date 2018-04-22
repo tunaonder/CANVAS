@@ -116,13 +116,10 @@ public class SimulationRuntime {
             //
             updateSimulation();
 
-        }
-
-        System.out.println("Total Number OF Vehicles Created: " + eventFactory.getNumberOfVehicles());
-
-        long totalTimeSpent = sumOfVehicleDestroyTime - eventFactory.getSumOfVehicleCreationTime();
-        int averageTime = (int) (totalTimeSpent / eventFactory.getNumberOfVehicles());
-        System.out.println("Avarage time a vehicle spends in the traffic: " + averageTime + " seconds.");
+        }  
+        
+        clockUpdate();
+        processEndOfSimulation();
 
         //Send Remaining Messages In The Buffer at The end of the Simulation
         // sendRemainingMessages();
@@ -694,6 +691,16 @@ public class SimulationRuntime {
         }
 
         return false;
+
+    }
+    
+    private void processEndOfSimulation() {
+        int vehicleCount = eventFactory.getNumberOfVehicles();
+        System.out.println("Total Number OF Vehicles Created: " + vehicleCount);
+        long totalTimeSpent = sumOfVehicleDestroyTime - eventFactory.getSumOfVehicleCreationTime();
+        int averageTime = (int) (totalTimeSpent / vehicleCount);
+        System.out.println("Avarage time a vehicle spends in the traffic: " + averageTime + " seconds.");
+        messageManager.endOfSimulation(vehicleCount, averageTime, simulationTime);
 
     }
 
