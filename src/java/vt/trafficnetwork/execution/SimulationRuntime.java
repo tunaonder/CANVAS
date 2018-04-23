@@ -54,6 +54,8 @@ public class SimulationRuntime {
     private final List<Vehicle> vehicles;
 
     private long sumOfVehicleDestroyTime;
+    private long sumOfVehicleCreationTime;
+    private int totalNumberOfVehicles;
 
     public SimulationRuntime(String sessionIdentifier) {
 
@@ -65,6 +67,8 @@ public class SimulationRuntime {
 
         this.simulationTime = 0;
         this.sumOfVehicleDestroyTime = 0;
+        this.sumOfVehicleCreationTime = 0;
+        this.totalNumberOfVehicles = 0;
 
         //Renderer renders 60 times in a sec. Simulation duration is defined in terms of minutes
         //simulationTimeLimit = 60 * 60 * Constants.simulationDuration;
@@ -157,7 +161,10 @@ public class SimulationRuntime {
             //Add The Created Vehicle To Dynamic Vehicle List
             vehicles.add(event.getVehicle());
             //   vehicleMap.put(event.getVehicle().getId(), event.getVehicle());
-
+            
+            // Save Vehicle Creation Second
+            sumOfVehicleCreationTime += simulationTime/60;
+            totalNumberOfVehicles++;
             //send message
             messageManager.vehicleCreated(event);
 
@@ -293,7 +300,6 @@ public class SimulationRuntime {
                     vehicle.setCurrentSpot(currentSpot);
 
                     if (currentSpot instanceof ExitPoint) {
-
                         // vehicle.getCurrentSpot().setOccupied(false);
                         vehicle.getCurrentSpot().setOccupierId("");
 
@@ -306,13 +312,13 @@ public class SimulationRuntime {
                             vehicleBehind.setNextDynamicObj(null);
 
                         }
-
+                        
                         vehicle.removePreviosSpotConnections(previousSpot);
                         vehicles.remove(i);
                         sumOfVehicleDestroyTime += simulationTime / 60;
 
                         messageManager.vehicleDestroy(vehicle.getId(), simulationTime);
-
+                        
                         continue;
 
                     } //Check if it is MoveSpot
@@ -634,12 +640,9 @@ public class SimulationRuntime {
         if (!vehicle.isThereVehicleAhead()) {
             return true;
         }
-        //   System.out.println(simulationTime);
         if (vehicle.canMoveWithSameSpeed(simulationConstants.vehicleDistanceLimit)) {
-            //System.out.println(vehicle.getId() + " new speed " + vehicle.getTempSpeed());
             return true;
         }
-        //System.out.println(vehicle.getId() + " new speed " + vehicle.getTempSpeed());
 
         //If vehicle cannot move with the same speed, change its speed        
         messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
@@ -695,12 +698,12 @@ public class SimulationRuntime {
     }
     
     private void processEndOfSimulation() {
-        int vehicleCount = eventFactory.getNumberOfVehicles();
-        System.out.println("Total Number OF Vehicles Created: " + vehicleCount);
-        long totalTimeSpent = sumOfVehicleDestroyTime - eventFactory.getSumOfVehicleCreationTime();
-        int averageTime = (int) (totalTimeSpent / vehicleCount);
+        
+        System.out.println("Total Number OF Vehicles Created: " + totalNumberOfVehicles);
+        long totalTimeSpent = sumOfVehicleDestroyTime - sumOfVehicleCreationTime;
+        int averageTime = (int) (totalTimeSpent / totalNumberOfVehicles);
         System.out.println("Avarage time a vehicle spends in the traffic: " + averageTime + " seconds.");
-        messageManager.endOfSimulation(vehicleCount, averageTime, simulationTime);
+        messageManager.endOfSimulation(totalNumberOfVehicles, averageTime, simulationTime);
 
     }
 

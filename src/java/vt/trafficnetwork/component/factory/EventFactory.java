@@ -20,13 +20,7 @@ import vt.trafficnetwork.execution.random.UniformRandom;
  */
 public class EventFactory {
     
-    private int numberOfVehicles;
-    private long sumOfVehicleCreationTime;
-
-
     public EventFactory() {
-        numberOfVehicles = 0;
-        sumOfVehicleCreationTime = 0;
     }
     
 
@@ -40,11 +34,7 @@ public class EventFactory {
         int time = (int)random.nextDouble() + currentTime;
                
         Vehicle vehicle = enterPoint.getNewVehicle();
-       
-        numberOfVehicles ++;
-        // Convert the time into seconds
-        sumOfVehicleCreationTime += time/60;
-        
+
         return new VehicleCreateEvent(time, vehicle, enterPoint.getId());
     }
     
@@ -64,18 +54,6 @@ public class EventFactory {
               
         return new TrafficLightStateChangeEvent(time, light);
      
-    }
-
-    public int getNumberOfVehicles() {
-        return numberOfVehicles;
-    }
-
-    public void setNumberOfVehicles(int numberOfVehicles) {
-        this.numberOfVehicles = numberOfVehicles;
-    }
-
-    public long getSumOfVehicleCreationTime() {
-        return sumOfVehicleCreationTime;
     }
 
 }
