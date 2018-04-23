@@ -27,6 +27,9 @@ function startSimulation() {
     hideEnterPointForm();
     hideForkForm();
     hideTrafficLightForm();
+   
+    document.getElementById("vehicleSizeDiv").setAttribute('style', 'display:none !important');
+    
 
     var simDuration = document.getElementById("simulationDuration").value;
     if (simDuration === "") {
