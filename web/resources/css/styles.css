@@ -205,3 +205,8 @@ h1 {
     background-color: #FDF5E6 !important;
     
 }
+
+/*Hide Scroll Bar on Web-Kit(Works in Chrome, but not in Firefox)*/
+::-webkit-scrollbar {
+    display: none;
+}

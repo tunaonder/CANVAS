@@ -20,8 +20,8 @@ public class Constants {
     public int vehicleLength3 = 30;
     public int vehicleLength4 = 40;
 
-    public double minSpeed = 0.7;
-    public double maxSpeed = 2.0;
+    public double minSpeed = 0.5;
+    public double maxSpeed = 1.3;
 
     public Constants(int vehicleLength) {
        
