@@ -14,9 +14,9 @@ var currentMoveSpot = null;
 // STATIC OBJECTS STYLING FOR THREE.JS MESHES
 
 //Radius of Spots
-var enterExitRadius = 15;
-var moveSpotRadius = 10;
-var trafficLightRadius = 12;
+var enterExitRadius = 7;
+var moveSpotRadius = 5;
+var trafficLightRadius = 6;
 
 //Color Code Of Spots
 var trafficLightRed = 0xcc0000;
