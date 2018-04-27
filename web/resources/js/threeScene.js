@@ -145,10 +145,10 @@ function onDocumentMouseDown(event) {
         }     
 
         //Check If The New Spot is very close to Current Spot. If it is do not add the spot
-        if (currentMoveSpot !== null) {
+        if (currentMoveSpot !== null && currentMoveSpot.type !== 'ExitPoint') {
             var distance = calculateDistance(currentMoveSpot.x, currentMoveSpot.y, vector.x, vector.y);
 
-            if (distance < 40) {
+            if (distance < 30) {
                 window.alert('Distance between Spots should be longer than the length of vehicles');
                 return;
             }
