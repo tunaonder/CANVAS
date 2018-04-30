@@ -3,11 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/conf/persistence.xml</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/resources/js/websocket.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/websocket/SimulationSessionHandler.java</file>
             <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficsimulator/managers/Constants.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/resources/js/websocket.js</file>
             <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/websocket/WebSocketServer.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/WEB-INF/glassfish-web.xml</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/conf/persistence.xml</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/WEB-INF/web.xml</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/execution/Constants.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/src/java/vt/trafficnetwork/websocket/SimulationSessionHandler.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/TrafficSimulator/web/WEB-INF/glassfish-resources.xml</file>
         </group>
     </open-files>
 </project-private>

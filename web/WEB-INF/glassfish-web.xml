@@ -10,4 +10,5 @@
   
    <property name="alternatedocroot_1" value="from=/TrafficSimulatorFileStorage/* dir=/Users/Onder" />
 <!--   <property name="alternatedocroot_1" value="from=/TrafficSimulatorFileStorage/* dir=/home/Onder" />-->
+<!--<property name="alternatedocroot_1" value="from=/TrafficSimulatorFileStorage/* dir=/home/balci" />-->
 </glassfish-web-app>
