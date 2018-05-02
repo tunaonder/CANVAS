@@ -145,7 +145,7 @@ public class SimulationRuntime {
 
     }
 
-    private void processScheduledEvent() {
+    private synchronized void processScheduledEvent() {
 
         if (earliestScheduledEvent instanceof VehicleCreateEvent) {
 
@@ -251,7 +251,7 @@ public class SimulationRuntime {
 
     }
 
-    private void updateSimulation() {
+    private synchronized void updateSimulation() {
 
         //for(Vehicle vehicle: vehicles){
         for (int i = 0; i < vehicles.size(); i++) {

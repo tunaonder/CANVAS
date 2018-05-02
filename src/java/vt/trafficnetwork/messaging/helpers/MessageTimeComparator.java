@@ -5,6 +5,7 @@
 package vt.trafficnetwork.messaging.helpers;
 
 import java.util.Comparator;
+import javax.json.JsonObject;
 
 /**
  *
@@ -14,10 +15,21 @@ public class MessageTimeComparator implements Comparator<Message> {
 
     @Override
     public int compare(Message m1, Message m2) {
+
+        JsonObject j1 = m1.getJSONObject();
+        JsonObject j2 = m2.getJSONObject();
+        String t1 = j1.getString("action");
+        String t2 = j2.getString("action");
+
         if (m1.getTime() < m2.getTime()) {
             return -1;
         } else if (m1.getTime() > m2.getTime()) {
             return 1;
+        } else if (t1.equals("changeSpeed") && t2.equals("createVehicle")) {
+            return 1;
+        }
+        else if (t1.equals("createVehicle") && t2.equals("changeSpeed")){
+            return -1;          
         }
         return 0;
 

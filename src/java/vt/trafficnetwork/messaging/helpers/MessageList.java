@@ -36,7 +36,7 @@ public class MessageList {
     }
 
     public void addMessage(Message message) {
-        messageList.add(message);
+    messageList.add(message);
         size++;
     }
 
