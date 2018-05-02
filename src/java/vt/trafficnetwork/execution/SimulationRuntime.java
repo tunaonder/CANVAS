@@ -370,7 +370,6 @@ public class SimulationRuntime {
                         vehicle.setPrevDynamicObj(null);
                         //Change car speed to previous speed
                         vehicle.setTempSpeed(vehicle.getSpeed());
-                        //
 
                         messageManager.vehicleDirectionChange(vehicle, simulationTime);
 
@@ -393,7 +392,6 @@ public class SimulationRuntime {
                         //Set New Rotation Of The Car According To Current and Target Spot
                         vehicle.setRotation(spot, nextSpot);
 
-                        ////
                         vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
                         //In the Next Run This Vehicle will leave the spot, so its' 

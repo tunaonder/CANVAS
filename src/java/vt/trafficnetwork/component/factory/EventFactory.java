@@ -30,7 +30,7 @@ public class EventFactory {
         // Generation Times are provided in terms of seconds
         RandomVariate random = new UniformRandom(enterPoint.getMinGenerationTime()*60, 
                  enterPoint.getMaxGenerationTime()*60);
-        //Get random creation time
+        // Get random creation time
         int time = (int)random.nextDouble() + currentTime;
                
         Vehicle vehicle = enterPoint.getNewVehicle();
@@ -45,10 +45,11 @@ public class EventFactory {
             time = light.getGreenStartTime();
         }
         else{
-            //If Vehicle is in Red State: time duration is redStateTime.
-            //Otherwise the duration is greenStateTime
+            // If Vehicle is in Red State: time duration is redStateTime.
+            // Otherwise the duration is greenStateTime
+            // Add an extra 1.5 seconds to red state (60 * 1.5)
             time = currentTime + (light.getState() == TrafficLight.STATE.RED ? 
-                    light.getRedStateTime() : light.getGreenStateTime());
+                    light.getRedStateTime() + 90 : light.getGreenStateTime() - 90);
           
         }     
               

@@ -393,6 +393,11 @@ function saveTrafficLightChanges(){
         return;
     }  
     
+    if (greenDuration < 5 || redDuration < 5) {
+        alert("Duration cannot be smaller than 5 seconds");
+        return;
+    }  
+    
     // Find the traffic light object
     var trafficLight;
     for(var i = 0; i<moveSpotObjects.length; i++){
