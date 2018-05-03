@@ -103,10 +103,10 @@ public class SimulationRuntime {
 
             // Scan Scheduled Future Events
             processEvent();
-            
+
             // Clock update
             clockUpdate();
-            
+
             updateSimulation();
 
         }
@@ -121,8 +121,8 @@ public class SimulationRuntime {
             //
             updateSimulation();
 
-        }  
-        
+        }
+
         clockUpdate();
         processEndOfSimulation();
 
@@ -156,13 +156,13 @@ public class SimulationRuntime {
             //Add The Created Vehicle To Dynamic Vehicle List
             vehicles.add(event.getVehicle());
             //   vehicleMap.put(event.getVehicle().getId(), event.getVehicle());
-            
+
             // Save Vehicle Creation Second
-            sumOfVehicleCreationTime += simulationTime/60;
+            sumOfVehicleCreationTime += simulationTime / 60;
             totalNumberOfVehicles++;
             //send message
             messageManager.vehicleCreated(event);
-            
+
             // Schedule a New Vehicle Event to add to future event list
             // Stop scheduling future event if end of the simulation has come
             if (simulationTime < simulationTimeLimit) {
@@ -255,7 +255,7 @@ public class SimulationRuntime {
     private synchronized void updateSimulation() {
 
         List<Vehicle> vehiclesToRemove = new ArrayList<>();
-        
+
         //for(Vehicle vehicle: vehicles){
         for (int i = 0; i < vehicles.size(); i++) {
 
@@ -303,7 +303,7 @@ public class SimulationRuntime {
                     vehicle.setCurrentSpot(currentSpot);
 
                     if (currentSpot instanceof ExitPoint) {
-                        
+
                         vehiclesToRemove.add(vehicle);
 
                         continue;
@@ -443,7 +443,7 @@ public class SimulationRuntime {
             }
 
         }
-        
+
         for (int i = 0; i < vehiclesToRemove.size(); i++) {
             removeVehicle(vehiclesToRemove.get(i));
         }
@@ -470,29 +470,34 @@ public class SimulationRuntime {
                         DynamicObject leavingVehicle = target.getLeavingDynamicObj();
 
                         //Occupier Already Passed the Target
-                        if (leavingVehicle != null && occupierId.equals(leavingVehicle.getId())) {
-
-                            if (vehicle.isVehicleClose(leavingVehicle, simulationConstants.vehicleDistanceLimit)) {
-
-                                if (vehicle.shouldSlowDown(leavingVehicle)) {
-                                    //If vehicle cannot move with the same speed, change its speed
-                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
-                                    return true;
-                                }
-
-                            }
-                            return true;
-
-                        } //Occupier is The vehicle from the other route
-                        else {
-                            //If vehicle is still moving, stop.
-                            if (vehicle.getTempSpeed() != 0) {
-                                vehicle.setTempSpeed(0);
-                                messageManager.vehicleSpeedChange(vehicle,  simulationTime);
-                            }
-                            return false;
-
+//                        if (leavingVehicle != null && occupierId.equals(leavingVehicle.getId())) {
+//
+//                            if (vehicle.isVehicleClose(leavingVehicle, simulationConstants.vehicleDistanceLimit)) {
+//
+//                                if (vehicle.shouldSlowDown(leavingVehicle)) {
+//                                    //If vehicle cannot move with the same speed, change its speed
+//                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
+//                                    return true;
+//                                }
+//
+//                            }
+//                            return true;
+//
+//                        } //Occupier is The vehicle from the other route
+//                        else {
+//                            //If vehicle is still moving, stop.
+//                            if (vehicle.getTempSpeed() != 0) {
+//                                vehicle.setTempSpeed(0);
+//                                messageManager.vehicleSpeedChange(vehicle,  simulationTime);
+//                            }
+//                            return false;
+//
+//                        }
+                        if (vehicle.getTempSpeed() != 0) {
+                            vehicle.setTempSpeed(0);
+                            messageManager.vehicleSpeedChange(vehicle, simulationTime);
                         }
+                        return false;
 
                     } else {
                         if (vehicle.getTempSpeed() == 0) {
@@ -562,8 +567,7 @@ public class SimulationRuntime {
                         }
                         return false;
 
-                    }
-                    else{
+                    } else {
                         // If spot after the traffic light is occupied do not move
                         StaticObject spotAfterTrafficLight = ((TrafficLight) target).getNext();
                         if (!spotAfterTrafficLight.getOccupierId().equals("")) {
@@ -573,7 +577,7 @@ public class SimulationRuntime {
                             }
                             return false;
                         }
-                        
+
                     }
 
                     //Check if Target Is Occupied By Another Vehicle
@@ -648,8 +652,8 @@ public class SimulationRuntime {
      */
     private void compareVehicleAndCurrentSpot(Vehicle vehicle) {
         //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
-        if (vehicle.getCurrentSpot().getLeavingDynamicObj() == vehicle && 
-                vehicle.isFarFromSpot(simulationConstants.vehicleDistanceLimit)) {
+        if (vehicle.getCurrentSpot().getLeavingDynamicObj() == vehicle
+                && vehicle.isFarFromSpot(simulationConstants.vehicleDistanceLimit)) {
 
             vehicle.getCurrentSpot().setLeavingDynamicObj(null);
 
@@ -686,9 +690,9 @@ public class SimulationRuntime {
         return false;
 
     }
-    
+
     private void processEndOfSimulation() {
-        
+
         System.out.println("Total Number OF Vehicles Created: " + totalNumberOfVehicles);
         long totalTimeSpent = sumOfVehicleDestroyTime - sumOfVehicleCreationTime;
         int averageTime = (int) (totalTimeSpent / totalNumberOfVehicles);
@@ -700,7 +704,7 @@ public class SimulationRuntime {
     public void requestNewEventsToVisualize() {
         messageManager.requestNewEventsToVisualize();
     }
-    
+
     private void removeVehicle(Vehicle vehicle) {
         // vehicle.getCurrentSpot().setOccupied(false);
         vehicle.getCurrentSpot().setOccupierId("");
