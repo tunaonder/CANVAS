@@ -33,16 +33,16 @@ function render() {
     if (simulationIsRunning) {
         // If events are not requested and number of events are lower than the limit
         // make a new event request
-        if(!eventsRequested && eventQueue.length < eventCountRequestLimit){
+        if (!eventsRequested && eventQueue.length < eventCountRequestLimit) {
             console.log('Event Queue need more event from server');
             var requestArray = [];
             requestArray.push({
                 "action": "requestEvents"
             });
-            socket.send(JSON.stringify(requestArray));  
+            socket.send(JSON.stringify(requestArray));
             eventsRequested = true;
         }
-        
+
         //Render Until All events are processed
         if (eventQueue.length !== 0) {
 
@@ -56,43 +56,45 @@ function render() {
                 if (eventQueue.length !== 0) {
 
                     //Pop The First Event
-                    var event = eventQueue.splice(0, 1 )[0];
+                    var event = eventQueue.splice(0, 1)[0];
                     //Process it
                     processCurrentEvent(event);
 
                     //Set the new earliest event time
+
                     earliestEventTime = eventQueue[0].time;
 
                 }
-                //console.log(eventQueue.size());
+                console.log(eventQueue.length);
             }
-        }
+            // Move All Vehicles
+            for (var i = 0; i < vehicles.length; i++) {
+                vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
+                vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
+            }
+            // Increment Visualization Time
+            visualizationTime++;
 
-        // Move All Vehicles
-        for (var i = 0; i < vehicles.length; i++) {
-            vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
-            vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
+
         }
-        // Increment Visualization Time
-        visualizationTime++;
 
     }
     renderer.render(scene, camera);
+
 }
 
-function pauseSimulation(button){
-    if(!simulationHasStarted){
+function pauseSimulation(button) {
+    if (!simulationHasStarted) {
         alert('Simulation has not started yet!');
-        return;      
+        return;
     }
-    
-    if(simulationIsRunning){
-        button.innerText= 'Continue';
+
+    if (simulationIsRunning) {
+        button.innerText = 'Continue';
         simulationIsRunning = false;
-    }
-    else{
-        button.innerText= 'Pause Simulation';
+    } else {
+        button.innerText = 'Pause Simulation';
         simulationIsRunning = true;
     }
-    
+
 }

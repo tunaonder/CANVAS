@@ -192,6 +192,8 @@ function processCurrentEvent(event) {
 
 function processEndOfSimulation(vehicleCount, averageTime){
     
+    simulationIsRunning = false;
+    
     alert("End of the Simulation!");
 
     document.getElementById("simResultForm:vehicleCount").value = vehicleCount;
