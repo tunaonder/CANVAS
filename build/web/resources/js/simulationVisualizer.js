@@ -8,7 +8,7 @@
 //Array Of Current Vehicles 
 var vehicles = [];
 
-var eventCountRequestLimit = 100;
+var eventCountRequestLimit = 1000;
 
 //Earliest Event
 var earliestEvent;
@@ -64,7 +64,7 @@ function render() {
                     earliestEventTime = eventQueue.getFirst().time;
 
                 }
-               // console.log(eventQueue.size());
+                console.log(eventQueue.size());
             }
         }
 

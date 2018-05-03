@@ -31,27 +31,6 @@ PriorityQueue.prototype.push = function (event, time) {
         return;
     }
 
-    // If Simulation Time of The last Event and new Event is Same
-    if (this.data[i - 1][1] === time) {
-
-
-        // Sometimes A Vehicle Is Created and at the same moment its speed is decreased to 0
-        // Since their time is exactly same, change speed message might be read before create vehicle
-        // Change Speed should always come after create vehicle
-        // If the last event is change speed and new message is create vehicle
-        if (this.data[i - 1][0].type === 'changeSpeed' && event.type === 'createVehicle') {
-
-            //If messages are for the same vehicle
-            if (this.data[i - 1][0].vehicleId === event.vehicleId) {
-
-                //Put New message before
-                this.data.splice(i - 1, 0, [event, time]);
-                return;
-            }
-
-        }
-    }
-
     this.data.splice(i, 0, [event, time]);
 };
 

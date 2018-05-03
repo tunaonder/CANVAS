@@ -25,8 +25,8 @@ public class MessageManager {
     private final String sessionIdentifier;
     private int messageCount;
 
-    private final int messageQueueStorageLimit = 500;
-    private final int messageCountLimitPerRequest = 200;
+    private final int messageQueueStorageLimit = 2000;
+    private final int messageCountLimitPerRequest = 1000;
 
     private final MessageList messageList;
 

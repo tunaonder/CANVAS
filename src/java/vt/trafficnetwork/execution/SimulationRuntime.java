@@ -97,7 +97,7 @@ public class SimulationRuntime {
         this.simulationTimeLimit = simulationTimeLimit * 60 * 60;
     }
 
-    public void simulate() {
+    public synchronized void simulate() {
 
         while (simulationTime < simulationTimeLimit) {
 

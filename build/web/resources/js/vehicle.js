@@ -9,9 +9,9 @@ var degree = Math.PI / 180;
 var vehicleLength = 16;
 
 var lengthRatio;
-var vehicleLength2 = 26;
-var vehicleLength3 = 30;
-var vehicleLength4 = 40;
+var vehicleLength2 = 30;
+var vehicleLength3 = 35;
+var vehicleLength4 = 48;
 
 //Vehicle Images
 var vehicleTextures = ['resources/images/Hatchback_red.png', 'resources/images/Blue_Porshe.png', 'resources/images/Porsche_black.png', 'resources/images/Porsche_blue.png',
