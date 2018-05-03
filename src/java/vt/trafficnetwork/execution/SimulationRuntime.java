@@ -648,7 +648,8 @@ public class SimulationRuntime {
      */
     private void compareVehicleAndCurrentSpot(Vehicle vehicle) {
         //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
-        if (vehicle.getCurrentSpot().getLeavingDynamicObj() == vehicle && vehicle.isFarFromSpot()) {
+        if (vehicle.getCurrentSpot().getLeavingDynamicObj() == vehicle && 
+                vehicle.isFarFromSpot(simulationConstants.vehicleDistanceLimit)) {
 
             vehicle.getCurrentSpot().setLeavingDynamicObj(null);
 

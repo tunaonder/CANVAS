@@ -35,19 +35,6 @@ public class Vehicle extends DynamicObject {
 
         return true;
     }
-
-//    public boolean isMergeOccupiedByAnotherVehicle(Merge targetSpot) {
-//
-//
-//        if (targetSpot.getOccupierId().equals("")) {
-//            targetSpot.setOccupierId(this.getId());
-//            return false;
-//        } else if (targetSpot.getOccupierId().equals(this.getId())) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
     
     /**
      * Checks if there is a vehicle ahead of this car until the target spot
@@ -202,14 +189,15 @@ public class Vehicle extends DynamicObject {
 
     /**
      * Checks if the vehicle got far away from its current spot
+     * @param vehicleDistanceLimit
      * @return 
      */
-    public boolean isFarFromSpot() {
+    public boolean isFarFromSpot(int vehicleDistanceLimit) {
 
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getCurrentSpot().getX(), this.getCurrentSpot().getY());
 
-        return distance > (this.getLength() * 1.5);
+        return distance > this.getLength() * 0.5 + vehicleDistanceLimit;
 
     }
 

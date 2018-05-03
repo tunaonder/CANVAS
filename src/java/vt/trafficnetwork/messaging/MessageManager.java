@@ -23,7 +23,6 @@ import vt.trafficnetwork.websocket.SimulationSessionHandler;
 public class MessageManager {
 
     private final String sessionIdentifier;
-    private int messageCount;
 
     private final int messageQueueStorageLimit = 2000;
     private final int messageCountLimitPerRequest = 1000;
@@ -31,7 +30,6 @@ public class MessageManager {
     private final MessageList messageList;
 
     public MessageManager(String sessionIdentifier) {
-        messageCount = 0;
         this.sessionIdentifier = sessionIdentifier;
 
         this.messageList = new MessageList();
@@ -68,8 +66,6 @@ public class MessageManager {
         Message message = new Message(createMessage, eventTime);
         messageList.addMessage(message);
 
-        checkMessageBuffer();
-
     }
 
     public void vehicleDirectionChange(Vehicle vehicle, int simTime) {
@@ -91,9 +87,10 @@ public class MessageManager {
                 .add("y", y)
                 .build();
 
-        //    System.out.println("direction change at: " + simTime);
         Message message = new Message(directionChangeMessage, simTime);
         messageList.addMessage(message);
+        
+        checkMessageBuffer();
     }
 
     public void vehicleSpeedChange(Vehicle vehicle, int simTime) {
@@ -175,7 +172,7 @@ public class MessageManager {
     }
 
     public void requestNewEventsToVisualize() {
-        System.out.println("Messages are requested. Remaining Messages: " + messageList.getSize());
+        System.out.println("Messages are requested. Current Number Of Messages: " + messageList.getSize());
 
         while (messageList.getSize() == 0) {
             // Wait until simulation has built and messages are genareted
@@ -188,20 +185,20 @@ public class MessageManager {
         }
         
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException ex) {
             Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         synchronized (this) {
-            System.out.println("Sending new batch of messages. Current number: " + messageList.getSize());
+            System.out.println("Sending messages: Current number: " + messageList.getSize());
 
             int messageCountPerRequest = 0;
             while (!messageList.isEmpty() && messageCountPerRequest < messageCountLimitPerRequest) {
                 Message message = messageList.pollNextMessage();
-                messageCount++;
                 messageCountPerRequest++;
                 SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
             }
+            System.out.println("Sent " + messageCountPerRequest + " messages.");
 
             System.out.println("woke up..." + sessionIdentifier);
             this.notify();
