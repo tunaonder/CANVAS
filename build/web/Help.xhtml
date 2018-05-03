@@ -5,17 +5,109 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:composition template="/templates/siteTemplate.xhtml">
 
         <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
-           Help
+            <div style="margin-top: 20px; margin-left: 40px; margin-right: 40px;">
+                <h3><b> Requirements </b></h3>
+                <h4> CANVAS requires minimum screen resolution of 1024×768. 
+                    CANVAS is not compatible with mobile devices.</h4>              
+                <br/>           
+                <h3><b> Simulation Model Composition </b></h3>
+
+                <h4> Users can create multiple paths to define a traffic network model. Forks and Merges can be used to define connections among different paths. Currently, CANVAS provides following components: Enter Points, Exit Points, 
+                    Move Spots, Traffic Lights, Forks and Merges. A Path must start with an enter point and end with an exit point. Move Spots and Traffic Lights can be added along the way.
+                    <br/>
+                    <br/>
+                    If there is an alternative path on a specified point, select the "Convert To Fork" option and click on the move spot.
+                    The move spot will be converted into a Fork after the "New Path Probability" is defined.
+                    <br/>
+                    <br/>
+                    Please use the "Convert To Merge" option to define an intersection between two paths.
+                    <br/>
+                    <br/>
+                    In the following two example is provided:
+                </h4>
+                <h3><b> Example Model 1: </b></h3>
+
+
+                <h:graphicImage value="resources/images/example1.png"
+                                style="max-height:400px; max-width:1000px;"
+                                alt="Example Model 1"/>
+
+                <h4> 
+                    The provided model can be created with the following instructions:
+
+                    <br/>
+                    <br/>
+
+                    1) Select the "Enter Point" to add the first component to the right edge of the map.
+                    Set Random Time Mimimum and Random Time Maximum to define vehicle generation timing.
+                    <br/>
+                    <br/>
+                    2)	Select the “Move Spot” component to add a move spot to the left-side of the enter point.
+                    <br/>
+                    <br/>
+                    3)	Select the “Traffic Light” component to add a traffic light. Enter the required parameters: Green Start Time, Green Duration, Red Duration.
+                    <br/>
+                    <br/>
+                    4)	Select the “Move Spot” component to add a move spot to the left-side of the traffic light.
+                    <br/>
+                    <br/>
+                    5)	Add an exit point to the left edge of the map.
+                    <br/>
+                </h4>
+
+                <h3><b> Example Model 2: </b></h3>
+
+                <h4>
+                    This example shows how to convert move spots to the fork and merge objects.
+
+                </h4>
+
+                <h:graphicImage value="resources/images/example2.png"
+                                style="max-height:400px; max-width:1000px;"
+                                alt="Example Model 2"/>
+
+                <h4> 
+                    The provided model can be created with the following actions:
+
+                    <br/>
+                    <br/>
+
+                    1) Add an enter point by setting the Random Time Minimum and Random Time Maximum.
+                    <br/>
+                    <br/>
+                    2)	Add a move spot.
+                    <br/>
+                    <br/>
+                    3)	Add a move spot.
+                    <br/>
+                    <br/>
+                    4)	Add an exit point.
+                    <br/>
+                    <br/>
+                    5)	Select the “Convert to Fork” option in the model composer. Click on the move spot that is added with action 2. Enter the “New Path Probability”.
+                    <br/><br/>                    
+                    6)	Add a move spot.
+                    <br/><br/>  
+                    7) Add an exit point
+                    <br/><br/>  
+                    8) Add an enter point by setting the Random Time Minimum and Random Time Maximum.
+                    <br/><br/>  
+                    9) Add a move spot.
+                    <br/><br/>  
+                    10) Select the “Convert to Merge” option in the model composer. Click on the move spot that is added with action 3.
+                </h4>
+
+            </div>
+
+
 
         </ui:define>
     </ui:composition>
