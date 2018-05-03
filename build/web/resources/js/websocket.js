@@ -142,5 +142,7 @@ function onMessage(message) {
 
     // Event Request has returned messages. 
     // Set it back to false to be able to make a new request
-    eventsRequested = false;
+    if(eventsRequested){
+        eventsRequested = false;
+    }    
 }

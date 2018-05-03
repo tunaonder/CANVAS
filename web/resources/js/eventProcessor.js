@@ -3,12 +3,10 @@
  * Copyright © 2017 Sait Tun Onder. All rights reserved. * 
  */
 
-
-/* global eventQueue */
-
 //Event Id. Will be Incremented for each received message
 var eventId = 0;
 var buildErrorInfo = 'Simulation Could not be Built!';
+var eventQueue = [];
 
 // Vehicle Create Event
 function Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, targetY, eventId) {
@@ -39,12 +37,13 @@ function Event2(type, time, vehicleId, rotation, eventId, x, y, speed) {
 }
 
 // Change Speed Event
-function Event3(type, time, vehicleId, speed) {
+function Event3(type, time, vehicleId, x, y, speed) {
     this.type = type;
     this.time = time;
     this.vehicleId = vehicleId;
     this.speed = speed;
-
+    this.x = x;
+    this.y = y;
 }
 
 // Destroy Vehicle Event
@@ -93,7 +92,7 @@ function processEvent(event) {
 
         var newEvent = new Event(type, time, vehicleId, speed, length, rotation, x, y, targetX, targetY, eventId);
 
-        eventQueue.push(newEvent, time);
+        eventQueue.push(newEvent);
 
     } else if (event.action === "changeDirection") {
         var type = event.action;
@@ -106,7 +105,7 @@ function processEvent(event) {
 
         var newEvent = new Event2(type, time, vehicleId, rotation, eventId, x, y, speed);
         
-        eventQueue.push(newEvent, time);
+        eventQueue.push(newEvent);
 
     } else if (event.action === "changeSpeed") {
 
@@ -114,10 +113,12 @@ function processEvent(event) {
         var time = event.time;
         var vehicleId = event.vehicleId;
         var speed = event.speed;
+        var x = event.x;
+        var y = event.y;
 
-        var newEvent = new Event3(type, time, vehicleId, speed);
+        var newEvent = new Event3(type, time, vehicleId, x, y, speed);
 
-        eventQueue.push(newEvent, time);
+        eventQueue.push(newEvent);
 
     } else if (event.action === "vehicleDestroy") {
 
@@ -127,7 +128,7 @@ function processEvent(event) {
 
         var newEvent = new Event4(type, time, vehicleId);
 
-        eventQueue.push(newEvent, time);
+        eventQueue.push(newEvent);
         
         
     } else if (event.action === "trafficLightStateChange") {
@@ -136,7 +137,7 @@ function processEvent(event) {
         var time = event.time;
         var lightId = event.lightId;
         var newEvent = new Event5(type, time, lightId);
-        eventQueue.push(newEvent, time);
+        eventQueue.push(newEvent);
     }
     
     else if (event.action === "buildError") {
@@ -156,7 +157,7 @@ function processEvent(event) {
         var averageTime = event.averageTime;
         var endOfSimEvent = new EndOfSimulationEvent(type, time, vehicleCount, averageTime);
            
-        eventQueue.push(endOfSimEvent, time);
+        eventQueue.push(endOfSimEvent);
     }
 
 }

@@ -33,7 +33,7 @@ function render() {
     if (simulationIsRunning) {
         // If events are not requested and number of events are lower than the limit
         // make a new event request
-        if(!eventsRequested && eventQueue.size() < eventCountRequestLimit){
+        if(!eventsRequested && eventQueue.length < eventCountRequestLimit){
             console.log('Event Queue need more event from server');
             var requestArray = [];
             requestArray.push({
@@ -44,27 +44,27 @@ function render() {
         }
         
         //Render Until All events are processed
-        if (eventQueue.size() !== 0) {
+        if (eventQueue.length !== 0) {
 
             //Get The Earliest Event
-            earliestEventTime = eventQueue.getFirst().time;
+            earliestEventTime = eventQueue[0].time;
 
             // If there are multiple events at the same time, process all of them before incrementing
             // the visualizer time
             while (earliestEventTime < visualizationTime + 1) {
 
-                if (eventQueue.size() !== 0) {
+                if (eventQueue.length !== 0) {
 
                     //Pop The First Event
-                    var event = eventQueue.pop();
+                    var event = eventQueue.splice(0, 1 )[0];
                     //Process it
                     processCurrentEvent(event);
 
                     //Set the new earliest event time
-                    earliestEventTime = eventQueue.getFirst().time;
+                    earliestEventTime = eventQueue[0].time;
 
                 }
-                console.log(eventQueue.size());
+                //console.log(eventQueue.size());
             }
         }
 

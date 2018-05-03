@@ -96,14 +96,21 @@ public class MessageManager {
         messageList.addMessage(message);
     }
 
-    public void vehicleSpeedChange(Vehicle vehicle, String id, double updatedSpeed, int simTime) {
-
+    public void vehicleSpeedChange(Vehicle vehicle, int simTime) {
+        
+        double x = vehicle.getX();
+        double y = vehicle.getY();
+        String id = vehicle.getId();
+        double updatedSpeed = vehicle.getTempSpeed();
+        
         JsonProvider provider = JsonProvider.provider();
         JsonObject speedChangeMessage = provider.createObjectBuilder()
                 .add("action", "changeSpeed")
                 .add("time", simTime)
                 .add("vehicleId", id)
                 .add("speed", updatedSpeed)
+                .add("x", x)
+                .add("y", y)
                 .build();
 
         // System.out.println("speed change at: " + simTime + "for id: " + id + " from " + vehicle.getSpeed()+ " to " + updatedSpeed) ;
@@ -179,20 +186,25 @@ public class MessageManager {
                 Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        System.out.println("Sending new batch of messages. Current number: " + messageList.getSize());
-
-        int messageCountPerRequest = 0;
-        while (!messageList.isEmpty() && messageCountPerRequest < messageCountLimitPerRequest) {
-            Message message = messageList.pollNextMessage();
-            messageCount++;
-            messageCountPerRequest++;
-            SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         synchronized (this) {
+            System.out.println("Sending new batch of messages. Current number: " + messageList.getSize());
+
+            int messageCountPerRequest = 0;
+            while (!messageList.isEmpty() && messageCountPerRequest < messageCountLimitPerRequest) {
+                Message message = messageList.pollNextMessage();
+                messageCount++;
+                messageCountPerRequest++;
+                SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
+            }
+
             System.out.println("woke up..." + sessionIdentifier);
-            this.notify();           
+            this.notify();
         }
 
     }

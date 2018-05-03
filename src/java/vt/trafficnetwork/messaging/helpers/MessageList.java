@@ -21,7 +21,7 @@ public class MessageList {
         Comparator<Message> comparator = new MessageTimeComparator();
 
         //Default 1000 Elements capacity
-        messageList = new PriorityQueue<>(10000, comparator);
+        messageList = new PriorityQueue<>(20000, comparator);
         
         size = 0;
 

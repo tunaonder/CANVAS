@@ -101,11 +101,12 @@ public class SimulationRuntime {
 
         while (simulationTime < simulationTimeLimit) {
 
-            // Clock update
-            clockUpdate();
             // Scan Scheduled Future Events
             processEvent();
-            //
+            
+            // Clock update
+            clockUpdate();
+            
             updateSimulation();
 
         }
@@ -113,10 +114,10 @@ public class SimulationRuntime {
         // Simulation time is over, continue processing until all vehicles leave the simulation
         while (vehicles.size() > 0) {
 
+            processEvent();
             // Clock update
             clockUpdate();
             // Scan Scheduled Future Events
-            processEvent();
             //
             updateSimulation();
 
@@ -152,12 +153,6 @@ public class SimulationRuntime {
             //Safely Cast It to VehicleCreateEvent
             VehicleCreateEvent event = (VehicleCreateEvent) earliestScheduledEvent;
 
-            // Schedule a New Vehicle Event to add to future event list
-            // Stop scheduling future event if end of the simulation has come
-            if (simulationTime < simulationTimeLimit) {
-                scheduleVehicleCreation(event);
-            }
-
             //Add The Created Vehicle To Dynamic Vehicle List
             vehicles.add(event.getVehicle());
             //   vehicleMap.put(event.getVehicle().getId(), event.getVehicle());
@@ -167,6 +162,12 @@ public class SimulationRuntime {
             totalNumberOfVehicles++;
             //send message
             messageManager.vehicleCreated(event);
+            
+            // Schedule a New Vehicle Event to add to future event list
+            // Stop scheduling future event if end of the simulation has come
+            if (simulationTime < simulationTimeLimit) {
+                scheduleVehicleCreation(event);
+            }
 
         } else if (earliestScheduledEvent instanceof TrafficLightStateChangeEvent) {
 
@@ -253,6 +254,8 @@ public class SimulationRuntime {
 
     private synchronized void updateSimulation() {
 
+        List<Vehicle> vehiclesToRemove = new ArrayList<>();
+        
         //for(Vehicle vehicle: vehicles){
         for (int i = 0; i < vehicles.size(); i++) {
 
@@ -300,25 +303,9 @@ public class SimulationRuntime {
                     vehicle.setCurrentSpot(currentSpot);
 
                     if (currentSpot instanceof ExitPoint) {
-                        // vehicle.getCurrentSpot().setOccupied(false);
-                        vehicle.getCurrentSpot().setOccupierId("");
-
-                        DynamicObject vehicleBehind = vehicle.getPrevDynamicObj();
-
-                        //Set The Incoming Car The Previos One
-                        vehicle.getCurrentSpot().setIncomingDynamicObj(vehicleBehind);
-
-                        if (vehicleBehind != null) {
-                            vehicleBehind.setNextDynamicObj(null);
-
-                        }
                         
-                        vehicle.removePreviosSpotConnections(previousSpot);
-                        vehicles.remove(i);
-                        sumOfVehicleDestroyTime += simulationTime / 60;
+                        vehiclesToRemove.add(vehicle);
 
-                        messageManager.vehicleDestroy(vehicle.getId(), simulationTime);
-                        
                         continue;
 
                     } //Check if it is MoveSpot
@@ -456,6 +443,10 @@ public class SimulationRuntime {
             }
 
         }
+        
+        for (int i = 0; i < vehiclesToRemove.size(); i++) {
+            removeVehicle(vehiclesToRemove.get(i));
+        }
 
     }
 
@@ -485,7 +476,7 @@ public class SimulationRuntime {
 
                                 if (vehicle.shouldSlowDown(leavingVehicle)) {
                                     //If vehicle cannot move with the same speed, change its speed
-                                    messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
                                     return true;
                                 }
 
@@ -497,7 +488,7 @@ public class SimulationRuntime {
                             //If vehicle is still moving, stop.
                             if (vehicle.getTempSpeed() != 0) {
                                 vehicle.setTempSpeed(0);
-                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                messageManager.vehicleSpeedChange(vehicle,  simulationTime);
                             }
                             return false;
 
@@ -506,7 +497,7 @@ public class SimulationRuntime {
                     } else {
                         if (vehicle.getTempSpeed() == 0) {
                             vehicle.setTempSpeed(vehicle.getSpeed());
-                            messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                            messageManager.vehicleSpeedChange(vehicle, simulationTime);
                             return true;
                         }
                     }
@@ -532,7 +523,7 @@ public class SimulationRuntime {
 
                             if (vehicle.shouldSlowDown(occupierVehicle)) {
                                 //If vehicle cannot move with the same speed, change its speed
-                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
 
                             }
 
@@ -540,7 +531,7 @@ public class SimulationRuntime {
                         else {
                             if (vehicle.getTempSpeed() == 0) {
                                 vehicle.setTempSpeed(occupierVehicle.getTempSpeed());
-                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
                             }
 
                         }
@@ -551,7 +542,7 @@ public class SimulationRuntime {
                     else {
                         if (vehicle.getTempSpeed() == 0) {
                             vehicle.setTempSpeed(vehicle.getSpeed());
-                            messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                            messageManager.vehicleSpeedChange(vehicle, simulationTime);
                         }
 
                         return true;
@@ -567,7 +558,7 @@ public class SimulationRuntime {
                     if (((TrafficLight) target).getState() == TrafficLight.STATE.RED) {
                         if (vehicle.getTempSpeed() != 0) {
                             vehicle.setTempSpeed(0);
-                            messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                            messageManager.vehicleSpeedChange(vehicle, simulationTime);
                         }
                         return false;
 
@@ -578,7 +569,7 @@ public class SimulationRuntime {
                         if (!spotAfterTrafficLight.getOccupierId().equals("")) {
                             if (vehicle.getTempSpeed() != 0) {
                                 vehicle.setTempSpeed(0);
-                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
                             }
                             return false;
                         }
@@ -600,7 +591,7 @@ public class SimulationRuntime {
 
                             if (vehicle.shouldSlowDown(occupierVehicle)) {
                                 //If vehicle cannot move with the same speed, change its speed
-                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
 
                             }
 
@@ -608,7 +599,7 @@ public class SimulationRuntime {
                         else {
                             if (vehicle.getTempSpeed() == 0) {
                                 vehicle.setTempSpeed(occupierVehicle.getTempSpeed());
-                                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
                             }
 
                         }
@@ -619,7 +610,7 @@ public class SimulationRuntime {
                     else {
                         if (vehicle.getTempSpeed() == 0) {
                             vehicle.setTempSpeed(vehicle.getSpeed());
-                            messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                            messageManager.vehicleSpeedChange(vehicle, simulationTime);
                         }
 
                         return true;
@@ -643,7 +634,7 @@ public class SimulationRuntime {
         }
 
         //If vehicle cannot move with the same speed, change its speed        
-        messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+        messageManager.vehicleSpeedChange(vehicle, simulationTime);
 
         return true;
 
@@ -679,12 +670,12 @@ public class SimulationRuntime {
 
         if (vehicle.getNextDynamicObj() == null) {
             vehicle.setTempSpeed(vehicle.getSpeed());
-            messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+            messageManager.vehicleSpeedChange(vehicle, simulationTime);
             return true;
         } else {
             if (!vehicle.isVehicleClose(vehicle.getNextDynamicObj(), simulationConstants.vehicleDistanceLimit)) {
                 vehicle.setTempSpeed(vehicle.getSpeed());
-                messageManager.vehicleSpeedChange(vehicle, vehicle.getId(), vehicle.getTempSpeed(), simulationTime);
+                messageManager.vehicleSpeedChange(vehicle, simulationTime);
                 return true;
 
             }
@@ -707,6 +698,28 @@ public class SimulationRuntime {
 
     public void requestNewEventsToVisualize() {
         messageManager.requestNewEventsToVisualize();
+    }
+    
+    private void removeVehicle(Vehicle vehicle) {
+        // vehicle.getCurrentSpot().setOccupied(false);
+        vehicle.getCurrentSpot().setOccupierId("");
+
+        DynamicObject vehicleBehind = vehicle.getPrevDynamicObj();
+
+        //Set The Incoming Car The Previos One
+        vehicle.getCurrentSpot().setIncomingDynamicObj(vehicleBehind);
+
+        if (vehicleBehind != null) {
+            vehicleBehind.setNextDynamicObj(null);
+
+        }
+
+        vehicle.removePreviosSpotConnections(vehicle.getCurrentSpot());
+        vehicles.remove(vehicle);
+        sumOfVehicleDestroyTime += simulationTime / 60;
+
+        messageManager.vehicleDestroy(vehicle.getId(), simulationTime);
+
     }
 
 }

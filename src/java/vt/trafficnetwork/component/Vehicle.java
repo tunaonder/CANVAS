@@ -6,8 +6,7 @@ package vt.trafficnetwork.component;
 
 import vt.trafficnetwork.component.helpers.DynamicObject;
 import vt.trafficnetwork.component.helpers.StaticObject;
-import vt.trafficnetwork.execution.Constants;
-
+ 
 /**
  *
  * @author Onder

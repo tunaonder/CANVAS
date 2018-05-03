@@ -9,9 +9,9 @@ var degree = Math.PI / 180;
 var vehicleLength = 16;
 
 var lengthRatio;
-var vehicleLength2 = 30;
-var vehicleLength3 = 35;
-var vehicleLength4 = 48;
+var vehicleLength2 = 22;
+var vehicleLength3 = 30;
+var vehicleLength4 = 40;
 
 //Vehicle Images
 var vehicleTextures = ['resources/images/Hatchback_red.png', 'resources/images/Blue_Porshe.png', 'resources/images/Porsche_black.png', 'resources/images/Porsche_blue.png',
@@ -58,7 +58,6 @@ function createNewVehicle(event) {
     } else if (length === vehicleLength2) {
         var index = Math.floor((Math.random() * 2));
         vehicleImagePath = vehicleTextures[8 + index];
-
     } else if (length === vehicleLength3) {
         vehicleImagePath = vehicleTextures[10];
     } else if (length === vehicleLength4) {
@@ -74,7 +73,7 @@ function createNewVehicle(event) {
     // However it might change from vehicle to vehicle
     // The ratio is updated when vehicle image is loaded
     // This hack is required because image is loaded asychronously
-    var vehicleGeometry = new THREE.PlaneBufferGeometry(length * 1 / 2, length, 0);
+    var vehicleGeometry = new THREE.PlaneBufferGeometry(length * 1/2, length, 0);
 
     var newVehicle;
     //Vehicle is also a Three.js mesh
@@ -87,10 +86,10 @@ function createNewVehicle(event) {
     //Set vehicle rotation
     newVehicle.rotation.z = newVehicle.carRotation + degree * 90;
 
+    vehicles.push(newVehicle); 
     //Add to the scene and vehicle array
     scene.add(newVehicle);
-    vehicles.push(newVehicle); 
-    
+       
     // Get the Width/Height ratio from the image
     // Update the vehicle geometry
     var img = new Image();
@@ -104,11 +103,6 @@ function createNewVehicle(event) {
     };
 
     img.src = vehicleImagePath;
-    
-
-
-
-
 }
 
 /**
@@ -151,14 +145,19 @@ function changeVehicleSpeed(event) {
 
     var vehicleId = event.vehicleId;
     var speed = event.speed;
+    var x = event.x;
+    var y = event.y;
 
     for (var i = 0; i < vehicles.length; i++) {
 
         if (vehicleId === vehicles[i].vehicleId) {            
             vehicles[i].speed = speed;
-            break;
+            vehicles[i].x = x;
+            vehicles[i].y = y;
+            vehicles[i].position.x = x;
+            vehicles[i].position.y = y;
+            return;
         }
-
     }
 }
 
@@ -170,12 +169,11 @@ function changeVehicleSpeed(event) {
 function destroyVehicle(event) {
 
     var vehicleId = event.vehicleId;
-
+    
     for (var i = 0; i < vehicles.length; i++) {
 
         if (vehicleId === vehicles[i].vehicleId) {
 
-            vehicles[i].position.y = vehicles[i].position.y + 30;
             scene.remove(vehicles[i]);
 
             //Remove Vehicle at index i
