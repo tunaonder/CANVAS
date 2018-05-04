@@ -464,35 +464,6 @@ public class SimulationRuntime {
 
                     if (vehicle.isSpotOccupiedByAnotherVehicle(targetSpot)) {
 
-                        //This is Cannot be Null because of the test
-                        String occupierId = targetSpot.getOccupierId();
-
-                        DynamicObject leavingVehicle = target.getLeavingDynamicObj();
-
-                        //Occupier Already Passed the Target
-//                        if (leavingVehicle != null && occupierId.equals(leavingVehicle.getId())) {
-//
-//                            if (vehicle.isVehicleClose(leavingVehicle, simulationConstants.vehicleDistanceLimit)) {
-//
-//                                if (vehicle.shouldSlowDown(leavingVehicle)) {
-//                                    //If vehicle cannot move with the same speed, change its speed
-//                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
-//                                    return true;
-//                                }
-//
-//                            }
-//                            return true;
-//
-//                        } //Occupier is The vehicle from the other route
-//                        else {
-//                            //If vehicle is still moving, stop.
-//                            if (vehicle.getTempSpeed() != 0) {
-//                                vehicle.setTempSpeed(0);
-//                                messageManager.vehicleSpeedChange(vehicle,  simulationTime);
-//                            }
-//                            return false;
-//
-//                        }
                         if (vehicle.getTempSpeed() != 0) {
                             vehicle.setTempSpeed(0);
                             messageManager.vehicleSpeedChange(vehicle, simulationTime);

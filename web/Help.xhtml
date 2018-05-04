@@ -20,17 +20,26 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                 <br/>           
                 <h3><b> Simulation Model Composition </b></h3>
 
-                <h4> Users can create multiple paths to define a traffic network model. Forks and Merges can be used to define connections among different paths. Currently, CANVAS provides following components: Enter Points, Exit Points, 
-                    Move Spots, Traffic Lights, Forks and Merges. A Path must start with an enter point and end with an exit point. Move Spots and Traffic Lights can be added along the way.
+                <h4> Currently, CANVAS provides following components: Enter Points, Exit Points, 
+                    Move Spots, Traffic Lights, Forks and Merges. A path must start with an enter point and end with an exit point. Move Spots and Traffic Lights can be added along the way.
+                    Forks and Merges can be used to define connections among different paths. 
                     <br/>
                     <br/>
-                    If there is an alternative path on a specified point, select the "Convert To Fork" option and click on the move spot.
+                    If an alternative path needs to be created starting from a specific point, a move spot object can be converted to a fork by using the "Convert To Fork" option.
                     The move spot will be converted into a Fork after the "New Path Probability" is defined.
                     <br/>
                     <br/>
-                    Please use the "Convert To Merge" option when two different paths intersect into one path.
+                    "Convert To Merge" option can be used to merge two different paths into one.
                     <br/>
                     <br/>
+                </h4>
+
+                <h3><b> Simulation Model Update </b></h3>
+                <h4> 
+                    New paths can be created on a simulation model by simply adding new objects starting from an enter point. 
+                    Existing paths can be removed starting from last added component.
+                    Moreover, traffic lights, forks, and enter points can modified by simply clicking on 
+                    them within the background map.
                 </h4>
                 <h3><b> Example Model 1: </b></h3>
 

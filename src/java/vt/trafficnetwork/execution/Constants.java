@@ -11,7 +11,7 @@ package vt.trafficnetwork.execution;
 public class Constants {
 
     public int vehicleDistanceLimit = 16;
-    public int vehicleToSpotDistanceLimit = 16;
+    public int vehicleToSpotDistanceLimit = 20;
 
     public int vehicleLength1 = 16;
     public int vehicleLength2 = 22;
