@@ -290,7 +290,7 @@ public class SimulationRuntime {
 
                     //Check If Vehicle Left The Current Spot Completely
                     //If it left, current spot is free for other vehicles to move
-                    compareVehicleAndCurrentSpot(vehicle);
+                    vehicle.compareVehicleAndCurrentSpot(simulationConstants.vehicleDistanceLimit);
 
                 } //If the vehicle has reached to the target
                 else {
@@ -618,25 +618,6 @@ public class SimulationRuntime {
         messageManager.vehicleSpeedChange(vehicle, simulationTime);
 
         return true;
-
-    }
-
-    /**
-     * If the vehicle got far away from its last spot, do not occupy the spot
-     * anymore
-     *
-     * @param vehicle
-     */
-    private void compareVehicleAndCurrentSpot(Vehicle vehicle) {
-        //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
-        if (vehicle.getCurrentSpot().getLeavingDynamicObj() == vehicle
-                && vehicle.isFarFromSpot(simulationConstants.vehicleDistanceLimit)) {
-
-            vehicle.getCurrentSpot().setLeavingDynamicObj(null);
-
-            //No Occupation on the Spot anymore
-            vehicle.getCurrentSpot().setOccupierId("");
-        }
 
     }
 

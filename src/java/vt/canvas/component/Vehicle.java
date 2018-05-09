@@ -263,5 +263,23 @@ public class Vehicle extends DynamicObject {
             previousSpot.setOccupierId("");
         }
     }
+    
+    /**
+     * If the vehicle got far away from its last spot, do not occupy the spot
+     * anymore
+     *
+     * @param vehicle
+     */
+    public void compareVehicleAndCurrentSpot(int vehicleDistanceLimit) {
+        //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
+        if (this.getCurrentSpot().getLeavingDynamicObj() == this
+                && this.isFarFromSpot(vehicleDistanceLimit)) {
+
+            this.getCurrentSpot().setLeavingDynamicObj(null);
+
+            //No Occupation on the Spot anymore
+            this.getCurrentSpot().setOccupierId("");
+        }
+    }
 
 }
