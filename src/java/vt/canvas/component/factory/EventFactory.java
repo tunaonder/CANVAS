@@ -18,18 +18,19 @@ import vt.canvas.execution.random.UniformRandom;
  * This class creates future events
  * @author Onder
  */
+
 public class EventFactory {
     
     public EventFactory() {
     }
     
-
     public Event scheduleVehicleCreation(EnterPoint enterPoint, int currentTime) {
         
         // A time frame is 1/60 seconds
         // Generation Times are provided in terms of seconds
         RandomVariate random = new UniformRandom(enterPoint.getMinGenerationTime()*60, 
                  enterPoint.getMaxGenerationTime()*60);
+        
         // Get random creation time
         int time = (int)random.nextDouble() + currentTime;
                
@@ -47,12 +48,11 @@ public class EventFactory {
         else{
             // If Vehicle is in Red State: time duration is redStateTime.
             // Otherwise the duration is greenStateTime
-            // Add an extra 1.5 seconds to red state (60 * 1.5)
+            // Add an extra 1.5 seconds to the red state (60 * 1.5)
             time = currentTime + (light.getState() == TrafficLight.STATE.RED ? 
                     light.getRedStateTime() + 90 : light.getGreenStateTime() - 90);
           
-        }     
-              
+        }                 
         return new TrafficLightStateChangeEvent(time, light);
      
     }

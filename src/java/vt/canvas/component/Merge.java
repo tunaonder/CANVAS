@@ -11,16 +11,17 @@ import vt.canvas.component.helpers.StaticObject;
  *
  * @author Onder
  */
+
 public class Merge extends StaticObject {
 
     private StaticObject prev;
     private StaticObject next;
-    //Fork Objects has an alternative Prev Spot that is different than Move Spots
+    //Fork Objects has an alternative Prev Spot
     private StaticObject prevAlternative;
-    //Each Movement Object has an Incoming Car. However, Since merge has 2 previous spot, it has another 
-    //INCOMING CAR
+    
+    // Each Movement Object has an Incoming Car. 
+    // Merge has 2 previous spot. Therefore, it has a second incoming object
     private DynamicObject incomingDynamicObject2;
-
 
     public Merge(String id, double x, double y) {
         super(id, x, y);
@@ -59,5 +60,4 @@ public class Merge extends StaticObject {
     public void setIncomingDynamicObject2(DynamicObject incomingDynamicObject2) {
         this.incomingDynamicObject2 = incomingDynamicObject2;
     }
-
 }

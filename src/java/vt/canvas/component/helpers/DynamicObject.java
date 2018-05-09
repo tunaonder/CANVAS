@@ -12,10 +12,6 @@ package vt.canvas.component.helpers;
  * Created by Sait Tuna Onder on 2017.03.18  * 
  * Copyright © 2017 Sait Tuna Onder. All rights reserved. * 
  */
-/**
- *
- * @author Onder
- */
 public abstract class DynamicObject extends SimulationObject {
 
     private double speed;
@@ -105,14 +101,16 @@ public abstract class DynamicObject extends SimulationObject {
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }
-    
-        /**
-     * This Method Calculates The rotation of the car according to current and target coordinates
+
+    /**
+     * This Method Calculates The rotation of the car according to current and
+     * target coordinates
+     *
      * @param x
      * @param y
      * @param targetX
      * @param targetY
-     * @return 
+     * @return
      */
     private double calculateRotation(double x, double y, double targetX, double targetY) {
 
@@ -135,11 +133,12 @@ public abstract class DynamicObject extends SimulationObject {
         return rot;
 
     }
-    
+
     /**
      * Calculate and Set the Rotation
+     *
      * @param o1
-     * @param o2 
+     * @param o2
      */
     public void setRotation(StaticObject o1, StaticObject o2) {
 
@@ -148,7 +147,5 @@ public abstract class DynamicObject extends SimulationObject {
         setRotation(rot);
 
     }
-    
-    
 
 }

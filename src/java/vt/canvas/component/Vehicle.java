@@ -11,6 +11,7 @@ import vt.canvas.component.helpers.StaticObject;
  *
  * @author Onder
  */
+
 public class Vehicle extends DynamicObject {
 
     public Vehicle(String id, double x, double y, double speed, StaticObject current, StaticObject target, double length) {

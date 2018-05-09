@@ -14,6 +14,7 @@ import vt.canvas.execution.random.UniformRandom;
  * This class Creates Vehicles
  * @author Onder
  */
+
 public class VehicleFactory {
 
     private final RandomVariate random;
@@ -56,6 +57,7 @@ public class VehicleFactory {
         
         double length;
         
+        // Randomly assign a length to the vehicle
         int lengthGenerator = (int)random.nextDouble(1, 12);
         
         if(lengthGenerator < 9){
@@ -71,11 +73,8 @@ public class VehicleFactory {
             length = vehicleLength4;
         }
              
-        //Set the length later
         Vehicle vehicle = new Vehicle(id, factoryOwner.getX(), factoryOwner.getY(), speed,
                 factoryOwner, factoryOwner.getNext(), length);
-
-        //System.out.println("Vehicle " + vehicle.getId() + " is created");
         
         return vehicle;
     }

@@ -10,11 +10,13 @@ import vt.canvas.component.helpers.StaticObject;
  *
  * @author Onder
  */
+
 public class Fork extends StaticObject{
     
     private StaticObject prev;
     private StaticObject next;
-    //Fork Objects has an alternative Next Spot that is different than Move Spots
+    
+    //Fork Objects has an alternative Next Spot
     private StaticObject nextAlternative;
     private final int newPathProbability;
 

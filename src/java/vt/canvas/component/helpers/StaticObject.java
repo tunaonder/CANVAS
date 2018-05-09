@@ -8,6 +8,7 @@ package vt.canvas.component.helpers;
  *
  * @author Onder
  */
+
 public abstract class StaticObject extends SimulationObject{
     
     private DynamicObject incomingDynamicObj;
@@ -43,12 +44,5 @@ public abstract class StaticObject extends SimulationObject{
     public void setOccupierId(String occupierId) {
         this.occupierId = occupierId;
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
 }

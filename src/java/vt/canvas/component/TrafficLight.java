@@ -22,7 +22,7 @@ public class TrafficLight extends StaticObject {
     public TrafficLight(String id, double x, double y, int greenStartTime,
             int greenDuration, int redDuration) {
         super(id, x, y);
-        // Multiply time values by 60 since the smallest time frame is 1/60 seconds
+        // Multiply time values by 60 since a CANVAS time frame is 1/60 seconds
         this.greenStartTime = greenStartTime * 60;
         this.greenStateTime = greenDuration * 60;
         this.redStateTime = redDuration * 60;        
@@ -88,7 +88,6 @@ public class TrafficLight extends StaticObject {
         } else {
             this.state = STATE.GREEN;
         }
-
     }
 
     public enum STATE {

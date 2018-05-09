@@ -10,6 +10,7 @@ import vt.canvas.component.helpers.StaticObject;
  *
  * @author Onder
  */
+
 public class MoveSpot extends StaticObject {
 
     private StaticObject prev;
@@ -35,12 +36,4 @@ public class MoveSpot extends StaticObject {
     public void setNext(StaticObject next) {
         this.next = next;
     }
-
-
-    
-    
-
-    
-    
-
 }
