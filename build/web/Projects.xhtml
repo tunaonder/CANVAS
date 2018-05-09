@@ -21,7 +21,6 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
             <div align="center" >
                 <p:growl id="msgs" showDetail="true" />  
                 <h:form id="projectForm">
-
                     <br/>
                     <br/>
                     <br/>
@@ -32,8 +31,6 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                             <p:ajax event="select" listener="#{projectManager.onSelect}" update="msgs"/>
 
                         </p:orderList>
-
-
                     </div>
                     <br/>
                     <p:commandButton id="selectProjectButton" value="Select Project" 
@@ -46,10 +43,7 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                      <p:commandButton id="deleteProjectButton" value="Delete Project" 
                                      class="btn btn-default" update="msgs projectList publicProjectForm:publicProjectList"
                                      action="#{projectManager.deleteProject()}" style="margin-top: 10px;"/>
-                    
-
-                             
-
+                   
                     <br/>
                     <br/>
                     <br/>

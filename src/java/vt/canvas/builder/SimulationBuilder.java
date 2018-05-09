@@ -38,26 +38,23 @@ public class SimulationBuilder {
         
         int enterPointCount = 0;
         int exitPointCount = 0;
-        
-        
+               
         System.out.println("==Simulation Model Build Start==");
         
         // First, Read Each Json Object and Create Static Objects According to JSON Object Type
-        // First object of model data is saved for non-component information such as simulation duration
+        // First object of model data(modelData[0]) is used for other data such as simulation duration
         for (int i = 1; i < modelData.size(); i++) {
             
             JsonObject spot = modelData.getJsonObject(i);
 
-            //'s' represents static objects
             String id = spot.getString("objectId");
 
             double x = spot.getJsonNumber("x").doubleValue();
             double y = spot.getJsonNumber("y").doubleValue();
 
-            //Create Objects of Different Types and add to Hash Map
+            //Create Objects of Different Types and add to the Hash Map
             StaticObject object;
-            
-            
+                  
             switch (spot.getString("type")) {
                 case "Standart":
 
@@ -120,11 +117,9 @@ public class SimulationBuilder {
         if(exitPointCount == 0){
              sendErrorMessage("Missing Exit Point");
             return false;            
-        }
-        
+        }       
 
-        //Second, Set the Connection Between Objects and add them to runtime
-        // First object of model data is saved for non-component information such as simulation duration
+        // Set the Connection Between Objects
         for (int i = 1; i < modelData.size(); i++) {
 
             JsonObject spot = modelData.getJsonObject(i);
@@ -133,18 +128,19 @@ public class SimulationBuilder {
 
             String prevId = "";
             String nextId = "";
-            //Used For Fork
+            // Used For Fork
             String alternativeNextId;
-             //Used For Merge
+            // Used For Merge
             String alternativePrevId;
 
             StaticObject prev = null;
             StaticObject next = null;
-            //Only For Fork Objects
+            // Only For Fork Objects
             StaticObject next2;
-            //Only For Merge Objects
+            // Only For Merge Objects
             StaticObject prev2;
             
+            // All object types except ExitPoint must have a valid next object
             if(!spot.getString("type").equals("ExitPoint")){
                 nextId = spot.getString("nextId"); 
                 if(nextId.equals("none")){
@@ -154,6 +150,7 @@ public class SimulationBuilder {
                 }   
                 next = (StaticObject) objects.get(nextId);                            
             }
+            // All object types except EnterPoint must have a valid prev object
             else if(!spot.getString("type").equals("EnterPoint")){
                 prevId = spot.getString("prevId");
                 if(prevId.equals("none")){
@@ -166,7 +163,7 @@ public class SimulationBuilder {
 
             switch (spot.getString("type")) {
 
-                //Standart type has prev and next objects
+                // Standart type has prev and next objects
                 case "Standart":
                     MoveSpot moveSpot = (MoveSpot) objects.get(id);
                     moveSpot.setPrev(prev);
