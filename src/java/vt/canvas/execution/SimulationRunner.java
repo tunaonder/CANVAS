@@ -15,7 +15,6 @@ import vt.canvas.builder.SimulationBuilder;
 public class SimulationRunner {
 
     private final SimulationBuilder simulationBuilder;
-
     private final Simulator sim;
 
     public SimulationRunner(String sessionIdentifier) {

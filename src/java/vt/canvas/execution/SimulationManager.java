@@ -12,6 +12,7 @@ import javax.json.JsonArray;
  *
  * @author Onder
  */
+
 public class SimulationManager {
 
     //Simulation Manager Map, one for each user session
@@ -62,11 +63,10 @@ public class SimulationManager {
 
     public void requestExecution(JsonArray modelData) {
 
-        // start execution thread
+        // Start execution thread
         executor = new SimulationExecutor(modelData);
         Thread exec = new Thread(executor, sessionIdentifier);
-        //Set priority
-        //exec.setPriority(Thread.currentThread().getPriority() - 1);
+
         exec.start();
     }
 
@@ -76,7 +76,8 @@ public class SimulationManager {
         Thread exec = new Thread(messageRequester);
         exec.start();
     }
-
+    
+    // Main Simulation Execution Thread
     private class SimulationExecutor implements Runnable {
 
         private final JsonArray model;
@@ -95,7 +96,8 @@ public class SimulationManager {
             }
         }
     };
-
+    
+    // Event Request Theread
     private class SimulationMessageRequester implements Runnable {
 
         @Override

@@ -7,7 +7,6 @@ package vt.canvas.component;
 import vt.canvas.component.helpers.StaticObject;
 import vt.canvas.component.factory.VehicleFactory;
 
-
 /**
  * 
  * @author Onder

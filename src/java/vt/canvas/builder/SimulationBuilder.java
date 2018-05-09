@@ -175,7 +175,7 @@ public class SimulationBuilder {
                 case "Fork":
 
                     alternativeNextId = spot.getString("alternativeNextId");
-
+                    // Check if Fork object is valid
                     if (alternativeNextId.equals("none") || alternativeNextId.equals(nextId) || nextId.equals(prevId)
                             || alternativeNextId.equals(prevId)) {
                         String numberId = id.substring(1);
@@ -197,7 +197,7 @@ public class SimulationBuilder {
                 case "Merge":
 
                     alternativePrevId = spot.getString("alternativePrevId");
-
+                    // Check if Merge object is valid
                     if (alternativePrevId.equals("none") || alternativePrevId.equals(prevId) || nextId.equals(prevId)
                             || alternativePrevId.equals(nextId)) {
                         String numberId = id.substring(1);
@@ -215,7 +215,6 @@ public class SimulationBuilder {
 
                     break;    
 
-                //EnterPoint has next object
                 case "EnterPoint":
 
                     EnterPoint enterPoint = (EnterPoint) objects.get(id);
@@ -224,8 +223,7 @@ public class SimulationBuilder {
                     sim.addObject(enterPoint);
 
                     break;
-
-                //Exit point has prev object    
+  
                 case "ExitPoint":
 
                     ExitPoint exitPoint = (ExitPoint) objects.get(id);

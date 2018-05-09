@@ -8,6 +8,7 @@ package vt.canvas.component.helpers;
  *
  * @author Onder
  */
+
 public abstract class SimulationObject {
 
     private final String id;

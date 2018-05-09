@@ -11,7 +11,6 @@ import vt.canvas.component.helpers.StaticObject;
  * @author Onder
  */
 
-
 public class ExitPoint extends StaticObject{
     
     private StaticObject prev;
