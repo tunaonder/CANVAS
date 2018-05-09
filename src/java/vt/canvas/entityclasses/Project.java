@@ -144,7 +144,7 @@ public class Project implements Serializable {
 
     @Override
     public String toString() {
-        return "vt.trafficsimulator.entityclasses.Project[ id=" + id + " ]";
+        return "vt.canvas.entityclasses.Project[ id=" + id + " ]";
     }
     
 }

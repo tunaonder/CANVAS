@@ -168,7 +168,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "vt.trafficsimulator.entityclasses.User[ id=" + id + " ]";
+        return "vt.canvas.entityclasses.User[ id=" + id + " ]";
     }
     
 }

@@ -112,7 +112,7 @@ public class SimulationModel implements Serializable {
 
     @Override
     public String toString() {
-        return "vt.trafficsimulator.entityclasses.SimulationModel[ id=" + id + " ]";
+        return "vt.canvas.entityclasses.SimulationModel[ id=" + id + " ]";
     }
     
 }

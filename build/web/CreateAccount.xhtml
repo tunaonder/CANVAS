@@ -10,21 +10,11 @@ Copyright © 2017 Sait Tuna Onder. All rights reserved.
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <!-- Do not enter tags before the composition line since they are ignored by JSF -->
-
-    <!-- This page is constructed based on the siteTemplate -->
     <ui:composition template="templates/siteTemplate.xhtml">
 
-        <ui:define name="title">
-            <!-- Set the page title -->
-            <h:outputText value="Create Account"></h:outputText>
-        </ui:define>
-
-        <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
             <div align="center" style="width:50%; margin:0 auto;">
-
                 <!-- Error messages will be shown here if any  -->
                 <p:messages id="msgs" showIcon="false"/>
                 <h:outputLabel id="form-error-message" class="errorMessages" value="#{accountManager.statusMessage}"/>
