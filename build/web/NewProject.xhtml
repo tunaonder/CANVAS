@@ -14,12 +14,6 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
     <!-- This page is constructed based on the siteTemplate -->
     <ui:composition template="templates/siteTemplate.xhtml">
 
-        <ui:define name="title">
-            <!-- Set the page title -->
-            <h:outputText value="Create Project"></h:outputText>
-        </ui:define>
-
-        <!-- Create the content for this page below -->
         <ui:define name="editableContent">
 
             <!-- 
@@ -33,7 +27,6 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                     <h2>Project Name</h2>
 
                     <br/>
-
                     <h:form>
                         <p:panelGrid columns="2" columnClasses="signInColumn1, signInColumn2">
 
@@ -59,8 +52,6 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
                         <br/>
                         <!-- Allow maximum 10MB file size and no more than 5 files to upload at the same time -->
 
-                       
-
                         <p:growl id="messages" showDetail="true" />
                         <br/>
                         <p:commandButton id="commandd" value="Create Project" action="#{projectManager.createProject()}" 
@@ -68,8 +59,6 @@ Copyright © 2017 Sait Tun Onder. All rights reserved.
 
                         <br/><br/>
                     </h:form>
-
-
 
                 </div>
             </h:form>
