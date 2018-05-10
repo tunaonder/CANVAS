@@ -190,6 +190,12 @@ function processCurrentEvent(event) {
     
 }
 
+/**
+ * Displays the Simulation Results
+ * @param {type} vehicleCount
+ * @param {type} averageTime
+ * @returns {undefined}
+ */
 function processEndOfSimulation(vehicleCount, averageTime){
     
     simulationIsRunning = false;

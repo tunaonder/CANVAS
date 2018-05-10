@@ -15,6 +15,7 @@ var mode = "";
 var controlPanelWidth = 300;
 var headerHeight = 60;
 
+// Dimensions of HTML canvas element
 var canvasWidth = window.innerWidth - controlPanelWidth;
 var canvasHeight = window.innerHeight - headerHeight;
 
@@ -23,7 +24,7 @@ var raycaster = new THREE.Raycaster(); // create once
 var mouse = new THREE.Vector2(); // create once
 var vector = new THREE.Vector3();
 
-//Boundries of The Map
+// Boundries of The Background Map(Aeurial View of the Traffic Networks)
 var mapStartX;
 var mapStartY;
 var mapFinishX;
@@ -32,17 +33,21 @@ var mapFinishY;
 //Object Id will be incremented for each added objects
 var objectId = 0;
 
+// This is true to display spots within the scene
 var staticObjectDisplay = true;
 
-//Set The When Application Displays the Map
+//Set The Scene
 function setScene() {
-
+    
+    // Get Background map path
     var currentBackgroundMap = document.getElementById("hiddenMapInput").value;
 
     var img = new Image();
 
     // Image has to be loaded to get the imageHeight/imageWidth ratio
     img.onload = function () {
+        
+        // Find the ratio of uploaded image
         var ratio = img.height / img.width;
 
         //Add Event Listener to the page
@@ -52,13 +57,13 @@ function setScene() {
         camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 30000);
 
         renderer = new THREE.WebGLRenderer();
-
+        
         var backgroundWidth = canvasWidth;
         var backgroundHeight = ratio * backgroundWidth;
 
         // Camera position has to be set according to size of the background image file
-        // While map gets bigger, camera zooms out
-        // 0.55 is selected after tests. Number could be bigger to zoom out
+        // If map gets bigger, camera zooms out
+        // 0.55 is selected after multiple tests. Number could be bigger to zoom out
         camera.position.z = backgroundWidth * 0.55;
 
         // Load the background texture
