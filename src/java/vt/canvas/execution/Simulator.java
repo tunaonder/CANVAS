@@ -50,8 +50,7 @@ public class Simulator {
     }
 
     /**
-     * This method is called by Simulation Builder for each object taken from
-     * client
+     * This method is called by Simulation Builder for each static object
      *
      * @param object
      */

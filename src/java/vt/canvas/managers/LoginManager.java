@@ -12,7 +12,6 @@ import javax.inject.Named;
 import vt.canvas.entityclasses.User;
 import vt.canvas.sessionbeans.UserFacade;
 
-
 @Named(value = "loginManager")
 @SessionScoped
 /**
@@ -85,6 +84,7 @@ public class LoginManager implements Serializable {
         // Redirect to show the CreateAccount page
         return "CreateAccount.xhtml?faces-redirect=true";
     }
+
     /*
     Sign in the user if the entered username and password are valid
     @return "" if an error occurs; otherwise, redirect to show the Profile page

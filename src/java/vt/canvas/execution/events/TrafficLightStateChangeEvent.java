@@ -12,7 +12,7 @@ import vt.canvas.execution.events.helpers.Event;
  * @author Onder
  */
 public class TrafficLightStateChangeEvent extends Event {
-    
+
     private TrafficLight light;
 
     public TrafficLightStateChangeEvent(int time, TrafficLight light) {
@@ -27,8 +27,4 @@ public class TrafficLightStateChangeEvent extends Event {
     public void setLight(TrafficLight light) {
         this.light = light;
     }
-    
-    
-
-    
 }

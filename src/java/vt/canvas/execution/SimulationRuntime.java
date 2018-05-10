@@ -116,11 +116,13 @@ public class SimulationRuntime {
      * Called When Simulator is Initialized
      */
     protected void initializeFutureList() {
-
+        
+        // Vehicle creation event is scheduled for each enter point
         for (EnterPoint point : enterPoints.values()) {
             futureEventList.addEvent(eventFactory.scheduleVehicleCreation(point, 0));
         }
-
+        
+        // Traffic light state change event is scheduled for each traffic light
         if (trafficLights.size() > 0) {
             for (TrafficLight trafficLight : trafficLights.values()) {
                 futureEventList.addEvent(eventFactory.scheduleTrafficLightStateChange(trafficLight, 0));

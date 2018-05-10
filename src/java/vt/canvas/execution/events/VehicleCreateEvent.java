@@ -12,19 +12,19 @@ import vt.canvas.component.Vehicle;
  * @author Onder
  */
 public class VehicleCreateEvent extends Event {
-    
+
     private final Vehicle vehicle;
     //Factory Id
     private final String originId;
-    
+
     public VehicleCreateEvent(int time, Vehicle vehicle, String id) {
         super(time);
         this.vehicle = vehicle;
         this.originId = id;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Vehicle: " + vehicle.getId() + " created at time: " + this.getTime();
     }
 
@@ -35,7 +35,5 @@ public class VehicleCreateEvent extends Event {
     public String getOriginId() {
         return originId;
     }
-    
-    
-    
+
 }

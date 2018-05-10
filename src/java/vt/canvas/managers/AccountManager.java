@@ -25,20 +25,20 @@ import javax.inject.Named;
 @SessionScoped
 
 public class AccountManager implements Serializable {
-    
+
     private String password;
     private String firstName;
     private String lastName;
     private String email;
     private String username;
-    
+
     private String statusMessage;
 
     private User selected;
-    
+
     @EJB
     private UserFacade userFacade;
-    
+
     public AccountManager() {
     }
 
@@ -73,7 +73,7 @@ public class AccountManager implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getUsername() {
         return username;
     }
@@ -81,7 +81,7 @@ public class AccountManager implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     protected UserFacade getUserFacade() {
         return userFacade;
     }
@@ -116,10 +116,8 @@ public class AccountManager implements Serializable {
     public void setSelected(User selected) {
         this.selected = selected;
     }
-    
-    
-   
-     /*
+
+    /*
     ================
     Instance Methods
     ================
@@ -134,9 +132,8 @@ public class AccountManager implements Serializable {
     upon successful account creation, redirect to show the SignIn page.
      */
     public String createAccount() {
-        
-        // First, check if the entered username is already being used
 
+        // First, check if the entered username is already being used
         // Obtain the object reference of a User object with username
         User aUser = getUserFacade().findByUsername(username);
 
@@ -146,9 +143,8 @@ public class AccountManager implements Serializable {
             statusMessage = "Username already exists! Please select a different one!";
             return "";
         }
-        
-        // The entered email is available
 
+        // The entered email is available
         if (statusMessage == null || statusMessage.isEmpty()) {
             try {
                 // Instantiate a new User object
@@ -157,13 +153,13 @@ public class AccountManager implements Serializable {
                 /*
                 Set the properties of the newly created newUser object with the values
                 entered by the user in the AccountCreationForm in CreateAccount.xhtml
-                */
+                 */
                 newUser.setFirstName(firstName);
                 newUser.setLastName(lastName);
                 newUser.setEmail(email);
                 newUser.setUsername(username);
                 newUser.setPassword(password);
-                
+
                 getUserFacade().create(newUser);
 
             } catch (EJBException e) {
@@ -178,8 +174,8 @@ public class AccountManager implements Serializable {
         }
         return "";
     }
-    
-      // Validate if the entered password and confirm password are correct
+
+    // Validate if the entered password and confirm password are correct
     public void validateUserPassword(ComponentSystemEvent event) {
         /*
         FacesContext contains all of the per-request state information related to the processing of
@@ -288,7 +284,7 @@ public class AccountManager implements Serializable {
     public String showHomePage() {
         return "index?faces-redirect=true";
     }
-   
+
     public String logout() {
         // Clear the logged-in User's session map
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
@@ -304,7 +300,7 @@ public class AccountManager implements Serializable {
         // Redirect to show the index (Home) page
         return "index.xhtml?faces-redirect=true";
     }
-    
+
     // Validate if the entered password matches the entered confirm password
     public void validateInformation(ComponentSystemEvent event) {
 

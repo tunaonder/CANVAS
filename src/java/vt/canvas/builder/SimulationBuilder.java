@@ -21,6 +21,7 @@ import vt.canvas.websocket.SimulationSessionHandler;
 
 /**
  * This Class Builds The Simulation Model with the Model Information sent by the Client
+ * An error message is returned if the model cannot be validated
  * @author Onder
  */
 public class SimulationBuilder {

@@ -15,8 +15,8 @@ import vt.canvas.messaging.helpers.MessageList;
 import vt.canvas.websocket.SimulationSessionHandler;
 
 /**
- * This class adds messages to a message list. When the length of queue gets
- * high, it sends messages to the client
+ * This class adds messages to a message list. The messages are sent the client
+ * when they are requested by the client
  *
  * @author Onder
  */
@@ -29,9 +29,9 @@ public class MessageManager {
 
     private final MessageList messageList;
 
+    // Each client has a Message Manager instance
     public MessageManager(String sessionIdentifier) {
         this.sessionIdentifier = sessionIdentifier;
-
         this.messageList = new MessageList();
     }
 
@@ -110,7 +110,6 @@ public class MessageManager {
                 .add("y", y)
                 .build();
 
-        // System.out.println("speed change at: " + simTime + "for id: " + id + " from " + vehicle.getSpeed()+ " to " + updatedSpeed) ;
         Message message = new Message(speedChangeMessage, simTime);
         messageList.addMessage(message);
     }
@@ -124,7 +123,6 @@ public class MessageManager {
                 .add("vehicleId", id)
                 .build();
 
-        //System.out.println("vehicle destroy: " + simTime + "for id: " + id);
         Message message = new Message(destroyMessage, simTime);
         messageList.addMessage(message);
     }
@@ -155,7 +153,10 @@ public class MessageManager {
         messageList.addMessage(message);
         
     }
-
+    
+    /**
+     * Pause the execution thread if number of messages are higher than the limit
+     */
     private void checkMessageBuffer() {
         synchronized (this) {
             if (messageList.getSize() > messageQueueStorageLimit) {
@@ -171,35 +172,47 @@ public class MessageManager {
         }
     }
 
+    /**
+     * This method is called by the client when more messages are required on
+     * the client
+     */
     public void requestNewEventsToVisualize() {
         System.out.println("Messages are requested. Current Number Of Messages: " + messageList.getSize());
 
+        // Wait until simulation has built and messages are genareted
+        // Message request might come eariler than first simulion results
         while (messageList.getSize() == 0) {
-            // Wait until simulation has built and messages are genareted
-            // Message request might come eariler than first simulion results
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
+        // Wait for additional time in case more messages are currently being created
         try {
             Thread.sleep(3000);
         } catch (InterruptedException ex) {
             Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         synchronized (this) {
             System.out.println("Sending messages: Current number: " + messageList.getSize());
 
             int messageCountPerRequest = 0;
+
+            // Send number of messages
+            // If there are less messages than required, send all of them
             while (!messageList.isEmpty() && messageCountPerRequest < messageCountLimitPerRequest) {
                 Message message = messageList.pollNextMessage();
                 messageCountPerRequest++;
                 SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
             }
+
             System.out.println("Sent " + messageCountPerRequest + " messages.");
 
+            // Notify the main execution thread to generate more messages
             System.out.println("woke up..." + sessionIdentifier);
             this.notify();
         }

@@ -9,10 +9,10 @@ import java.util.Map;
 import javax.json.JsonArray;
 
 /**
- *
+ * Each Client has a Simulation Manager instance
+ * References are stored in static "managers" map
  * @author Onder
  */
-
 public class SimulationManager {
 
     //Simulation Manager Map, one for each user session
@@ -45,7 +45,7 @@ public class SimulationManager {
      */
     public static SimulationManager addSimulationInstance(String sessionIdentifier) {
 
-        //If No session is created yet, initialize the hash map
+        //If no session is created yet, initialize the hash map
         if (managers == null) {
             managers = new HashMap();
         }

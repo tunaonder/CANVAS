@@ -9,11 +9,12 @@ package vt.canvas.managers;
  * @author Onder
  */
 public class Constants {
-      /* =========== Our Design Decision ===========
+
+    /* =========== Our Design Decision ===========
         We decided to use directories external to our application 
         for the storage and retrieval of user's files.
      */
-   public static final String FILES_ABSOLUTE_PATH = "/Users/Onder/TrafficSimulatorFileStorage/";
+    public static final String FILES_ABSOLUTE_PATH = "/Users/Onder/TrafficSimulatorFileStorage/";
 //    public static final String FILES_ABSOLUTE_PATH = "/home/Onder/TrafficSimulatorFileStorage/";
 //     public static final String FILES_ABSOLUTE_PATH = "/home/balci/TrafficSimulatorFileStorage/";
 
@@ -24,7 +25,7 @@ public class Constants {
     Relative path is defined with respect to the Alternate Document Root starting with 'TrafficSimulatorFileStorage'.
      */
     public static final String FILES_RELATIVE_PATH = "TrafficSimulatorFileStorage/";
-    
+
     public static final String DEFAULT_BACKGROUND_MAP = "DowntownClean.jpg";
 
     /* Temporary filename */
