@@ -141,7 +141,7 @@ public class SimulationRuntime {
         this.simulationTimeLimit = simulationTimeLimit * 60 * 60;
     }
 
-    public synchronized void simulate() {
+    public void simulate() {
 
         while (simulationTime < simulationTimeLimit) {
 
@@ -182,7 +182,7 @@ public class SimulationRuntime {
 
     }
 
-    private synchronized void processScheduledEvent() {
+    private void processScheduledEvent() {
 
         // If the event is Vehicle Creation Event
         if (earliestScheduledEvent instanceof VehicleCreateEvent) {
@@ -258,15 +258,16 @@ public class SimulationRuntime {
 
     }
 
-    private synchronized void updateSimulation() {
+    private void updateSimulation() {
 
         List<Vehicle> vehiclesToRemove = new ArrayList<>();
 
-        //for(Vehicle vehicle: vehicles){
+        // Update each vehicle
         for (int i = 0; i < vehicles.size(); i++) {
 
             Vehicle vehicle = vehicles.get(i);
 
+            // Check if vehicle can update its coordinate
             if (canMove(vehicle)) {
 
                 double x = vehicle.getX();
@@ -279,12 +280,12 @@ public class SimulationRuntime {
                 double distanceY = Math.abs(y - targetY);
 
                 //If the Vehicle is not close to target, update its coordinates
-                //Max Speed of A vehicle is the biggest possible location change in a time frame.
+                //Max Speed of the vehicle is the biggest possible location change in a time frame.
                 if (distanceX > simulationConstants.maxSpeed || distanceY > simulationConstants.maxSpeed) {
 
+                    // Update the vehicle's coordinates
                     x += vehicle.getTempSpeed() * Math.cos(vehicle.getRotation()) * -1;
                     y += vehicle.getTempSpeed() * Math.sin(vehicle.getRotation()) * -1;
-
                     vehicle.setX(x);
                     vehicle.setY(y);
 
@@ -295,27 +296,29 @@ public class SimulationRuntime {
                 } //If the vehicle has reached to the target
                 else {
 
-                    //Update the vehicle's coordinates to the exact coordinates of the target
+                    // There might be very small difference between the vehicle's coordinate and the target's coordinates
+                    // Update the vehicle's coordinates to the exact coordinates of the target
                     vehicle.setX(targetX);
                     vehicle.setY(targetY);
 
-                    //Previous Spot
+                    // Previous Spot
                     StaticObject previousSpot = vehicle.getCurrentSpot();
 
-                    //Get The Target We Almost Reached
+                    // Get The Target We Almost Reached
                     StaticObject currentSpot = vehicle.getTargetSpot();
 
-                    //Set It as Current Spot
+                    // Set It as Current Spot
                     vehicle.setCurrentSpot(currentSpot);
 
+                    // If vehicle has reached to an ExitPoint, add it to the removal list
                     if (currentSpot instanceof ExitPoint) {
 
                         vehiclesToRemove.add(vehicle);
 
                         continue;
 
-                    } //Check if it is MoveSpot
-                    else if (currentSpot instanceof MoveSpot) {
+                    } else if (currentSpot instanceof MoveSpot) {
+
                         MoveSpot spot = (MoveSpot) currentSpot;
 
                         vehicle.setTargetSpot(spot.getNext());
@@ -323,25 +326,15 @@ public class SimulationRuntime {
                         //Set New Rotation Of The Car According To Current and Target Spot
                         vehicle.setRotation(spot, spot.getNext());
 
-                        ////
+                        // Vehicle is not the incoming dynamic object anymore.
+                        // Make the previous dynamic object new IncomingDynamicObj
                         vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
-                        //In the Next Run This Vehicle will leave the spot, so its' 
-                        //vehicle.getCurrentSpot().setOccupied(false);
+                        // Vehicle is the leaving vehicle now
                         spot.setLeavingDynamicObj(vehicle);
 
-                        //Remove the connection between two cars
-                        if (vehicle.getPrevDynamicObj() != null) {
-                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
-                        }
-                        vehicle.setPrevDynamicObj(null);
-                        //Change car speed to previous speed
-                        vehicle.setTempSpeed(vehicle.getSpeed());
-                        //
-
-                        messageManager.vehicleDirectionChange(vehicle, simulationTime);
-
                     } else if (currentSpot instanceof TrafficLight) {
+
                         TrafficLight spot = (TrafficLight) currentSpot;
 
                         vehicle.setTargetSpot(spot.getNext());
@@ -349,28 +342,20 @@ public class SimulationRuntime {
                         //Set New Rotation Of The Car According To Current and Target Spot
                         vehicle.setRotation(spot, spot.getNext());
 
-                        ////
+                        // Vehicle is not the incoming dynamic object anymore.
+                        // Make the previous dynamic object new IncomingDynamicObj
                         vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
-                        //In the Next Run This Vehicle will leave the spot, so its' 
-                        //vehicle.getCurrentSpot().setOccupied(false);
+                        // Vehicle is the leaving vehicle now
                         spot.setLeavingDynamicObj(vehicle);
 
-                        //Remove the connection between two cars
-                        if (vehicle.getPrevDynamicObj() != null) {
-                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
-                        }
-                        vehicle.setPrevDynamicObj(null);
-                        //Change car speed to previous speed
-                        vehicle.setTempSpeed(vehicle.getSpeed());
-
-                        messageManager.vehicleDirectionChange(vehicle, simulationTime);
-
                     } else if (currentSpot instanceof Fork) {
+
                         Fork spot = (Fork) currentSpot;
 
                         StaticObject nextSpot;
 
+                        // Find the next target spot according to selection probability
                         Random rand = new Random();
                         int randomInt = rand.nextInt(100) + 1;
                         if (randomInt <= spot.getNewPathProbability()) {
@@ -387,20 +372,8 @@ public class SimulationRuntime {
 
                         vehicle.getCurrentSpot().setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
-                        //In the Next Run This Vehicle will leave the spot, so its' 
-                        //vehicle.getCurrentSpot().setOccupied(false);
+                        // Vehicle is the leaving vehicle now
                         spot.setLeavingDynamicObj(vehicle);
-
-                        //Remove the connection between two cars
-                        if (vehicle.getPrevDynamicObj() != null) {
-                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
-                        }
-                        vehicle.setPrevDynamicObj(null);
-                        //Change car speed to previous speed
-                        vehicle.setTempSpeed(vehicle.getSpeed());
-                        //
-
-                        messageManager.vehicleDirectionChange(vehicle, simulationTime);
 
                     } else if (currentSpot instanceof Merge) {
 
@@ -411,6 +384,9 @@ public class SimulationRuntime {
                         //Set New Rotation Of The Car According To Current and Target Spot
                         vehicle.setRotation(spot, spot.getNext());
 
+                        // Set the new incoming object of the merge spot
+                        // If the vehicle is coming from path 1, update path 1 incoming dynamic object
+                        // Otherwise, update path 2 incoming dynamic object
                         if (vehicle == vehicle.getCurrentSpot().getIncomingDynamicObj()) {
                             spot.setIncomingDynamicObj(vehicle.getPrevDynamicObj());
 
@@ -419,26 +395,23 @@ public class SimulationRuntime {
 
                         }
 
-                        //In the Next Run This Vehicle will leave the spot, so its' 
-//                        spot.setOccupied(false);
-//                        spot.setOccupier(Merge.OccupierRoute.None);
+                        // Vehicle is the leaving vehicle now
                         spot.setLeavingDynamicObj(vehicle);
-
-                        //Remove the connection between two cars
-                        if (vehicle.getPrevDynamicObj() != null) {
-                            vehicle.getPrevDynamicObj().setNextDynamicObj(null);
-                        }
-                        vehicle.setPrevDynamicObj(null);
-                        //Change car speed to previous speed
-                        vehicle.setTempSpeed(vehicle.getSpeed());
-                        //
-
-                        messageManager.vehicleDirectionChange(vehicle, simulationTime);
 
                     }
 
-                    //Remove If There Is Still Connection with The Previous Spot
-                    //This methold is usefull when spots are places so closed to each other
+                    // Remove the connections between two vehicles
+                    if (vehicle.getPrevDynamicObj() != null) {
+                        vehicle.getPrevDynamicObj().setNextDynamicObj(null);
+                    }
+                    vehicle.setPrevDynamicObj(null);
+
+                    //Change car speed to previous speed
+                    vehicle.setTempSpeed(vehicle.getSpeed());
+
+                    messageManager.vehicleDirectionChange(vehicle, simulationTime);
+
+                    // Remove connections with the previous spot
                     vehicle.removePreviosSpotConnections(previousSpot);
 
                 }
@@ -456,27 +429,40 @@ public class SimulationRuntime {
 
     }
 
+    /**
+     * This method checks if a vehicle can move. Vehicle's speed is updated if
+     * required
+     *
+     * @param vehicle
+     * @return false if vehicle speed is reduced to zero
+     */
     private boolean canMove(Vehicle vehicle) {
 
+        // Check if vehicle is close to its target
         if (vehicle.isCloseToTargetSpot(simulationConstants.vehicleToSpotDistanceLimit)) {
 
             StaticObject target = vehicle.getTargetSpot();
+            // If the target is a Merge
             if (target instanceof Merge) {
 
                 Merge targetSpot = (Merge) target;
 
-                //If the Vehicle is the first car coming from either of the two routes
+                // Check if the vehicle is the first vehicle coming towards the target from one of the previous static objects
                 if (vehicle == targetSpot.getIncomingDynamicObj() || vehicle == targetSpot.getIncomingDynamicObject2()) {
 
+                    // If the merge is occuiped by another vehicle
                     if (vehicle.isSpotOccupiedByAnotherVehicle(targetSpot)) {
 
+                        // If vehicle is moving, stop
                         if (vehicle.getTempSpeed() != 0) {
                             vehicle.setTempSpeed(0);
                             messageManager.vehicleSpeedChange(vehicle, simulationTime);
                         }
+                        // If it is already stopped, return false
                         return false;
 
                     } else {
+                        // If the merge is not occupied anymore and the vehicle is waiting, start moving with its original speed
                         if (vehicle.getTempSpeed() == 0) {
                             vehicle.setTempSpeed(vehicle.getSpeed());
                             messageManager.vehicleSpeedChange(vehicle, simulationTime);
@@ -493,29 +479,31 @@ public class SimulationRuntime {
                     //Check if Target Is Occupied By Another Vehicle
                     if (vehicle.isSpotOccupiedByAnotherVehicle(target)) {
 
-                        //If this vehicle is the first one, and the target is occupied by someone else
-                        //It is the leaving car
+                        // If this vehicle is the first one, and the target is occupied by someone else
+                        // The other vehicle is the leaving vehicle
                         DynamicObject occupierVehicle = target.getLeavingDynamicObj();
 
+                        // If there is not an occupier, move with the same speed
                         if (occupierVehicle == null) {
                             return true;
                         }
 
+                        // Chech if the distance between vehicles is less than the limit
                         if (vehicle.isVehicleClose(occupierVehicle, simulationConstants.vehicleDistanceLimit)) {
 
+                            // If vehicle cannot move with the same speed, change its speed
                             if (vehicle.shouldSlowDown(occupierVehicle)) {
-                                //If vehicle cannot move with the same speed, change its speed
                                 messageManager.vehicleSpeedChange(vehicle, simulationTime);
 
                             }
 
-                        } //If the Vehicle Ahead got Far Away
+                        } //If the ahead is not close
                         else {
+                            // if vehicle has stopped, it can start moving with its original speed
                             if (vehicle.getTempSpeed() == 0) {
                                 vehicle.setTempSpeed(occupierVehicle.getTempSpeed());
                                 messageManager.vehicleSpeedChange(vehicle, simulationTime);
                             }
-
                         }
 
                         return true;
@@ -545,8 +533,10 @@ public class SimulationRuntime {
                         return false;
 
                     } else {
-                        // If spot after the traffic light is occupied do not move
+                        // If the spot after the traffic light is occupied do not move
+                        // This block makes sure that, there are no vehicles within the intersection
                         StaticObject spotAfterTrafficLight = ((TrafficLight) target).getNext();
+                        // If the spot after traffic light is occupied, stop the vehicle
                         if (!spotAfterTrafficLight.getOccupierId().equals("")) {
                             if (vehicle.getTempSpeed() != 0) {
                                 vehicle.setTempSpeed(0);
@@ -603,49 +593,21 @@ public class SimulationRuntime {
         }
 
         //If Vehicle has alreaddy Stopped, check if it has space to move again
-        if (vehicle.getTempSpeed() == 0 && canVehicleSpeedUp(vehicle)) {
-            return true;
-        }
-
-        if (!vehicle.isThereVehicleAhead()) {
-            return true;
-        }
-        if (vehicle.canMoveWithSameSpeed(simulationConstants.vehicleDistanceLimit)) {
-            return true;
-        }
-
-        //If vehicle cannot move with the same speed, change its speed        
-        messageManager.vehicleSpeedChange(vehicle, simulationTime);
-
-        return true;
-
-    }
-
-    /**
-     * Checks if the vehicle has an open space in front of it to speed up
-     *
-     * @param vehicle
-     * @return
-     */
-    private boolean canVehicleSpeedUp(Vehicle vehicle) {
-        
-        // If vehicle has a vehicle ahead
-        if (vehicle.getNextDynamicObj() == null) {
-            vehicle.setTempSpeed(vehicle.getSpeed());
+        if (vehicle.getTempSpeed() == 0 && vehicle.canVehicleSpeedUp(simulationConstants.vehicleDistanceLimit)) {
             messageManager.vehicleSpeedChange(vehicle, simulationTime);
             return true;
-        } 
-        else {
-            // If vehicle ahead is not close, the vehicle can get back to its original speed
-            if (!vehicle.isVehicleClose(vehicle.getNextDynamicObj(), simulationConstants.vehicleDistanceLimit)) {
-                vehicle.setTempSpeed(vehicle.getSpeed());
-                messageManager.vehicleSpeedChange(vehicle, simulationTime);
-                return true;
-            }
         }
 
-        return false;
+        // Check If vehicle has a close vehicle ahead
+        if (vehicle.isThereVehicleAhead()) {
+            if (!vehicle.canMoveWithSameSpeed(simulationConstants.vehicleDistanceLimit)) {
+                messageManager.vehicleSpeedChange(vehicle, simulationTime);
+            }
 
+        }
+
+        // Vehicle can move with the same speed
+        return true;
     }
 
     /**
@@ -660,10 +622,11 @@ public class SimulationRuntime {
         messageManager.endOfSimulation(totalNumberOfVehicles, averageTime, simulationTime);
 
     }
-    
+
     /**
      * Remove vehicle from SimulationRuntime, and delete all of its connections
-     * @param vehicle 
+     *
+     * @param vehicle
      */
     private void removeVehicle(Vehicle vehicle) {
 
@@ -687,7 +650,7 @@ public class SimulationRuntime {
         messageManager.vehicleDestroy(vehicle.getId(), simulationTime);
 
     }
-    
+
     /**
      * Request Events from the message manager This method is called by
      * Simulation Manager which is totally different than SimulationRuntime

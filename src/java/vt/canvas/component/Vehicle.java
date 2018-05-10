@@ -281,5 +281,28 @@ public class Vehicle extends DynamicObject {
             this.getCurrentSpot().setOccupierId("");
         }
     }
+    
+    /**
+     * Checks if the vehicle has an open space in front of it to speed up
+     *
+     * @param vehicle
+     * @return
+     */
+    public boolean canVehicleSpeedUp(int vehicleDistanceLimit) {
+
+        // If vehicle has a vehicle ahead
+        if (this.getNextDynamicObj() == null) {
+            this.setTempSpeed(this.getSpeed());
+            return true;
+        } else {
+            // If vehicle ahead is not close, the vehicle can get back to its original speed
+            if (!this.isVehicleClose(this.getNextDynamicObj(), vehicleDistanceLimit)) {
+                this.setTempSpeed(this.getSpeed());
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
