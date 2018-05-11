@@ -10,6 +10,7 @@
 
         <ui:define name="editableContent">
 
+            <!--HTML canvas element styling-->
             <style> 
                 canvas {
                     position: absolute;
@@ -19,6 +20,7 @@
             </style>
 
             <div id="controlPanel">
+                <!--Model Composer Components-->
                 <h:outputText value="#{projectManager.selectedProjectName}" style="color: blue; font-size: 20pt; font-weight: bold;"/>
                 <label class="controlLabel">Model Composer</label>
                 <button id="enterPointButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Enter Point</button>
@@ -29,7 +31,8 @@
                 <button id="mergeButton" class="btn panelButton" onClick="buttonClicked(this.id);"> Convert to Merge</button>
                 <button id="removeButton" class="btn panelButton" onClick="removeMoveSpot();"> Remove Last</button>
                 <button id="hideButton" class="btn panelButton" onClick="hideShowModelDetails(this);"> Hide Spots</button>
-                
+
+                <!--Traffic Light Form. It is not displayed initially-->
                 <h:form id="trafficLightForm" style="display: none;">
                     <label class="controlLabel">Set Traffic Light</label>
                     <h:panelGrid columns="2" cellpadding="5" columnClasses="trafficLight-label, trafficLight-input">
@@ -42,7 +45,8 @@
                     </h:panelGrid>                    
                 </h:form>
                 <button id="trafficLightChangeButton" class="btn panelButton" onClick="saveTrafficLightChanges();" style="display: none;"> Save Changes </button>
-                
+
+                <!--Enter Point Form. It is not displayed initially-->
                 <h:form id="enterPointForm" style="display: none;">
                     <label class="controlLabel">Vehicle Generation Timing</label>
                     <h:panelGrid columns="2" cellpadding="5" columnClasses=", enterPoint-input">
@@ -53,8 +57,9 @@
                     </h:panelGrid>                    
                 </h:form>
                 <button id="enterPointChangeButton" class="btn panelButton" onClick="saveEnterPointChanges();" style="display: none;"> Save Changes </button>
-                
-                  <h:form id="convertToForkForm" style="display: none;">
+
+                <!--Fork Form. It is not displayed initially-->
+                <h:form id="convertToForkForm" style="display: none;">
                     <label class="controlLabel">Fork Settings</label>
                     <h:panelGrid columns="2" cellpadding="5" columnClasses="fork-label, fork-input">
                         <p:outputLabel for="forkNewPathProbability" value="New Path Probability:" />
@@ -62,21 +67,26 @@
                     </h:panelGrid> 
                 </h:form>
                 <button id="convertForkChangeButton" class="btn panelButton" onClick="saveConvertForkChanges();" style="display: none;"> Save Changes </button>
-                
+
                 <br/>
-                
+
+                <!--Vehicle Size Adjustment buttons-->
                 <div id="vehicleSizeDiv">                   
                     <label class="controlLabel">Vehicle Size</label>                        
                     <button class="btn panelButton" onClick="createExampleVehicle('+');"> + </button>
                     <button class="btn panelButton" onClick="createExampleVehicle('-');"> - </button>
                 </div>
+
+                <!--Zoom in/Zoom out buttons-->
                 <div id="zoomDiv">                   
                     <label class="controlLabel">Zoom In / Zoom Out</label>                        
                     <button class="btn panelButton" onClick="zoomIn();"> + </button>
                     <button class="btn panelButton" onClick="zoomOut();"> - </button>
                 </div>
-                
+
                 <br/>
+
+                <!--Simulation Control buttons-->
                 <div id="startSimDiv">
                     <label class="controlLabel">Simulator Commands</label>
                     <h:panelGrid columns="2" cellpadding="5" columnClasses="simulationCommandsColumn1, simulationCommandsColumn1">
@@ -91,9 +101,9 @@
                         <h:inputHidden id="hiddenSimulationModel" value="#{projectManager.simulationModelData}"/>                      
                     </h:form>
                 </div>
-                
-               
-                    
+
+
+                <!--Simulation results form. It is not displayed initially-->
                 <h:form id="simResultForm" style="display: none;">
                     <label class="controlLabel">Simulation Results</label>
                     <h:panelGrid columns="2" cellpadding="5" columnClasses="simulationCommandsColumn1, simulationCommandsColumn1">
@@ -103,21 +113,24 @@
                         <h:inputText  id="averageTime" class="form-control" style="width: 120px;" readonly="true"/>
                     </h:panelGrid>
                 </h:form>
-              
+
             </div>
             <div>
                 <h:inputHidden id="hiddenMapInput" value="#{projectManager.selectedProjectMap}"/>                               
-                <script src="resources/js/websocket.js"></script>
-                <script src="resources/js/three.js"></script>
-                <script src="resources/js/threeScene.js"></script>
-                <script src="resources/js/moveSpot.js"></script>
-                <script src="resources/js/eventProcessor.js"></script>
-                <script src="resources/js/vehicle.js"></script>
-                <script src="resources/js/simulationVisualizer.js"></script>
-                <script>
-                            setScene();
-                </script>
             </div>
+            
+            <!--JS classes are only used in Simulator.xhtml page-->
+            <script src="resources/js/websocket.js"></script>
+            <script src="resources/js/three.js"></script>
+            <script src="resources/js/threeScene.js"></script>
+            <script src="resources/js/moveSpot.js"></script>
+            <script src="resources/js/eventProcessor.js"></script>
+            <script src="resources/js/vehicle.js"></script>
+            <script src="resources/js/simulationVisualizer.js"></script>
+            <!--Set HTML canvas element scene-->
+            <script>
+                        setScene();
+            </script>
 
         </ui:define>
     </ui:composition>

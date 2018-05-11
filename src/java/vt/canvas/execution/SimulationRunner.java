@@ -9,6 +9,9 @@ import javax.json.JsonObject;
 import vt.canvas.builder.SimulationBuilder;
 
 /**
+ * This class builds the simulation before simulator starts If simulationBuilder
+ * does not validate the input(modelData), simulationBuilder returns an error
+ * message to the client
  *
  * @author Onder
  */

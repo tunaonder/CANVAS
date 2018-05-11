@@ -69,7 +69,7 @@ function createNewVehicle(event) {
     vehicleTexture = THREE.ImageUtils.loadTexture(vehicleImagePath);
     vehicleMaterial = new THREE.MeshBasicMaterial({map: vehicleTexture, transparent: true});
     
-    // This is a simple hack. Width to height ratio is accepted as 1/2
+    // This is a simple hack. Width to height ratio is considered as 1/2
     // However it might change from vehicle to vehicle
     // The ratio is updated when vehicle image is loaded
     // This hack is required because image is loaded asychronously
@@ -178,7 +178,6 @@ function destroyVehicle(event) {
 
             //Remove Vehicle at index i
             vehicles.splice(i, 1);
-            //i = i - 1;
 
             break;
         }
@@ -204,6 +203,7 @@ function createExampleVehicle(newVehicleMode) {
         }
     }
 
+    // Create the example vehicle according to its size
     var img = new Image();
     img.onload = function () {
         var length = img.height;

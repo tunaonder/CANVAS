@@ -20,18 +20,22 @@ socket.onmessage = onMessage;
  */
 function startSimulation() {
     
+    // Check if simulation is already running
     if(simulationHasStarted){
         alert('Simulation is already running!');
         return;
     }
     
+    // Hide control panel forms in case they are displayed
     hideEnterPointForm();
     hideForkForm();
     hideTrafficLightForm();
    
+   // Hide vehicle size adjusment buttons
+   // Vehicle size cannot be changed while simulation is running
     document.getElementById("vehicleSizeDiv").setAttribute('style', 'display:none !important');
     
-
+    // Check if simulation duration is valid
     var simDuration = document.getElementById("simulationDuration").value;
     if (simDuration === "") {
         alert("Please enter simulation duration");
@@ -50,17 +54,22 @@ function startSimulation() {
 
     var simulationModel = [];
     
+    // Default Length of vehicles is 16.
+    // Find the length change ratio according to user's vehicle size update
+    // Recalculate the lengths of other vehicles(e.g trucks, busses)
+    // The vehicles will be created according to updated sizes
     lengthRatio = vehicleLength / 16;
     vehicleLength2 =  Math.floor(vehicleLength2 * lengthRatio);
     vehicleLength3 = Math.floor(vehicleLength3 * lengthRatio);
     vehicleLength4 = Math.floor(vehicleLength4 * lengthRatio);
     
-    // Add Simulation duration before model components
+    // Set Simulation duration and adjusted vehicle length as the first object of JSON array
     simulationModel.push({
         "duration": simDuration,
         "vehicleLength": vehicleLength
     });
-
+    
+    // Add all simulation components to the JSON array
     for (var i = 0; i < moveSpotObjects.length; i++) {
 
         var object = moveSpotObjects[i];
@@ -131,10 +140,12 @@ function startSimulation() {
     }
 
     simulationHasStarted = true;
+    
+    // Start WebSocket session
     socket.send(JSON.stringify(simulationModel));
 }
 
-//This method is called automatically when client receives a message from server
+// This method is called automatically when client receives a message from server
 function onMessage(message) {
 
     var event = JSON.parse(message.data);

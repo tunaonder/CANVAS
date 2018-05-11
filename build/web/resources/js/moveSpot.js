@@ -533,6 +533,7 @@ function saveConvertForkChanges() {
         return;
     }
     
+    // Find the clicked fork
     var fork;
     for (var i = 0; i < moveSpotObjects.length; i++) {
         if (lastClickedForkId === moveSpotObjects[i].objectId) {
@@ -541,8 +542,10 @@ function saveConvertForkChanges() {
         }
     }
     
+    // Update the fork's new path probability
     fork.newPathProbability = newPathProbability;
     
+    // Hide fork form
     document.getElementById("convertForkChangeButton").style.display = 'none';
     document.getElementById("convertToForkForm").style.display = 'none';
     document.getElementById("convertToForkForm:forkNewPathProbability").value = "";

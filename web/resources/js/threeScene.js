@@ -36,7 +36,7 @@ var objectId = 0;
 // This is true to display spots within the scene
 var staticObjectDisplay = true;
 
-//Set The Scene
+// Set The Scene
 function setScene() {
     
     // Get Background map path
@@ -88,14 +88,16 @@ function setScene() {
         mapStartY = bbox.min.y;
         mapFinishX = bbox.max.x;
         mapFinishY = bbox.max.y;
-
+        
+        // Retrieve the saved model
         retrieveModel();
         
+        // Create an example vehicle on top of the map
         createExampleVehicle('+');
         
-
         //Renders the app in half resolution, but display in full size.
         renderer.setSize(canvasWidth, canvasHeight);
+        
         //Set Background Color to the Scene
         renderer.setClearColor(0xafcedf);
         document.body.appendChild(renderer.domElement);
@@ -135,14 +137,8 @@ function onDocumentMouseDown(event) {
 
     var pos = camera.position.clone().add(dir.multiplyScalar(distance));
 
-    //If The User Clicks Withit The Map Boundries
+    // If The User Clicks Withit The Map Boundries
     if (vector.x > mapStartX && vector.x < mapFinishX && vector.y > mapStartY && vector.y < mapFinishY) {
-        
-        if (simulationHasStarted) {
-            alert('Interactions with the model is not allowed after simulation has started\n\
-                    Please refresh the page to update the model');
-            return;
-        }
         
         //If the Mode is Convert To Fork or Convert to Merge       
         if (moveSpotClicked(event)) {
@@ -162,33 +158,38 @@ function onDocumentMouseDown(event) {
         if (mode === 'enterPointButton') {
             var minTime = document.getElementById("enterPointForm:minVehicleGenerationTime").value;
             var maxTime = document.getElementById("enterPointForm:maxVehicleGenerationTime").value;
-
+            
+            // Check if min and max time values are entered
             if (minTime === "" || maxTime === "") {
                 alert("Please Fill Enter Point Details");
                 return;
             }
-
+            
+            // Check if numbers are valid integers
             var isNumber1 = minTime.match(/^\d+$/);
             var isNumber2 = maxTime.match(/^\d+$/);
             if (!isNumber1 || !isNumber2) {
                 alert("Enter Point Details is not valid");
                 return;
             }
-
+            
             if (minTime <= 0 || maxTime <= 0) {
                 alert("Time cannot be zero or negative");
                 return;
             }
 
-            
+            // Make sure that max time is bigger than min time
             if (parseFloat(minTime) > parseFloat(maxTime)) {
                 alert("Minimum time cannot be bigger than maximum time!");
                 return;
             }
-
+            
+            // Increment the object id
             objectId++;
+            // Insert new Enter Point
             enterPointInsert(vector.x, vector.y, 's' + objectId, minTime, maxTime);
-
+            
+            // Update HTML input values after the point is inserted
             document.getElementById("enterPointForm:minVehicleGenerationTime").value = "";
             document.getElementById("enterPointForm:maxVehicleGenerationTime").value = "";
             document.getElementById("enterPointForm").style.display = 'none';
@@ -196,22 +197,30 @@ function onDocumentMouseDown(event) {
             mode = ''; 
             
         } else if (mode === 'moveSpotButton') {
+            // Increment the object id
             objectId++;
+            // Insert new move spot
             moveSpotInsert(vector.x, vector.y, 's' + objectId);
 
         } else if (mode === 'exitPointButton') {
+            // Increment the object id
             objectId++;
+            // Insert new exit point
             exitPointInsert(vector.x, vector.y, 's' + objectId);
         } else if (mode === 'trafficLightButton') {
+            
+            // Get the traffic light details
             var greenStartTime = document.getElementById("trafficLightForm:greenStartTime").value;
             var greenDuration = document.getElementById("trafficLightForm:greenDuration").value;
             var redDuration = document.getElementById("trafficLightForm:redDuration").value;
-
+            
+            // Check if inputs are entered
             if (greenStartTime === "" || greenDuration === "" || redDuration === "") {
                 alert("Please Fill Traffic Light Details");
                 return;
             }
-
+            
+            // Check if inputs are valid integers
             var isNumber1 = greenStartTime.match(/^\d+$/);
             var isNumber2 = greenDuration.match(/^\d+$/);
             var isNumber3 = redDuration.match(/^\d+$/);
@@ -224,8 +233,11 @@ function onDocumentMouseDown(event) {
                 alert("Time cannot be smaller than 0");
                 return;
             }
-
+            
+            // Increment the object id
             objectId++;
+            
+            // Insert new traffic light
             trafficLightInsert(vector.x, vector.y, 's' + objectId, greenStartTime, greenDuration, redDuration);
 
             document.getElementById("trafficLightForm:greenStartTime").value = "";
@@ -241,6 +253,8 @@ function onDocumentMouseDown(event) {
 
 /**
  * 
+ * Calculates the distance between two coordinates. This method is used to check
+ * if spots are placed too close
  * 
  * @param {type} x1
  * @param {type} y1
@@ -258,6 +272,7 @@ function calculateDistance(x1, y1, x2, y2) {
 
 function buttonClicked(id) {
     
+    // Do not enable to click on
     if (simulationHasStarted) {
         alert('Model is not modifiable during the simulation visualization\nPlease refresh the page to add a new component');
         return;
@@ -273,13 +288,14 @@ function buttonClicked(id) {
             hideTrafficLightForm();
         }
     } else if (id === 'enterPointButton') {
-        // Display Traffic Light Form
+        // Display Enter Point Form
         if (document.getElementById("enterPointForm").style.display === 'none') {
             document.getElementById("enterPointForm").style.display = 'inline';
         } else {
             hideEnterPointForm();
         }
     } else if (id === 'forkButton') {
+        // Display Fork Form
         if (document.getElementById("convertToForkForm").style.display === 'none') {
             document.getElementById("convertToForkForm").style.display = 'inline';
 
@@ -287,7 +303,8 @@ function buttonClicked(id) {
             hideForkForm();
         }
     }
-
+    
+    // Hide forms other than the current mode form
     if (id !== 'trafficLightButton') {
         hideTrafficLightForm();
     }
@@ -333,6 +350,15 @@ function changeInsertMode(id) {
     }
 }
 
+/**
+ * This method calculates relative location of each static object
+ * The results are pushed inside static object array which is saved to hiddenSimulationModel
+ * The value of hiddenSimulationModel is called by saveProjectModel() method inside ProjectManager.java
+ * The functionality is provided through expression language. See the button definition in Simulator.xhtml
+ * for details
+ * 
+ * @returns {undefined}
+ */
 function saveModel() {
 
     var staticObjects = [];
@@ -406,19 +432,30 @@ function saveModel() {
             });
         }
     }
-
+    
+    // Save JSON formatted data inside hiddenSimulationModel element
     document.getElementById("simModelForm:hiddenSimulationModel").value = JSON.stringify(staticObjects);
 }
 
+/**
+ * This method retrieves a simulation model that is saved
+ * JSON formatted data is taken from hiddenSimulationModel element
+ * Model is created by calculating the new coordinates of the each object
+ * @returns {undefined}
+ */
 function retrieveModel() {
 
     var modelData = document.getElementById("simModelForm:hiddenSimulationModel").value;
-
+    
+    // Check if there is a valid data
     if (modelData === ''){
         return;
-    }        
+    } 
+    
+    // Parse the data into a json array
     var jsonArr = JSON.parse(modelData);
     
+    // Check if array has elements
     if (jsonArr.length === 0){
         return;
     }
@@ -428,8 +465,13 @@ function retrieveModel() {
         var spot = jsonArr[i];
         var xRatio = spot.x;
         var yRatio = spot.y;
+        
+        // This functions calculate the new coordinates of the objects according to
+        // the background map's border coordinates
         var xCoord = xRatio * (mapFinishX - mapStartX) + mapStartX;
         var yCoord = yRatio * (mapFinishY - mapStartY) + mapStartY;
+        
+        // Create Static Objects from Saved Models
         if (spot.type === 'EnterPoint') {
             enterPointFromSavedModel(xCoord, yCoord, spot.objectId, spot.nextId, spot.minTime, spot.maxTime);
         } else if (spot.type === 'ExitPoint') {
@@ -450,9 +492,9 @@ function retrieveModel() {
     // Find the Last Added Object Id
     var lastSpot = jsonArr[jsonArr.length-1];
     var lastObjectId = lastSpot.objectId;
-       
-    // Set current spot the last added spot
+         
     // Model can be modified starting from last added spot
+    // Set current spot the last added spot
     for (var i = 0; i < moveSpotObjects.length; i++) {
         if (lastObjectId === moveSpotObjects[i].objectId) {
             currentMoveSpot = moveSpotObjects[i];
@@ -471,6 +513,7 @@ function zoomOut(){
     camera.position.z = camera.position.z * 1.05;
 }
 
+// Hide all spots except traffic lights
 function hideShowModelDetails(button) {
     if (staticObjectDisplay) {
         for (var i = 0; i < moveSpotObjects.length; i++) {

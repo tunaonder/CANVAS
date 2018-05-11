@@ -11,6 +11,8 @@
         <ui:define name="editableContent">
             <div align="center">
                 <h2> Welcome to CANVAS</h2>
+
+                <!--Displays PrimeFaces Galleria-->
                 <p:panel styleClass="galleriaPanel">
                     <p:galleria value="#{imagesView.images}" var="image" panelWidth="650" showCaption="false">
                         <p:graphicImage name="images/imageSliderPhotos/#{image}" alt="Image Description for #{image}" title="#{image}"/>

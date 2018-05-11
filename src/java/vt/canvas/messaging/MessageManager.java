@@ -35,6 +35,10 @@ public class MessageManager {
         this.messageList = new MessageList();
     }
 
+    /**
+     * Add a VehicleCreateEvent to the messageList
+     * @param event 
+     */
     public void vehicleCreated(VehicleCreateEvent event) {
 
         double eventTime = event.getTime();
@@ -68,6 +72,11 @@ public class MessageManager {
 
     }
 
+    /**
+     * Add a VehicleDirectionChange event to the messageList
+     * @param vehicle
+     * @param simTime 
+     */
     public void vehicleDirectionChange(Vehicle vehicle, int simTime) {
 
         String vehicleId = vehicle.getId();
@@ -90,9 +99,15 @@ public class MessageManager {
         Message message = new Message(directionChangeMessage, simTime);
         messageList.addMessage(message);
         
+        // Check Number of Messages in the buffer
         checkMessageBuffer();
     }
-
+    
+    /**
+     * Add VehicleSpeedChange event to the messageList
+     * @param vehicle
+     * @param simTime 
+     */
     public void vehicleSpeedChange(Vehicle vehicle, int simTime) {
         
         double x = vehicle.getX();
@@ -113,7 +128,12 @@ public class MessageManager {
         Message message = new Message(speedChangeMessage, simTime);
         messageList.addMessage(message);
     }
-
+    
+    /**
+     * Add a vehicleRemoval event to the messageList
+     * @param id
+     * @param simTime 
+     */
     public void vehicleDestroy(String id, int simTime) {
 
         JsonProvider provider = JsonProvider.provider();
@@ -127,6 +147,11 @@ public class MessageManager {
         messageList.addMessage(message);
     }
 
+    /**
+     * Add a traffic light state change event to the messageList
+     * @param id
+     * @param simTime 
+     */
     public void trafficLightStateChange(String id, int simTime) {
 
         JsonProvider provider = JsonProvider.provider();
@@ -140,6 +165,12 @@ public class MessageManager {
         messageList.addMessage(message);
     }
     
+    /**
+     * Add end of the simulation message to the messageList
+     * @param vehicleCount
+     * @param averageTime
+     * @param simTime 
+     */
     public void endOfSimulation(int vehicleCount, int averageTime, int simTime){
         JsonProvider provider = JsonProvider.provider();
         JsonObject endOfSimMessage = provider.createObjectBuilder()
@@ -155,7 +186,8 @@ public class MessageManager {
     }
     
     /**
-     * Pause the execution thread if number of messages are higher than the limit
+     * Pause the execution thread if enough number of messages are created
+     * Otherwise, thread will continue running
      */
     private void checkMessageBuffer() {
         synchronized (this) {

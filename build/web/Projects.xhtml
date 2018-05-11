@@ -13,7 +13,8 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
     <ui:composition template="templates/siteTemplate.xhtml">
 
         <ui:define name="editableContent">
-            
+
+            <!--Make a java method call on page load-->
             <f:metadata>
                 <f:viewAction action="#{projectManager.onload}" />
             </f:metadata>
@@ -24,6 +25,7 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                     <br/>
                     <br/>
                     <br/>
+                    <!--User Project List Div-->
                     <div>
                         <p:orderList id="projectList" value="#{projectManager.userProjectNames}" var="project" controlsLocation="none"
                                      itemLabel="#{project}" itemValue="#{project}">
@@ -40,15 +42,16 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                     <br/>
                     <p:button id="createProjectButton" value="Create Project" 
                               class="btn btn-default" outcome="NewProject" style="margin-top: 10px;"/>
-                     <p:commandButton id="deleteProjectButton" value="Delete Project" 
+                    <p:commandButton id="deleteProjectButton" value="Delete Project" 
                                      class="btn btn-default" update="msgs projectList publicProjectForm:publicProjectList"
                                      action="#{projectManager.deleteProject()}" style="margin-top: 10px;"/>
-                   
+
                     <br/>
                     <br/>
                     <br/>
                 </h:form>
                 <h:form id="publicProjectForm">
+                    <!--Public Project list Div-->
                     <div>
                         <p:orderList id="publicProjectList" value="#{projectManager.publicProjectNames}" var="project" controlsLocation="none"
                                      itemLabel="#{project}" itemValue="#{project}">
@@ -62,9 +65,10 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                                 <h:outputLabel for="projectName" value="Project Name: " style="margin-right: 10px;" />
                                 <p:inputText id="projectName" value="#{projectManager.publicToMyProjectsProjectName}" label="projectName" />
 
+                                <!--This dialog is displayed before a project is copied into local repository-->
                                 <f:facet name="footer">
                                     <p:commandButton value="Copy to My Projects" update="growl projectForm:projectList" actionListener="#{projectManager.addToMyProjects()}"
-                                                     oncomplete="handleLoginRequest(args)" style="margin-top: 30px;"/>
+                                                     oncomplete="handleCopyRequest(args)" style="margin-top: 30px;"/>
                                 </f:facet>  
                             </h:panelGrid>
                         </p:dialog>
@@ -77,8 +81,9 @@ Copyright © 2018 Sait Tuna Onder. All rights reserved.
                 </h:form>                
             </div>
 
+
             <script type="text/javascript">
-                function handleLoginRequest(args) {
+                function handleCopyRequest(args) {
                     if (args.validationFailed) {
                         PF('dlg').jq.effect("shake", {times: 5}, 100);
                     } else {

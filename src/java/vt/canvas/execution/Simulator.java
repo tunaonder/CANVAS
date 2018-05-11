@@ -29,11 +29,19 @@ public class Simulator {
         // signal end of simulation
         shutdown();
     }
-
+    
+    /**
+     * Prepares the SimulationRuntime for the runtime algorithm
+     * @param simDuration
+     * @param vehicleLength 
+     */
     protected void initialize(int simDuration, int vehicleLength) {
         System.out.println("initializing simulator...");
+        // Set Simulation Constants
         rt.setSimulationConstants(vehicleLength);
+        // Set the Duration
         rt.setSimulationTimeLimit(simDuration);
+        // Set the Initial Future Events
         rt.initializeFutureList();
         System.out.println("Future Event List initalized");
 

@@ -8,6 +8,7 @@
 //Array Of Current Vehicles 
 var vehicles = [];
 
+// If number of events is less then this limit, more events are requested from the server
 var eventCountRequestLimit = 1000;
 
 //Earliest Event
@@ -25,25 +26,28 @@ var eventsRequested = false;
 var simulationHasStarted = false;
 
 // This Function is Called 60 times in A Second!
-// Three.js main visualization processes are happening in this method.
+// Three.js main visualization processes run in this method.
 function render() {
-    //pauses when the user navigates to another browser tab
+    
+    //Pauses when the user navigates to another browser tab
     requestAnimationFrame(render);
 
+    // This is true if simulation is not paused
     if (simulationIsRunning) {
-        // If events are not requested and number of events are lower than the limit
-        // make a new event request
+        
+        // If events are not requested and number of events are lower than the client buffer limit,
+        // Make a new event request
         if (!eventsRequested && eventQueue.length < eventCountRequestLimit) {
-            console.log('Event Queue need more event from server');
             var requestArray = [];
             requestArray.push({
                 "action": "requestEvents"
             });
+            // Connect to WebSocket server to request more events
             socket.send(JSON.stringify(requestArray));
             eventsRequested = true;
         }
 
-        //Render Until All events are processed
+        // Render Until All events are processed
         if (eventQueue.length !== 0) {
 
             //Get The Earliest Event
@@ -61,21 +65,17 @@ function render() {
                     processCurrentEvent(event);
 
                     //Set the new earliest event time
-
                     earliestEventTime = eventQueue[0].time;
 
                 }
-                console.log(eventQueue.length);
             }
-            // Move All Vehicles
+            // Update vehicles positions according to their speed and rotation
             for (var i = 0; i < vehicles.length; i++) {
                 vehicles[i].position.x += vehicles[i].speed * Math.cos(vehicles[i].carRotation) * -1;
                 vehicles[i].position.y += vehicles[i].speed * Math.sin(vehicles[i].carRotation) * -1;
             }
             // Increment Visualization Time
             visualizationTime++;
-
-
         }
 
     }
@@ -83,6 +83,11 @@ function render() {
 
 }
 
+/**
+ * Pause/Continue Simulation Visualization
+ * @param {type} button
+ * @returns {undefined}
+ */
 function pauseSimulation(button) {
     if (!simulationHasStarted) {
         alert('Simulation has not started yet!');
