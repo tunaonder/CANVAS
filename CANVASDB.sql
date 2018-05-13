@@ -32,7 +32,7 @@ CREATE TABLE Project
 CREATE TABLE SimulationModel
 (
        id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
-       modeldata VARCHAR (10000) NOT NULL,
+       modeldata VARCHAR (65500) NOT NULL,
        project_id INT UNSIGNED,
        FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE
 );

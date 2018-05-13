@@ -3,53 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/Merge.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/sessionbeans/ProjectFacade.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/css/styles.css</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/messaging/helpers/MessageList.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/validators/PasswordValidator.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/bootstrap.min.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/eventProcessor.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/sessionbeans/AbstractFacade.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/SimulationRuntime.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/sessionbeans/UserFacade.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/Fork.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/SimulationManager.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/validators/UsernameValidator.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/three.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/TrafficLight.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/sessionbeans/SimulationModelFacade.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/SimulationRunner.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/messaging/helpers/Message.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/MoveSpot.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/messaging/helpers/MessageTimeComparator.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/messaging/MessageManager.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/managers/Constants.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/EnterPoint.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/websocket/SimulationSessionHandler.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/moveSpot.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/random/UniformRandom.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/events/VehicleCreateEvent.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/events/helpers/Event.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/builder/SimulationBuilder.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/jquery-3.1.0.min.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/vehicle.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/Vehicle.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/websocket/WebSocketServer.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/managers/AccountManager.java</file>
             <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/threeScene.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/Simulator.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/jsfclasses/ImagesView.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/component/ExitPoint.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/Constants.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/events/TrafficLightStateChangeEvent.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/moveSpot.js</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/Projects.xhtml</file>
             <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/simulationVisualizer.js</file>
             <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/managers/ProjectManager.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/validators/EmailValidator.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/random/RandomVariate.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/events/helpers/EventList.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/execution/events/helpers/EventTimeComparator.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/managers/LoginManager.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/messaging/MessageManager.java</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/index.xhtml</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/eventProcessor.js</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/websocket.js</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/vehicle.js</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/jquery-3.1.0.min.js</file>
+            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/Simulator.xhtml</file>
         </group>
     </open-files>
 </project-private>
