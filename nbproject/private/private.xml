@@ -2,19 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/threeScene.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/moveSpot.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/Projects.xhtml</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/simulationVisualizer.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/managers/ProjectManager.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/src/java/vt/canvas/messaging/MessageManager.java</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/index.xhtml</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/eventProcessor.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/websocket.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/vehicle.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/resources/js/jquery-3.1.0.min.js</file>
-            <file>file:/Users/Onder/NetBeansProjects/CANVAS/web/Simulator.xhtml</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

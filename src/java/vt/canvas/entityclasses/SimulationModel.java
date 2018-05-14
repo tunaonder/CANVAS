@@ -42,7 +42,7 @@ public class SimulationModel implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10000)
+    @Size(min = 1, max = 65500)
     @Column(name = "modeldata")
     private String modeldata;
     @JoinColumn(name = "project_id", referencedColumnName = "id")

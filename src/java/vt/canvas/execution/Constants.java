@@ -35,7 +35,9 @@ public class Constants {
      */
     public Constants(int vehicleLength) {
        
-        double ratio = vehicleLength / vehicleLength1;
+        // 16.0 is the default vehicle length
+        double ratio = vehicleLength / 16.0;
+        
         vehicleLength1 = (int)vehicleLength;
         vehicleLength2 *= ratio;
         vehicleLength3 *= ratio;
@@ -46,7 +48,7 @@ public class Constants {
         
         vehicleDistanceLimit *= ratio;
         vehicleToSpotDistanceLimit *= ratio;
-        
+             
     }
 
 }
