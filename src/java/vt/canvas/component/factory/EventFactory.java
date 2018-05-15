@@ -24,6 +24,12 @@ public class EventFactory {
     public EventFactory() {
     }
     
+    /**
+     * Schedules new vehicle creation event for the enter point
+     * @param enterPoint
+     * @param currentTime
+     * @return 
+     */
     public Event scheduleVehicleCreation(EnterPoint enterPoint, int currentTime) {
         
         // A time frame is 1/60 seconds
@@ -39,6 +45,12 @@ public class EventFactory {
         return new VehicleCreateEvent(time, vehicle, enterPoint.getId());
     }
     
+    /**
+     * Schedules new traffic light state change for the traffic light
+     * @param light
+     * @param currentTime
+     * @return 
+     */
     public Event scheduleTrafficLightStateChange(TrafficLight light, int currentTime){
              
         int time;

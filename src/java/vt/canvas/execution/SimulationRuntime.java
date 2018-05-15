@@ -313,9 +313,7 @@ public class SimulationRuntime {
                     vehicle.setY(targetY);                
 
                     // Previous Spot
-                    StaticObject previousSpot = vehicle.getCurrentSpot();
-                   
-                    
+                    StaticObject previousSpot = vehicle.getCurrentSpot();         
                     
                     // *************************
                     // If statements in this code block are rarely returns true
@@ -342,13 +340,7 @@ public class SimulationRuntime {
                         previousSpot.setOccupierId("");
 
                     }
-                    // **************************
-                    
-
-
-                    
-                    
-                    
+                    // **************************  
                     
                     // Get The Target We Almost Reached
                     StaticObject currentSpot = vehicle.getTargetSpot();
@@ -579,10 +571,16 @@ public class SimulationRuntime {
                         return false;
 
                     } else {
+                        // Vehicle movement might not be allowed even though TrafficLight state is green
+                        // This is required because, we prefer to not have vehicles within traffic intersections
+                        // when there is a traffic jam. If a vehicle gets into the intersection and cannot move
+                        // vehicles that are on other paths might overlap with the vehicle
+                        
                         // If the spot after the traffic light is occupied do not move
                         // This block makes sure that, there are no vehicles within the intersection
                         StaticObject spotAfterTrafficLight = ((TrafficLight) target).getNext();
                         
+                        // If target is occupied do not move
                         if (!spotAfterTrafficLight.getOccupierId().equals("")) {
                             if (vehicle.getTempSpeed() != 0) {
                                 vehicle.setTempSpeed(0);
@@ -590,7 +588,11 @@ public class SimulationRuntime {
                                 return false;
                             }
                         }
-
+                        
+                        // If there is a fork just after the traffic light, we must check the next two objects
+                        // The reaon is that forks are placed very close to traffic lights in some cases
+                        // to provide right turns after the traffic lights
+                        // Therefore, the points after the fork are the points on the other side of the intersection
                         if (spotAfterTrafficLight instanceof Fork) {
                             Fork fork = (Fork) spotAfterTrafficLight;
                             
@@ -607,6 +609,10 @@ public class SimulationRuntime {
                         }
                                                                             
                         
+                        // Check the visit logs
+                        // If the vehicle ahead did not arrive to the target do not move
+                        // This code block makes sure that, a vehicle cannot move before the vehicle ahead arrives to the target
+                        // Same Fork issue described above is also valid for this case                        
                         Set<String> visitSet = visitLogs.get(target.getId());
                         Set<String> aheadObjectVisitSet = visitLogs.get(spotAfterTrafficLight.getId());
                         
@@ -621,7 +627,6 @@ public class SimulationRuntime {
                                 return false;
                             }
                                                         
-
                             if (spotAfterTrafficLight instanceof Fork) {
                                 Fork fork = (Fork) spotAfterTrafficLight;
 
