@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import vt.canvas.component.EnterPoint;
 import vt.canvas.component.ExitPoint;
 import vt.canvas.component.Fork;
@@ -39,6 +40,9 @@ public class SimulationRuntime {
     Map<String, EnterPoint> enterPoints;
     // Holds References to TrafficLights
     Map<String, TrafficLight> trafficLights;
+    
+    Map<String, Set<String>> visitLogs;
+    Map<String, String> lastVisitedVehicleLogs;
 
     // The time of the simulation
     private int simulationTime;
@@ -69,6 +73,8 @@ public class SimulationRuntime {
         enterPoints = new HashMap();
         trafficLights = new HashMap();
         vehicles = new ArrayList();
+        visitLogs = new HashMap();
+        lastVisitedVehicleLogs = new HashMap<>();
 
         this.simulationTime = 0;
         this.sumOfVehicleDestroyTime = 0;
@@ -293,7 +299,7 @@ public class SimulationRuntime {
 
                     //Check If Vehicle Left The Current Spot Completely
                     //If it left, current spot is free for other vehicles to move
-                    vehicle.compareVehicleAndCurrentSpot(simulationConstants.vehicleDistanceLimit);
+                    vehicle.compareVehicleAndCurrentSpot(simulationConstants.vehicleDistanceLimit, visitLogs, lastVisitedVehicleLogs);
 
                 } //If the vehicle has reached to the target
                 else {
@@ -301,7 +307,7 @@ public class SimulationRuntime {
                     // There might be very small difference between the vehicle's coordinate and the target's coordinates
                     // Update the vehicle's coordinates to the exact coordinates of the target
                     vehicle.setX(targetX);
-                    vehicle.setY(targetY);
+                    vehicle.setY(targetY);                
 
                     // Previous Spot
                     StaticObject previousSpot = vehicle.getCurrentSpot();
@@ -538,13 +544,52 @@ public class SimulationRuntime {
                         // If the spot after the traffic light is occupied do not move
                         // This block makes sure that, there are no vehicles within the intersection
                         StaticObject spotAfterTrafficLight = ((TrafficLight) target).getNext();
-                        // If the spot after traffic light is occupied, stop the vehicle
-                        if (!spotAfterTrafficLight.getOccupierId().equals("")) {
-                            if (vehicle.getTempSpeed() != 0) {
-                                vehicle.setTempSpeed(0);
-                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
+
+                        Set<String> visitSet = visitLogs.get(target.getId());
+                        Set<String> aheadObjectVisitSet = visitLogs.get(spotAfterTrafficLight.getId());
+                        
+                        String lastVehicleId = lastVisitedVehicleLogs.get(target.getId());
+                        if (visitSet != null && lastVehicleId != null && !lastVehicleId.equals("")) {
+
+                            if (aheadObjectVisitSet != null && !aheadObjectVisitSet.contains(lastVehicleId)) {
+                                if (vehicle.getTempSpeed() != 0) {
+                                    vehicle.setTempSpeed(0);
+                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                }
+                                return false;
                             }
-                            return false;
+                            
+
+                            if (spotAfterTrafficLight instanceof Fork) {
+                                Fork fork = (Fork) spotAfterTrafficLight;
+
+                                StaticObject nextOfFork1 = fork.getNext();
+                                StaticObject nextOfFork2 = fork.getNextAlternative();
+
+                                Set<String> set1 = visitLogs.get(nextOfFork1.getId());
+                                Set<String> set2 = visitLogs.get(nextOfFork2.getId());
+
+                                boolean vehicleArrived1 = false;
+                                boolean vehicleArrived2 = false;
+
+                                if (set1 != null && set1.contains(lastVehicleId)) {
+                                    vehicleArrived1 = true;
+                                }
+
+                                if (set2 != null && set2.contains(lastVehicleId)) {
+                                    vehicleArrived2 = true;
+                                }
+
+                                if (!vehicleArrived1 && !vehicleArrived2) {
+                                    if (vehicle.getTempSpeed() != 0) {
+                                        vehicle.setTempSpeed(0);
+                                        messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                    }
+                                    return false;
+
+                                }
+
+                            }
                         }
 
                     }

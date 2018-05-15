@@ -4,6 +4,9 @@
  */
 package vt.canvas.component;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import vt.canvas.component.helpers.DynamicObject;
 import vt.canvas.component.helpers.StaticObject;
 
@@ -190,7 +193,7 @@ public class Vehicle extends DynamicObject {
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getCurrentSpot().getX(), this.getCurrentSpot().getY());
 
-        return distance > this.getLength() * 0.5 + vehicleDistanceLimit;
+        return distance > (this.getLength() + vehicleDistanceLimit) * 0.5;
 
     }
 
@@ -263,11 +266,20 @@ public class Vehicle extends DynamicObject {
      *
      * @param vehicle
      */
-    public void compareVehicleAndCurrentSpot(int vehicleDistanceLimit) {
+    public void compareVehicleAndCurrentSpot(int vehicleDistanceLimit, Map<String, Set<String>> visitLogs, Map<String, String> lastVisitedVehicleLog) {
         //If the vehicle is the last vehicle leaving the current spot and if it is gone far enough
         if (this.getCurrentSpot().getLeavingDynamicObj() == this
                 && this.isFarFromSpot(vehicleDistanceLimit)) {
-
+            
+            
+            Set<String> set = visitLogs.get(this.getCurrentSpot().getId());
+            if (set == null) {
+                set = new HashSet<String>();
+            }
+            set.add(this.getId());
+            visitLogs.put(this.getCurrentSpot().getId(), set);
+            lastVisitedVehicleLog.put(this.getCurrentSpot().getId(), this.getId());
+            
             this.getCurrentSpot().setLeavingDynamicObj(null);
 
             //No Occupation on the Spot anymore

@@ -66,7 +66,7 @@ function render() {
 
                     //Set the new earliest event time
                     earliestEventTime = eventQueue[0].time;
-
+                    console.log(eventQueue.length);
                 }
             }
             // Update vehicles positions according to their speed and rotation

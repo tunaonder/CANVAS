@@ -26,6 +26,7 @@ public class MessageManager {
 
     private final int messageQueueStorageLimit = 2000;
     private final int messageCountLimitPerRequest = 1000;
+    private int totalEventCount = 0;
 
     private final MessageList messageList;
 
@@ -216,7 +217,7 @@ public class MessageManager {
         while (messageList.getSize() == 0) {
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -224,7 +225,7 @@ public class MessageManager {
 
         // Wait for additional time in case more messages are currently being created
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException ex) {
             Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -240,6 +241,7 @@ public class MessageManager {
                 Message message = messageList.pollNextMessage();
                 messageCountPerRequest++;
                 SimulationSessionHandler.sendMessageToClient(sessionIdentifier, message.getJSONObject());
+                totalEventCount++;
             }
 
             System.out.println("Sent " + messageCountPerRequest + " messages.");
@@ -247,6 +249,7 @@ public class MessageManager {
             // Notify the main execution thread to generate more messages
             System.out.println("woke up..." + sessionIdentifier);
             this.notify();
+            System.out.println("TOTAL EVENTS GENERATED SO FAR: " + totalEventCount);
         }
 
     }
