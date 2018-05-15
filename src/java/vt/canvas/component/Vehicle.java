@@ -193,7 +193,7 @@ public class Vehicle extends DynamicObject {
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getCurrentSpot().getX(), this.getCurrentSpot().getY());
 
-        return distance > (this.getLength() + vehicleDistanceLimit) * 0.5;
+        return distance > (this.getLength() * 0.5) + vehicleDistanceLimit;
 
     }
 
