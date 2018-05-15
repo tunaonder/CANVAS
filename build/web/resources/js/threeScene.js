@@ -149,8 +149,8 @@ function onDocumentMouseDown(event) {
         if (currentMoveSpot !== null && currentMoveSpot.type !== 'ExitPoint') {
             var distance = calculateDistance(currentMoveSpot.x, currentMoveSpot.y, vector.x, vector.y);
 
-            if (distance < 30) {
-                window.alert('Distance between Spots should be longer than the length of vehicles');
+            if (distance < vehicleLength * 1.5) {
+                window.alert('Added spot cannot be very close to the previous object. Please try again.');
                 return;
             }
         }
@@ -459,7 +459,7 @@ function retrieveModel() {
     if (jsonArr.length === 0){
         return;
     }
-    
+
     for (var i = 0; i < jsonArr.length; i++) {
 
         var spot = jsonArr[i];

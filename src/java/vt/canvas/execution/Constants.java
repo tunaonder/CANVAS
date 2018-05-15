@@ -14,7 +14,7 @@ public class Constants {
     // Default Vehicle Distance Limit(Between Vehicles)
     public int vehicleDistanceLimit = 16;
     // Default Vehicle to Spot Distance Limit
-    public int vehicleToSpotDistanceLimit = 20;
+    public int vehicleToSpotDistanceLimit = 16;
     
     // Default Automobile Length
     public int vehicleLength1 = 16;

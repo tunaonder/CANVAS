@@ -192,8 +192,8 @@ public class Vehicle extends DynamicObject {
 
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getCurrentSpot().getX(), this.getCurrentSpot().getY());
-
-        return distance > (this.getLength() * 0.5) + vehicleDistanceLimit;
+        
+        return distance > vehicleDistanceLimit + (this.getLength()/2);
 
     }
 
@@ -272,6 +272,9 @@ public class Vehicle extends DynamicObject {
                 && this.isFarFromSpot(vehicleDistanceLimit)) {
             
             
+            // When connections between a vehicle and its previous spot is removed
+            // Add the removal information to the logs.
+            // These logs are used to check if vehicle behind can move
             Set<String> set = visitLogs.get(this.getCurrentSpot().getId());
             if (set == null) {
                 set = new HashSet<String>();
@@ -281,7 +284,6 @@ public class Vehicle extends DynamicObject {
             lastVisitedVehicleLog.put(this.getCurrentSpot().getId(), this.getId());
             
             this.getCurrentSpot().setLeavingDynamicObj(null);
-
             //No Occupation on the Spot anymore
             this.getCurrentSpot().setOccupierId("");
         }

@@ -48,9 +48,9 @@ public class EventFactory {
         else{
             // If Vehicle is in Red State: time duration is redStateTime.
             // Otherwise the duration is greenStateTime
-            // Add an extra 1.5 seconds to the red state (60 * 1.5)
+            // Add an extra 2 seconds to the red state (60 * 2)
             time = currentTime + (light.getState() == TrafficLight.STATE.RED ? 
-                    light.getRedStateTime() + 90 : light.getGreenStateTime() - 90);
+                    light.getRedStateTime() + 120 : light.getGreenStateTime() - 120);
           
         }                 
         return new TrafficLightStateChangeEvent(time, light);

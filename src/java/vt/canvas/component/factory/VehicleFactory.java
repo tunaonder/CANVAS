@@ -58,15 +58,17 @@ public class VehicleFactory {
         double length;
         
         // Randomly assign a length to the vehicle
-        int lengthGenerator = (int)random.nextDouble(1, 12);
+        // Vehicle length1 refers to automobiles while others refer to
+        // trucks and busses
+        int lengthGenerator = (int)random.nextDouble(1, 25);
         
-        if(lengthGenerator < 9){
+        if(lengthGenerator < 21){
             length = vehicleLength1;
         }
-        else if(lengthGenerator == 9){
+        else if(lengthGenerator < 23){
             length = vehicleLength2;
         }
-        else if(lengthGenerator == 10){
+        else if(lengthGenerator == 23){
             length = vehicleLength3;
         }
         else{

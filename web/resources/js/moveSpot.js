@@ -330,7 +330,7 @@ function moveSpotCallback() {
  * @returns {undefined}
  */
 function trafficLightCallback() {
-    
+   
     if (document.getElementById("trafficLightForm").style.display === 'none') {
         document.getElementById("trafficLightForm").style.display = 'inline';
         document.getElementById("trafficLightChangeButton").style.display = 'inline';

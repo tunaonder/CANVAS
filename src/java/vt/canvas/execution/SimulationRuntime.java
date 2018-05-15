@@ -6,6 +6,7 @@ package vt.canvas.execution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -41,7 +42,9 @@ public class SimulationRuntime {
     // Holds References to TrafficLights
     Map<String, TrafficLight> trafficLights;
     
+    // This map holds the visited vehicle ids for each static object id
     Map<String, Set<String>> visitLogs;
+    // This map holds the last visited vehicle id for each static object id
     Map<String, String> lastVisitedVehicleLogs;
 
     // The time of the simulation
@@ -311,7 +314,42 @@ public class SimulationRuntime {
 
                     // Previous Spot
                     StaticObject previousSpot = vehicle.getCurrentSpot();
+                   
+                    
+                    
+                    // *************************
+                    // If statements in this code block are rarely returns true
+                    // They return true in case two static objects are placed very close
+                    // and the vehicle arrived the second static object before removing
+                    // the connections with the previous static object
+                    // If it happens, this block makes sure that, all connections with
+                    // the previous spot are removed
+                    
+                    if (previousSpot.getLeavingDynamicObj() == vehicle || previousSpot.getOccupierId().equals(vehicle.getId())) {
+                        Set<String> set = visitLogs.get(previousSpot.getId());
+                        if (set == null) {
+                            set = new HashSet<String>();
+                        }
+                        set.add(vehicle.getId());
+                        visitLogs.put(previousSpot.getId(), set);
+                        lastVisitedVehicleLogs.put(previousSpot.getId(), vehicle.getId());
+                    }
+                    
+                    if (previousSpot.getLeavingDynamicObj() == vehicle) {
+                        previousSpot.setLeavingDynamicObj(null);
+                    }
+                    if (previousSpot.getOccupierId().equals(vehicle.getId())) {
+                        previousSpot.setOccupierId("");
 
+                    }
+                    // **************************
+                    
+
+
+                    
+                    
+                    
+                    
                     // Get The Target We Almost Reached
                     StaticObject currentSpot = vehicle.getTargetSpot();
 
@@ -544,7 +582,31 @@ public class SimulationRuntime {
                         // If the spot after the traffic light is occupied do not move
                         // This block makes sure that, there are no vehicles within the intersection
                         StaticObject spotAfterTrafficLight = ((TrafficLight) target).getNext();
+                        
+                        if (!spotAfterTrafficLight.getOccupierId().equals("")) {
+                            if (vehicle.getTempSpeed() != 0) {
+                                vehicle.setTempSpeed(0);
+                                messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                return false;
+                            }
+                        }
 
+                        if (spotAfterTrafficLight instanceof Fork) {
+                            Fork fork = (Fork) spotAfterTrafficLight;
+                            
+                            StaticObject next1 = fork.getNext();
+                            StaticObject next2 = fork.getNextAlternative();
+                                                        
+                            if (!next1.getOccupierId().equals("") || !next2.getOccupierId().equals("")) {
+                                if (vehicle.getTempSpeed() != 0) {
+                                    vehicle.setTempSpeed(0);
+                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                    return false;
+                                }
+                            }
+                        }
+                                                                            
+                        
                         Set<String> visitSet = visitLogs.get(target.getId());
                         Set<String> aheadObjectVisitSet = visitLogs.get(spotAfterTrafficLight.getId());
                         
@@ -558,7 +620,7 @@ public class SimulationRuntime {
                                 }
                                 return false;
                             }
-                            
+                                                        
 
                             if (spotAfterTrafficLight instanceof Fork) {
                                 Fork fork = (Fork) spotAfterTrafficLight;
