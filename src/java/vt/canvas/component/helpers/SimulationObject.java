@@ -40,4 +40,21 @@ public abstract class SimulationObject {
     public void setY(double y) {
         this.y = y;
     }
+
+    /**
+     *
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return Distance between two coordinates
+     */
+    public double calculateDistance(double x1, double y1, double x2, double y2) {
+
+        double xDistance = Math.abs(x1 - x2);
+        double yDistance = Math.abs(y1 - y2);
+
+        return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+
+    }
 }

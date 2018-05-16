@@ -594,16 +594,22 @@ public class SimulationRuntime {
                         // to provide right turns after the traffic lights
                         // Therefore, the points after the fork are the points on the other side of the intersection
                         if (spotAfterTrafficLight instanceof Fork) {
-                            Fork fork = (Fork) spotAfterTrafficLight;
-                            
-                            StaticObject next1 = fork.getNext();
-                            StaticObject next2 = fork.getNextAlternative();
-                                                        
-                            if (!next1.getOccupierId().equals("") || !next2.getOccupierId().equals("")) {
-                                if (vehicle.getTempSpeed() != 0) {
-                                    vehicle.setTempSpeed(0);
-                                    messageManager.vehicleSpeedChange(vehicle, simulationTime);
-                                    return false;
+                            // This statement checks if fork object is places very close to the traffic light
+                            if (target.calculateDistance(target.getX(), target.getY(), spotAfterTrafficLight.getX(), 
+                                    spotAfterTrafficLight.getY()) < simulationConstants.vehicleLength1 * 3) {
+
+                                Fork fork = (Fork) spotAfterTrafficLight;
+
+                                StaticObject next1 = fork.getNext();
+                                StaticObject next2 = fork.getNextAlternative();
+
+                                if (!next1.getOccupierId().equals("") || !next2.getOccupierId().equals("")) {
+                                    if (vehicle.getTempSpeed() != 0) {
+                                        vehicle.setTempSpeed(0);
+                                        messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                        return false;
+
+                                    }
                                 }
                             }
                         }
@@ -628,34 +634,37 @@ public class SimulationRuntime {
                             }
                                                         
                             if (spotAfterTrafficLight instanceof Fork) {
-                                Fork fork = (Fork) spotAfterTrafficLight;
+                                // This statement checks if fork object is places very close to the traffic light
+                                if (target.calculateDistance(target.getX(), target.getY(), spotAfterTrafficLight.getX(),
+                                        spotAfterTrafficLight.getY()) < simulationConstants.vehicleLength1 * 3) {
+                                    Fork fork = (Fork) spotAfterTrafficLight;
 
-                                StaticObject nextOfFork1 = fork.getNext();
-                                StaticObject nextOfFork2 = fork.getNextAlternative();
+                                    StaticObject nextOfFork1 = fork.getNext();
+                                    StaticObject nextOfFork2 = fork.getNextAlternative();
 
-                                Set<String> set1 = visitLogs.get(nextOfFork1.getId());
-                                Set<String> set2 = visitLogs.get(nextOfFork2.getId());
+                                    Set<String> set1 = visitLogs.get(nextOfFork1.getId());
+                                    Set<String> set2 = visitLogs.get(nextOfFork2.getId());
 
-                                boolean vehicleArrived1 = false;
-                                boolean vehicleArrived2 = false;
+                                    boolean vehicleArrived1 = false;
+                                    boolean vehicleArrived2 = false;
 
-                                if (set1 != null && set1.contains(lastVehicleId)) {
-                                    vehicleArrived1 = true;
-                                }
-
-                                if (set2 != null && set2.contains(lastVehicleId)) {
-                                    vehicleArrived2 = true;
-                                }
-
-                                if (!vehicleArrived1 && !vehicleArrived2) {
-                                    if (vehicle.getTempSpeed() != 0) {
-                                        vehicle.setTempSpeed(0);
-                                        messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                    if (set1 != null && set1.contains(lastVehicleId)) {
+                                        vehicleArrived1 = true;
                                     }
-                                    return false;
 
+                                    if (set2 != null && set2.contains(lastVehicleId)) {
+                                        vehicleArrived2 = true;
+                                    }
+
+                                    if (!vehicleArrived1 && !vehicleArrived2) {
+                                        if (vehicle.getTempSpeed() != 0) {
+                                            vehicle.setTempSpeed(0);
+                                            messageManager.vehicleSpeedChange(vehicle, simulationTime);
+                                        }
+                                        return false;
+
+                                    }
                                 }
-
                             }
                         }
 
