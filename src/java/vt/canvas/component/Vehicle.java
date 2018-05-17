@@ -32,10 +32,13 @@ public class Vehicle extends DynamicObject {
      */
     public boolean isSpotOccupiedByAnotherVehicle(StaticObject targetSpot) {
 
+        // If it is not occupied, make this vehicle occupier and return false
         if (targetSpot.getOccupierId().equals("")) {
             targetSpot.setOccupierId(this.getId());
             return false;
-        } else if (targetSpot.getOccupierId().equals(this.getId())) {
+        } 
+        // If occupier is this vehicle, return false
+        else if (targetSpot.getOccupierId().equals(this.getId())) {
             return false;
         }
 
@@ -51,7 +54,7 @@ public class Vehicle extends DynamicObject {
      */
     public boolean isThereVehicleAhead() {
 
-        // There is a vehicle ahead if the dynamic object is not null
+        // There is a vehicle ahead if the next dynamic object is not null
         if (this.getNextDynamicObj() != null) {
             return true;
         }
@@ -62,14 +65,18 @@ public class Vehicle extends DynamicObject {
         DynamicObject vehicleAhead;
 
         // Check If the next spot is merge and this vehicle is on the alternative route
+        // Because merges have two different incoming paths
         boolean isSpotMergeAlternative = targetSpot instanceof Merge
                 && this.getCurrentSpot() == ((Merge) targetSpot).getPrevAlternative();
 
-        //If it is, get the alternative vehicle
+        //If this vehicle is on the alternative path, get the alternative vehicle
         if (isSpotMergeAlternative) {
             vehicleAhead = ((Merge) targetSpot).getIncomingDynamicObject2();
 
-        } else {
+        } 
+        // For all other target objects and for the main path of merge
+        // Vehicle ahead can be find by getIncomingDynamicObj()
+        else {
             vehicleAhead = targetSpot.getIncomingDynamicObj();
         }
 
@@ -77,6 +84,7 @@ public class Vehicle extends DynamicObject {
         if (vehicleAhead == this) {
             return false;
         }
+        
         // If there is no car ahead, set this car as the first incoming car
         if (vehicleAhead == null) {
 
@@ -90,6 +98,8 @@ public class Vehicle extends DynamicObject {
         }
 
         // If there are vehicles moving to the target spot, find the last one
+        // Because there might be many vehicles before the target spot
+        // This vehicle will be connected to the last one
         while (vehicleAhead.getPrevDynamicObj() != null && vehicleAhead.getPrevDynamicObj() != this) {
             vehicleAhead = vehicleAhead.getPrevDynamicObj();
         }
@@ -111,9 +121,11 @@ public class Vehicle extends DynamicObject {
      */
     public boolean canMoveWithSameSpeed(int vehicleDistanceLimit) {
 
+        // Calculate the distance with this vehicle and vehicle ahead
         double distance = calculateDistance(this.getX(), this.getY(),
                 this.getNextDynamicObj().getX(), this.getNextDynamicObj().getY());
 
+        // If there is enough distance return true
         return isDistanceEnough(this.getNextDynamicObj(), distance, vehicleDistanceLimit);
 
     }
@@ -146,6 +158,8 @@ public class Vehicle extends DynamicObject {
      */
     private boolean isDistanceEnough(DynamicObject vehicleAhead, double distance, int vehicleDistanceLimit) {
 
+        // When distance is calculated we need to take half of length into consideration
+        // Because vehicle distance is calculated according to the center points of vehicles
         double length1 = this.getLength() / 2;
         double length2 = vehicleAhead.getLength() / 2;
 

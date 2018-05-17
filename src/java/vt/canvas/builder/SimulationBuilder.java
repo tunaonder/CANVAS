@@ -35,6 +35,15 @@ public class SimulationBuilder {
         
     }
 
+    /**
+     * This method creates the simulation model on the server
+     * If there is an invalid component within the model,
+     * the client is notified with a build error
+     * @param modelData
+     * @param sim
+     * @return
+     * @throws Exception 
+     */
     public boolean buildModel(JsonArray modelData, Simulator sim) throws Exception {
         
         int enterPointCount = 0;
@@ -55,7 +64,8 @@ public class SimulationBuilder {
 
             //Create Objects of Different Types and add to the Hash Map
             StaticObject object;
-                  
+            
+            // Crete the objects with its parameters according to the type of objects
             switch (spot.getString("type")) {
                 case "Standart":
 
@@ -120,7 +130,8 @@ public class SimulationBuilder {
             return false;            
         }       
 
-        // Set the Connection Between Objects
+        // The objects are created above
+        // Now, set the Connection Between Objects
         for (int i = 1; i < modelData.size(); i++) {
 
             JsonObject spot = modelData.getJsonObject(i);
@@ -177,6 +188,7 @@ public class SimulationBuilder {
 
                     alternativeNextId = spot.getString("alternativeNextId");
                     // Check if Fork object is valid
+                    // Checks if there is an alternative next object which is not the next and prev object
                     if (alternativeNextId.equals("none") || alternativeNextId.equals(nextId) || nextId.equals(prevId)
                             || alternativeNextId.equals(prevId)) {
                         String numberId = id.substring(1);
@@ -199,6 +211,7 @@ public class SimulationBuilder {
 
                     alternativePrevId = spot.getString("alternativePrevId");
                     // Check if Merge object is valid
+                    // Checks if there is an alternative prev object which is not the next and prev object
                     if (alternativePrevId.equals("none") || alternativePrevId.equals(prevId) || nextId.equals(prevId)
                             || alternativePrevId.equals(nextId)) {
                         String numberId = id.substring(1);
@@ -258,13 +271,17 @@ public class SimulationBuilder {
         return true;
     }
     
-    private void sendErrorMessage(String errorDetail){
-                     JsonProvider provider = JsonProvider.provider();
-             JsonObject errorMessage = provider.createObjectBuilder()
+    /**
+     * Sends an error message to the client about the error
+     * @param errorDetail 
+     */
+    private void sendErrorMessage(String errorDetail) {
+        JsonProvider provider = JsonProvider.provider();
+        JsonObject errorMessage = provider.createObjectBuilder()
                 .add("action", "buildError")
                 .add("errorDetail", errorDetail)
                 .build();
-            SimulationSessionHandler.sendMessageToClient(sessionIdentifier, errorMessage);        
+        SimulationSessionHandler.sendMessageToClient(sessionIdentifier, errorMessage);
     }
    
 }

@@ -142,6 +142,7 @@ function startSimulation() {
     simulationHasStarted = true;
     
     // Start WebSocket session
+    // Send the JSON data to the server
     socket.send(JSON.stringify(simulationModel));
 }
 

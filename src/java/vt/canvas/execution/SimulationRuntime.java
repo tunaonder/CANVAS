@@ -153,18 +153,19 @@ public class SimulationRuntime {
     }
 
     public void simulate() {
-
+        
+        // Run the simulation until the end of the simulation duration
         while (simulationTime < simulationTimeLimit) {
 
             // Scan Scheduled Future Events
             processEvent();
-
             clockUpdate();
             updateSimulation();
 
         }
 
         // Simulation time is over, continue processing until all vehicles leave the simulation
+        // Enter Points stop generating vehicles after simulation duration is execeded
         while (vehicles.size() > 0) {
 
             processEvent();
@@ -172,7 +173,8 @@ public class SimulationRuntime {
             updateSimulation();
 
         }
-
+        
+        // Update the simulation time one last time before sending the end of simulation message
         clockUpdate();
 
         // End Of The Simulation
@@ -269,6 +271,10 @@ public class SimulationRuntime {
 
     }
 
+    /**
+     * All vehicles are updated according to their speed and directions
+     * in every time frame until the end of the simulation
+     */
     private void updateSimulation() {
 
         List<Vehicle> vehiclesToRemove = new ArrayList<>();
@@ -775,9 +781,8 @@ public class SimulationRuntime {
     }
 
     /**
-     * Request Events from the message manager This method is called by
-     * Simulation Manager which is totally different than SimulationRuntime
-     * thread
+     * Request Events from the message manager. This method is called by a new thread
+     * which is totally different than SimulationRuntime(Main Execution) thread
      */
     public void requestNewEventsToVisualize() {
         messageManager.requestNewEventsToVisualize();

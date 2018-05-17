@@ -51,7 +51,14 @@ public class WebSocketServer {
     public void onError(Throwable error) {
         Logger.getLogger(WebSocketServer.class.getName()).log(Level.SEVERE, null, error);
     }
-
+    
+    /**
+     * This method is called when a message is received from the client
+     * The data within the message is parsed, and corresponding methods are called
+     * according to requested action
+     * @param message
+     * @param session 
+     */
     @OnMessage
     public void handleMessage(String message, Session session) {
 
