@@ -67,6 +67,7 @@ public class Simulator {
 
     }
 
+    // Request new events from the simulation runtime
     public void requestNewEventsToVisualize() {
         rt.requestNewEventsToVisualize();
     }

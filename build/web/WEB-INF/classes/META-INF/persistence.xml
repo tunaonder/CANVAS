@@ -5,7 +5,7 @@
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="Tur-Kiye(1923)" />
+            <property name="javax.persistence.jdbc.password" value="Va-Tech@1872" />
             <property name="eclipselink.logging.level" value="ALL" />
             <property name="eclipselink.logging.level.sql" value="FINE"/>
             <property name="eclipselink.logging.parameters" value="true" />

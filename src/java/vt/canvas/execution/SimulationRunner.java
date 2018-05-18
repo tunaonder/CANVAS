@@ -58,6 +58,7 @@ public class SimulationRunner {
 
     }
     
+    // Request new events from the simulator
     public void requestNewEventsToVisualize(){
         sim.requestNewEventsToVisualize();      
     }

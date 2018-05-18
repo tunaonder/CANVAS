@@ -31,6 +31,10 @@ public class SimulationManager {
      */
     SimulationRunner runner;
 
+    /**
+     * Each simulation manager has a simulation runner instance
+     * @param sessionIdentifier 
+     */
     public SimulationManager(String sessionIdentifier) {
 
         this.sessionIdentifier = sessionIdentifier;
@@ -57,10 +61,13 @@ public class SimulationManager {
         return manager;
     }
     
+    // This method returns the correct simulation manager instance
     public static SimulationManager getSimulationInstance(String sessionIdentifier){
         return managers.get(sessionIdentifier);      
     }
 
+    // This method is called by  handleMessage() method in WebSocketServer.java 
+    // to start a new execution for a new client
     public void requestExecution(JsonArray modelData) {
 
         // Start execution thread
@@ -70,6 +77,8 @@ public class SimulationManager {
         exec.start();
     }
 
+    // This method is called by  handleMessage() method in WebSocketServer.java 
+    // to start a new message request thread for an existing client
     public void requestEventsForVisualizer() {
         
         SimulationMessageRequester messageRequester = new SimulationMessageRequester();
@@ -78,6 +87,7 @@ public class SimulationManager {
     }
     
     // Main Simulation Execution Thread
+    // Start a new execution with the provided simulation model input
     private class SimulationExecutor implements Runnable {
 
         private final JsonArray model;

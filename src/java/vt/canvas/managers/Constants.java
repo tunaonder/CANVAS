@@ -14,9 +14,9 @@ public class Constants {
         We decided to use directories external to our application 
         for the storage and retrieval of user's files.
      */
-    public static final String FILES_ABSOLUTE_PATH = "/Users/Onder/TrafficSimulatorFileStorage/";
+//    public static final String FILES_ABSOLUTE_PATH = "/Users/Onder/TrafficSimulatorFileStorage/";
 //    public static final String FILES_ABSOLUTE_PATH = "/home/Onder/TrafficSimulatorFileStorage/";
-//     public static final String FILES_ABSOLUTE_PATH = "/home/balci/TrafficSimulatorFileStorage/";
+     public static final String FILES_ABSOLUTE_PATH = "/home/balci/TrafficSimulatorFileStorage/";
 
     /*
     In glassfish-web.xml file, we designated the '/TrafficSimulatorFileStorage/' directory as the
